@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import '../styles/home.css'
 
 const Home = () => {
-  let paaths = useSelector((state) => state.events.events.filter((e) => e.type === "paath"));
+  let paaths = useSelector((state) => state.events.events.filter((e) => e.eventtype === "paath"));
   let [dropdown, setDropdown] = useState(false)
   let history = useHistory()
   console.log(paaths);
@@ -52,7 +52,7 @@ const Home = () => {
             </button>
             {dropdown && 
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              {paaths.map(e => <p key={e.id} id={e.id} onClick={handlePaathClick}>{e.place}</p>)}
+              {paaths.map(e => <p key={e.eventid} id={e.eventid} onClick={handlePaathClick}>{e.eventplace}</p>)}
             </div>}
           </div>
 

@@ -7,13 +7,13 @@ import '../styles/paath.css'
 
 const Paath = () => {
     let params = useParams()
-    let paath = useSelector((state) => state.events.events.filter((e) => e.id === params.id)[0]);
-    
+    let paath = useSelector((state) => state.events.events.filter((e) => String(e.eventid) === params.id)[0]);
+    console.log(paath)
     return (
         <div>
             {paath &&
                 <div className='event-details'>
-                    <p className='event-p'><span>{paath.place.toUpperCase()}</span><span>type: {paath.type}</span> <span></span></p>
+                    <p className='event-p'><span>{paath.eventplace.toUpperCase()}</span><span>type: {paath.eventtype}</span> <span></span></p>
                     <TimeSlots event={paath} />
                 </div>
             }

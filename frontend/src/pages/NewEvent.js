@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { v4 as uuid } from 'uuid'
 
-import { addEvent } from '../actions/actions';
+import { addEvent, addDbEvent } from '../actions/actions';
 
-// import { addWeeks } from 'date-fns'
+import { database } from '../services/EventService';
 
 import Calendar from 'react-calendar';
 
@@ -69,9 +69,10 @@ const NewEvent = (props) => {
 
                 let ev = props.events[i]
 
-                if (!ev.langarDate) continue
+                if (ev.enddate) continue // if it has an end date then it's a paath type event, so skip
 
-                let { mm, yy, dd } = ev.langarDate
+                let [yy, mm, dd] = ev.startdate.split('-')
+                dd = dd.slice(0,2)
 
                 // Handle days in event month
                 if (mm === event.langarDate.mm &&
@@ -111,6 +112,8 @@ const NewEvent = (props) => {
         return { dd, mm, yy }
     }
 
+    const formatRegular = (date) => `${date.yy}-${date.mm}-${date.dd}`
+
     const blank = () => ({ mm: '', yy: '', dd: '' })
 
     const handleChange = (e, e2) => {
@@ -133,25 +136,49 @@ const NewEvent = (props) => {
 
         setEvent({ ...event, [name]: value })
     }
-
+/*
+enddate: "2021-11-19T05:00:00.000+00:00"
+eventaddress: "123 Main Street"
+eventid: 1
+eventphone: "888-999-1021"
+eventplace: "CJSA"
+eventstatus: "created"
+eventtype: "langar"
+startdate:
+*/
     const packageEvent = () => {
         let newEvent;
-        let baseEvent = { user, id: uuid(), place: event.place, type: event.type }
 
-        if (event.type === "langar") {
-            newEvent = {
-                ...baseEvent,
-                langarDate: event.selectedDay,
-                phone
+        // for development purposes
+        if (database)
+            newEvent = { 
+                startdate: event.startDate,
+                enddate: event.endDate,
+                eventaddress: event.address, 
+                eventtype: event.type, 
+                eventplace: event.place, 
+                eventphone: phone,
+                eventstatus: "created"
             }
-        } else {
-            newEvent = {
-                ...baseEvent,
-                startDate: event.startDate,
-                endDate: event.endDate,
-                address: event.address,
-            }
-        }
+        else
+            newEvent = { ...newEvent, user, id: uuid() }
+
+        if (event.type === "langar" && !newEvent.startdate)
+            newEvent.startdate = formatRegular(event.selectedDay)
+
+        console.log(newEvent)
+        // if (event.type === "langar") {
+        //     newEvent = {
+        //         ...baseEvent,
+        //         langarDate: event.selectedDay
+        //     }
+        // } else {
+        //     newEvent = {
+        //         ...baseEvent,
+        //         startDate: event.startDate,
+        //         endDate: event.endDate
+        //     }
+        // }
 
         return newEvent
     }
@@ -161,10 +188,7 @@ const NewEvent = (props) => {
         console.log(event)
 
         let newEvent = packageEvent()
-
-        history.push('/')
-        alert('Event created!')
-        dispatch(addEvent(newEvent))
+        
 
         /*
             (NOTE: All local storage code below can be deleted. Mostly for development purposes)
@@ -176,19 +200,28 @@ const NewEvent = (props) => {
                 5. Store the new array in local storage
         */
 
-        let currentStorage = localStorage.getItem("events")
+        if (database) {
+            dispatch(addDbEvent(newEvent))
+        } else {
+            dispatch(addEvent(newEvent))
 
-        if (!currentStorage) {
-            localStorage.setItem("events", JSON.stringify([]))
-            currentStorage = localStorage.getItem("events")
+            let currentStorage = localStorage.getItem("events")
+
+            if (!currentStorage) {
+                localStorage.setItem("events", JSON.stringify([]))
+                currentStorage = localStorage.getItem("events")
+            }
+
+            let parsedCurrentEvents = JSON.parse(currentStorage)
+
+            let newStorage = [...parsedCurrentEvents, newEvent]
+            let stringNewStorage = JSON.stringify(newStorage)
+
+            localStorage.setItem("events", stringNewStorage)
         }
-
-        let parsedCurrentEvents = JSON.parse(currentStorage)
-
-        let newStorage = [...parsedCurrentEvents, newEvent]
-        let stringNewStorage = JSON.stringify(newStorage)
-
-        localStorage.setItem("events", stringNewStorage)
+        
+        history.push('/')
+        alert('Event created!')
 
     }
 
@@ -281,9 +314,9 @@ const NewEvent = (props) => {
                         ref={detailsRef}
                         onClick={() => detailsRef.current.classList.remove('active')}
                     >
-                        <div><span>{`${booked.ev?.langarDate.mm}/${booked.ev?.langarDate.dd}/${booked.ev?.langarDate.yy}`}</span> has already been booked</div>
+                        <div><span>{`${booked.ev?.startdate.split('-')[1]}/${booked.ev?.startdate.split('-')[2].slice(0,2)}/${booked.ev?.startdate.split('-')[0]}`}</span> has already been booked</div>
                         <div><span>Booked by:</span> {booked.ev?.user}</div>
-                        <div><span>Phone number:</span> {booked.ev?.phone}</div>
+                        <div><span>Phone number:</span> {booked.ev?.eventphone}</div>
                         {/* <div onClick={handleClickedDetails}><span>More details</span></div> */}
                     </div>
                 </label>}

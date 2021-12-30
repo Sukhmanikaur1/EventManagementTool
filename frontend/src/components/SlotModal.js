@@ -11,7 +11,7 @@ import '../styles/slotModal.css'
 const SlotModal = ({ slot, closeModal }) => {
 
     let user = useSelector(state => state.users.currentUser)
-    let [phone, setPhone] = useState(slot.currentSlot?.phone ? slot.currentSlot.phone : '')
+    let [phone, setPhone] = useState(slot.currentSlot?.eventphone ? slot.currentSlot.eventphone : '')
 
     let nameRef = useRef()
     let emailRef = useRef()
@@ -115,7 +115,7 @@ const SlotModal = ({ slot, closeModal }) => {
         <Modal>
             <div className='event-modal'>
                 <div className='event-details'>
-                    <p className='event-p'><span>{slot.event.place}</span>{slot.viewOnly ? <span style={{ color: 'grey' }}>{slot.time} on {slot.date} was booked</span> : <><span>{slot.time}</span> <span>{slot.date}</span></>}</p>
+                    <p className='event-p'><span>{slot.event.eventplace}</span>{slot.viewOnly ? <span style={{ color: 'grey' }}>{slot.time} on {slot.date} was booked</span> : <><span>{slot.time}</span> <span>{slot.date}</span></>}</p>
 
                     <form onSubmit={handleSubmit}>
                         <div>

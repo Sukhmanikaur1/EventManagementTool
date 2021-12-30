@@ -8,13 +8,13 @@ import { setSlot } from '../actions/slotActions'
 
 const TimeSlots = ({ event }) => {
 
-    let { startDate, endDate } = event
+    let { startdate, enddate } = event
 
     let slotDateRef = useRef({})
     let slotTimeRef = useRef({})
     let slotDisableRef = useRef({})
 
-    let [days] = useState((new Date(endDate) - new Date(startDate)) / 1000 / 60 / 60 / 24)
+    let [days] = useState((new Date(enddate) - new Date(startdate)) / 1000 / 60 / 60 / 24)
     let [modal, setModal] = useState(false)
 
     let [slotDate, setSlotDate] = useState({})
@@ -37,7 +37,7 @@ const TimeSlots = ({ event }) => {
             dispatch(setSlot(parsedStorage))
         }
 
-        let currentDate = new Date(startDate);
+        let currentDate = new Date(startdate);
         currentDate.setDate(currentDate.getDate() + 1);
     
         let daysOfWeek = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -79,7 +79,7 @@ const TimeSlots = ({ event }) => {
         setSlotTime({...slotTimeRef.current})
         setSlotsDisabled({...slotDisableRef.current})
 
-    }, [days, dispatch, startDate])
+    }, [days, dispatch, startdate])
 
     const calculateTimeRow = (row, col) => {
         if (col !== 0 || row === 0) return

@@ -1,3 +1,6 @@
+import EventService from "../services/EventService"
+const EventServices = new EventService()
+
 export const ADD_EVENT = 'ADD_EVENT'
 export const addEvent = (data) => ({
     type: ADD_EVENT,
@@ -15,3 +18,17 @@ export const toggleEventDetails = (data) => ({
     type: TOGGLE_EVENT_DETAILS,
     payload: data
 })
+
+export const getDbEvents = () => async dispatch => {
+    let events = await EventServices.getEvents()
+    events = events.data
+    console.log(events)
+    dispatch(setEvent(events))
+}
+
+export const addDbEvent = (data) => async dispatch => {
+    let event = await EventServices.createEvent(data)
+    event = event.data
+    console.log(event)
+    dispatch(addEvent(event))
+}
