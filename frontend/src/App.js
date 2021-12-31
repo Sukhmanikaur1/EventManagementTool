@@ -29,6 +29,8 @@ import Contact from './pages/GeneralPages/Contact';
 import Home_NU from './pages/NewUserPages/Home_NU';
 import Login from './pages/NewUserPages/Login';
 import SignUp from './pages/NewUserPages/SignUp';
+import BookASlot from './pages/SignedIn/BookASlot';
+import EventConfirmation from './pages/SignedIn/EventConfirmation';
 
 
 function App() {
@@ -64,6 +66,9 @@ function App() {
             <Route path="/contact" component={Contact} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
+            <Route path="/book-a-slot" component={BookASlot} />
+            <Route path="/create-event/event-confirmation/:id" component={EventConfirmation} />
+            <Route path="/create-event/langar" render={() => <NewEvent events={events} />} />
             <Route path="/create-event" render={() => <NewEvent events={events} />} />
             <Route exact path="/manage-events" component={Events} />
             <Route path="/events/:id" component={Paath} />

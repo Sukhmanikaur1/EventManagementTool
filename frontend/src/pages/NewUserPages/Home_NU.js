@@ -33,26 +33,12 @@ const Home_NU = () => {
       <section className="services">
         <div>
           <h2>Sign up or Log In to:</h2>
-          <span
-            className="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            onClick={() => setDropdown(!dropdown)}
-          >
-            <Link to="/">Book a Slot</Link>
-          </span>
-          {dropdown && (
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              {paaths.map((e) => (
-                <p key={e.eventid} id={e.eventid} onClick={handlePaathClick}>
-                  {e.eventplace}
-                </p>
-              ))}
-            </div>
-          )}
+            <span>
+              <Link to="/book-a-slot/paath">Book a Paath Slot</Link>
+            </span>
+            <span>
+              <Link to="/create-event/langar">Book a Langar Slot</Link>
+            </span>
           <span>
             <Link to="/create-event">Create an Event</Link>
           </span>

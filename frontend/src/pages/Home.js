@@ -4,14 +4,6 @@ import { useSelector } from "react-redux";
 import '../styles/home.css'
 
 const Home = () => {
-  let paaths = useSelector((state) => state.events.events.filter((e) => e.eventtype === "paath"));
-  let [dropdown, setDropdown] = useState(false)
-  let history = useHistory()
-  console.log(paaths);
-
-  const handlePaathClick = (e) => {
-    history.push(`/events/${e.target.id}`)
-}
 
   return (
     <main>
@@ -33,29 +25,6 @@ const Home = () => {
       </section>
       <section className="services-breakdown">
         <div>
-
-        {/* 
-          Turned Book A Slot link into a Bootstrap dropdown
-          Resource: https://getbootstrap.com/docs/4.0/components/dropdowns/
-        */}
-          <div className="dropdown">
-            <button
-              className="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-              onClick={() => setDropdown(!dropdown)} 
-            >
-              Book A Slot
-            </button>
-            {dropdown && 
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              {paaths.map(e => <p key={e.eventid} id={e.eventid} onClick={handlePaathClick}>{e.eventplace}</p>)}
-            </div>}
-          </div>
-
           <button>
             <Link to="/new-event">Create an Event</Link>
           </button>

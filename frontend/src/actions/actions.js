@@ -26,9 +26,10 @@ export const getDbEvents = () => async dispatch => {
     dispatch(setEvent(events))
 }
 
-export const addDbEvent = (data) => async dispatch => {
-    let event = await EventServices.createEvent(data)
+export const addDbEvent = ({ newEvent, history }) => async dispatch => {
+    let event = await EventServices.createEvent(newEvent)
     event = event.data
     console.log(event)
+    history.push(`/create-event/event-confirmation/${event.eventid}`)
     dispatch(addEvent(event))
 }

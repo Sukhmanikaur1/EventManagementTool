@@ -22,11 +22,13 @@ const NewEvent = (props) => {
     let history = useHistory()
     let detailsRef = useRef()
 
+    let typeOfEvent = history.location.pathname
+
     let user = useSelector(state => state.users.currentUser)
 
     let [event, setEvent] = useState({
         user: user,
-        type: '',
+        type: typeOfEvent.includes('langar') ? 'langar' : '',
         startDate: '',
         endDate: '',
         place: '',
@@ -36,6 +38,8 @@ const NewEvent = (props) => {
         bookedDays: {},
         selectedDay: { dd: '', mm: '', yy: '' }
     })
+
+    console.log(event)
 
     let [phone, setPhone] = useState('')
 
@@ -68,7 +72,7 @@ const NewEvent = (props) => {
             for (let i = 0; i < props.events.length; i++) {
 
                 let ev = props.events[i]
-
+                if (!ev) break
                 if (ev.enddate) continue // if it has an end date then it's a paath type event, so skip
 
                 let [yy, mm, dd] = ev.startdate.split('-')
@@ -77,7 +81,7 @@ const NewEvent = (props) => {
                 // Handle days in event month
                 if (mm === event.langarDate.mm &&
                     yy === event.langarDate.yy) {
-
+console.log('ok')
                     bookedDays[dd] = { dd, ev }
                 }
 
@@ -125,6 +129,7 @@ const NewEvent = (props) => {
         } else {
             // handles selection of a date in the calendar
             let day = e.getDate()
+            day = day < 10 ? '0' + day : day
             if (day in event.bookedDays) {
                 detailsRef.current.classList.add('active')
                 setEvent({ ...event, bookedDetails: event.bookedDays[day], selectedDay: blank() })
@@ -201,7 +206,7 @@ startdate:
         */
 
         if (database) {
-            dispatch(addDbEvent(newEvent))
+            dispatch(addDbEvent({ newEvent, history }))
         } else {
             dispatch(addEvent(newEvent))
 
@@ -220,15 +225,17 @@ startdate:
             localStorage.setItem("events", stringNewStorage)
         }
         
-        history.push('/')
-        alert('Event created!')
+        // history.push('/create-event/event-confirmation')
 
     }
 
     const handleBookedDayStyle = ({ date }) => {
         let tileDate = String(date.getDate())
-        if (tileDate in event.bookedDays)
+        tileDate = tileDate < 10 ? '0' + tileDate : tileDate
+        if (tileDate in event.bookedDays) {
+            console.log('we in')
             return 'booked-day'
+        }
         else
             return null
     }
@@ -280,9 +287,9 @@ startdate:
     return (
         <form className="ne-form" onSubmit={handleSubmit}>
 
-            <label>
+            <label style={typeOfEvent.includes('langar') ? greyedOutStyle : null}>
                 Event Type
-                <select defaultValue="choose" onChange={handleChange} name="type" autoFocus>
+                <select defaultValue={typeOfEvent.includes('langar') ? 'langar' : 'choose'} onChange={handleChange} name="type" autoFocus>
                     <option value="choose" disabled />
                     <option value="paath">Paath (Prayer)</option>
                     <option value="langar">Langar (Kitchen)</option>
