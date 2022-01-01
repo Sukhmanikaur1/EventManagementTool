@@ -284,7 +284,11 @@ startdate:
     let interactMore = (!paath && !event.selectedDay.dd) || (paath && !event.startDate) ? greyedOutStyle : null
     let booked = event.bookedDetails
 
+    // let eventWord = event.type.slice(0, 1).toUpperCase() + event.type.slice(1)
+console.log(event.type)
     return (
+        <>
+        <h1 className='ne-h'>{event.type === 'langar' ? `Book a Langar slot: ` : `Create a Paath event`}</h1>
         <form className="ne-form" onSubmit={handleSubmit}>
 
             <label style={typeOfEvent.includes('langar') ? greyedOutStyle : null}>
@@ -389,7 +393,7 @@ startdate:
 
             <button style={buttInt} className='create-button'>Create</button>
         </form>
-
+        </>
     )
 }
 

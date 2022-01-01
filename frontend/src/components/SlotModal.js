@@ -45,6 +45,19 @@ const SlotModal = ({ slot, closeModal }) => {
             }
         }
 
+        /*
+            slotid
+            slottime
+            slotdate
+            userid
+            name
+            email
+            phone
+            eventid
+            eventtype
+            eventaddress
+        */
+
         if (slot.currentSlot)
             localStorageStuff('update', newSlot)
         else

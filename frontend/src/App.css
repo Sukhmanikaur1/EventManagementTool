@@ -1,5 +1,11 @@
 /* Import Poppins font */
 
+:root {
+    --blue-shade: #2192FF;
+    --purple-shade: #6B37A1;
+    --orange-shade: #FEB72B;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 /* General */
 * {
@@ -15,7 +21,6 @@ nav {
   display:flex;
   align-items: center;
   width: 50vw;
-  border: 1px solid black;
   width: 100%;
 }
 
@@ -92,14 +97,14 @@ nav ul {
 }
 
 .home-nu-nav-links li:hover {
-    color: #6B37A1;
+    color: var(--purple-shade);
     font-weight: 700;
     margin: -1;
 }
 
 .navbar-brand i {
     padding-right: 5%;
-    color: #FEB72B;
+    color: var(--orange-shade);
 }
 
 .navbar-brand {
@@ -126,16 +131,16 @@ nav ul {
 .home-hero div {
     position: absolute;
     top: 50px;
-    right: 30px;
-    border: 1px solid black;
+    right: 0px;
+
     background-color: rgba(255, 255, 255, 0.632);
-    padding: 2%;
+    padding: 1%;
     width: 28%;
 }
 
 .home-hero div h1 {
     font-weight: 700;
-    color: #6B37A1;
+    color: var(--purple-shade);
 }
 
 .home-hero form {
@@ -153,9 +158,10 @@ nav ul {
 }
 
 .signup-btn {
+    cursor: pointer;
     border: none;
-    background: #6B37A1;
-    color: #FEB72B;
+    background: var(--purple-shade);
+    color: var(--orange-shade);
     border-radius: 10px;
     padding: 2%;
 }
@@ -171,7 +177,7 @@ nav ul {
 .services {
     height: 100%;
     padding: 5%;
-    background-color: #FEB72B;
+    background-color: var(--orange-shade);
 }
 
 .services div {
@@ -192,14 +198,23 @@ nav ul {
     font-size: 1.2rem;
     padding: 10%;
     margin: 5%;
-    background-color: #2192FF;
+    background-color: var(--blue-shade);
     width: 300px;
+}
+
+.services div span:hover {
+    cursor: pointer;
+    background-color: var(--purple-shade);
+}
+
+.services div span:active {
+    color: white;
 }
 
 /* Sign up or login in section */
 
 .login-signup-banner-container {
-    background-color: #6B37A1;
+    background-color: var(--purple-shade);
     display: flex;
     justify-content: center;
     padding: 5%;
@@ -217,7 +232,7 @@ nav ul {
 
 .login-signup-banner-btns button {
     border: none;
-    background-color: #FEB72B;
+    background-color: var(--orange-shade);
     padding: 2%;
     margin: 2%;
 }
@@ -225,7 +240,7 @@ nav ul {
 /* Registration Pages */
 
 .register-pgs {
-    background-color: #FEB72B;
+    background-color: var(--orange-shade);
     height: 100vh;
 }
 
@@ -251,7 +266,7 @@ nav ul {
 }
 
 div.login-signup-container {
-    background-color: #2192FF;
+    background-color: var(--blue-shade);
     padding: 5%;
     width: fit-content;
     border-radius: 20px;
@@ -275,19 +290,19 @@ div.login-signup-container {
 
 .login-signup-container form button {
     padding: 2%;
-    background-color: #FEB72B;
+    background-color: var(--orange-shade);
     border: none;
 }
 
 .login-signup-container span a {
-    color: #FEB72B;
-    text-decoration: #FEB72B solid;
+    color: var(--orange-shade);
+    text-decoration: var(--orange-shade) solid;
 }
 
 /* Event Confirmation page */
 
 .event-confirmation-pg {
-    background-color: #2192FF;
+    background-color: var(--blue-shade);
     height: 100vh;
     display: flex;
     align-items: center;
@@ -296,7 +311,7 @@ div.login-signup-container {
 
 .event-confirmation-pg div {
     background-color: white;
-    border: #FEB72B 5px solid;
+    border: var(--orange-shade) 5px solid;
     width: fit-content;
     padding: 5%;
     border-radius: 20px;
@@ -318,7 +333,7 @@ div.login-signup-container {
 }
 
 .event-confirmation-pg ul li span:nth-child(2) {
-    color: #6B37A1;
+    color: var(--purple-shade);
 }
 
 .done {
@@ -339,14 +354,14 @@ div.login-signup-container {
     align-items: center;
     width: 100%;
     height: 100vh;
-    background-color: #FEB72B;
+    background-color: var(--orange-shade);
 }
 
 .book-a-slot div {
     display: flex;
     justify-content: center;
     border: 1px solid black;
-    background-color: #2192FF;
+    background-color: var(--blue-shade);
     cursor: pointer;
     border-radius: 10px;
     font-size: 2rem;
@@ -361,12 +376,12 @@ div.login-signup-container {
     padding: 10px;
     width: 500px;
     text-align: center;
-    background-color: #2192FF;
+    background-color: var(--blue-shade);
 }
 
 .book-a-slot p:hover {
     cursor: pointer;
-    background-color: #6B37A1;
+    background-color: var(--purple-shade);
 }
 
 .book-a-slot section {
@@ -389,7 +404,19 @@ div.login-signup-container {
 /*  Create Event */
 
 .ne-form {
- 
+    background-color: var(--purple-shade);
+    display: flex;
+    justify-content: center;
+    padding: 5%;
+    gap: 2%;
+}
+
+.ne-h {
+    position: absolute;
+    top: 70px;
+    width: 100%;
+    background-color: var(--purple-shade);
+    text-align: center;
 }
 
 /* .App {

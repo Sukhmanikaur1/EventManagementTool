@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const Home_NU = () => {
-  let paaths = useSelector((state) =>
-    state.events.events.filter((e) => e.eventtype === "paath")
-  );
+  // let paaths = useSelector((state) =>
+  //   state.events.events.filter((e) => e.eventtype === "paath")
+  // );
 
-  let [dropdown, setDropdown] = useState(false);
+  // let [dropdown, setDropdown] = useState(false);
   let history = useHistory();
 
-  const handlePaathClick = (e) => {
-    history.push(`/events/${e.target.id}`);
+  const handleButtonPress = (path) => {
+    history.push(path);
   };
   return (
     <main>
@@ -26,24 +26,24 @@ const Home_NU = () => {
               type="email"
               placeholder="Enter your email address"
             />
-            <button className="signup-btn">Sign up for free!</button>
+            <button className="signup-btn" onClick={() => handleButtonPress('/signup')}>Sign up for free!</button>
           </form>
         </div>
       </section>
       <section className="services">
         <div>
           <h2>Sign up or Log In to:</h2>
-            <span>
-              <Link to="/book-a-slot/paath">Book a Paath Slot</Link>
+            <span onClick={() => handleButtonPress('/book-a-slot/paath')}>
+              Book a Paath Slot
             </span>
-            <span>
-              <Link to="/create-event/langar">Book a Langar Slot</Link>
+            <span onClick={() => handleButtonPress('/create-event/langar')}>
+              Book a Langar Slot
             </span>
-          <span>
-            <Link to="/create-event">Create an Event</Link>
+          <span onClick={() => handleButtonPress('/create-event')}>
+            Create an Event
           </span>
-          <span>
-            <Link to="/manage-events">Manage Events</Link>
+          <span onClick={() => handleButtonPress('/manage-events')}>
+            Manage Events
           </span>
         </div>
       </section>
