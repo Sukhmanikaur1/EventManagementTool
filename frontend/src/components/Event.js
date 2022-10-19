@@ -10,7 +10,7 @@ const Event = ({ event }) => {
 
     let dispatch = useDispatch()
     let history = useHistory()
-console.log(event)
+
     const handleClick = () => {
         dispatch(toggleEventDetails(event))
         history.replace(`/events/${event.eventid}`)
@@ -23,7 +23,6 @@ console.log(event)
         }
         else {
             let sd = event.startdate.split("-")
-            console.log(sd)
             return `${sd[1]}/${sd[2].slice(0,2)}/${sd[0]}`
         }
     }

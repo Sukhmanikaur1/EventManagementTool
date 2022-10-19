@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export const NavLinks_SI = () => {
+export const NavLinksSi = () => {
     return (
         <>
             <Link to="/"><li className="col">Home</li> </Link>

@@ -32,6 +32,7 @@ const NewEvent = (props) => {
         startDate: '',
         endDate: '',
         place: '',
+        name: '',
         address: '',
         langarDate: { dd: '', mm: '', yy: '' },
         bookedDetails: {},
@@ -161,6 +162,7 @@ startdate:
                 enddate: event.endDate,
                 eventaddress: event.address, 
                 eventtype: event.type, 
+                eventname: event.name ? event.name : "none",
                 eventplace: event.place, 
                 eventphone: phone,
                 eventstatus: "created"
@@ -356,6 +358,17 @@ console.log(event.type)
                         required
                     />
                 </label>}
+
+            {paath &&
+            <label style={interactMore}>
+                Event Name
+                <input
+                    name="name"
+                    value={event.name}
+                    onChange={handleChange}
+                    required
+                />
+            </label>}
 
             <label style={interactMore}>
                 Place Name

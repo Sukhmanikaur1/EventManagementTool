@@ -6,6 +6,7 @@ import SlotModal from './SlotModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSlot } from '../actions/slotActions'
 
+
 const TimeSlots = ({ event }) => {
 
     let { startdate, enddate } = event
@@ -14,14 +15,19 @@ const TimeSlots = ({ event }) => {
     let slotTimeRef = useRef({})
     let slotDisableRef = useRef({})
 
-    let [days] = useState((new Date(enddate) - new Date(startdate)) / 1000 / 60 / 60 / 24)
+    let rawDateRange = new Date(enddate) - new Date(startdate)
+    let rawDaysRange = rawDateRange / 1000 / 60 / 60 / 24
+    let daysInitialValue = Number(rawDaysRange.toFixed(0))
+    let amountOfRows = 14 // to 6pm
+
+    let [days] = useState(daysInitialValue)
     let [modal, setModal] = useState(false)
 
     let [slotDate, setSlotDate] = useState({})
     let [slotTime, setSlotTime] = useState({})
     let [slotsDisabled, setSlotsDisabled] = useState({})
 
-    let [gridRows] = useState([...Array(13)])
+    let [gridRows] = useState([...Array(amountOfRows)])
     let [gridCols] = useState([...Array(days + 1)])
 
     let slots = useSelector(state => state.slots.slots.filter(s => s.eventId === event.id))
@@ -60,7 +66,7 @@ const TimeSlots = ({ event }) => {
             }   
         }
 
-        let hours = [...Array(13)]
+        let hours = [...Array(amountOfRows)]
         let daysInRange = [...Array(days + 1)]
 
         for (let row = 0; row < hours.length; row++) {
@@ -79,7 +85,7 @@ const TimeSlots = ({ event }) => {
         setSlotTime({...slotTimeRef.current})
         setSlotsDisabled({...slotDisableRef.current})
 
-    }, [days, dispatch, startdate])
+    }, [days, dispatch, startdate, amountOfRows])
 
     const calculateTimeRow = (row, col) => {
         if (col !== 0 || row === 0) return
@@ -87,39 +93,26 @@ const TimeSlots = ({ event }) => {
         let m = row >= 7 ? 'PM' : 'AM';
         let result;
         
+        // handles display of 6AM to 12PM
         if (row >= 1 && row <= 7)
             result = (baseTime + row) + m
-        switch (baseTime + row) {
-            case 13:
-                result = 1 + m
-                break;
-            case 14:
-                result = 2 + m
-                break;
-            case 15:
-                result = 3 + m
-                break;
-            case 16:
-                result = 4 + m
-                break;
-            case 17:
-                result = 5 + m
-                break;
-            default:
-                break;
-        }
 
+        // handles display of 1PM to 6PM
+        if (baseTime + row > 12)
+            result = (baseTime + row) - 12 + m
+        
         slotTimeRef.current[`${row}`] = result
     }
 
     const handleSlotClick = (e) => {
-
+        
         let [row, col] = e.currentTarget.id.split("-")
         let time = slotTime[row]
         let date = slotDate[col]
-
+       
         // Ignore click if it was on a disabled or out of bounds slot
-        if (!time || !date || e.target.className.includes('d-slot')) return
+        // ...target is a span and the parent is a div with the class name
+        if (!time || !date || e.target.parentElement.className.includes('d-slot')) return
 
         // Otherwise, try to find the info associated with the slot clicked
         let currentSlot = slots.filter(s => s.time === time && s.date === date)[0]
@@ -137,9 +130,12 @@ const TimeSlots = ({ event }) => {
         console.log(`You clicked on slot ${e.target.id}, which is ${slotTimeRef.current[row]} on ${slotDateRef.current[col]}`)
     }
 
+    // blacking out slots beyond 6AM
+    const disabledSlotRange = (row) => row > 1
+
     const disableOrNot = (row, col) => {
         if (slotDisableRef.current[`${col}`]) {
-            if (row > 1 && row < 10) 
+            if (disabledSlotRange(row)) 
                 return 'd-slot'
         }
         return ''
@@ -165,7 +161,7 @@ const TimeSlots = ({ event }) => {
         
         if (currentSlot) 
             return slotMiniDetails(currentSlot) 
-        else if (slotsDisabled[`${col}`] && row > 1 && row < 10)
+        else if (slotsDisabled[`${col}`] && disabledSlotRange(row))
             return 
         else 
             return <p className='plus-symbol'><span>+</span></p>

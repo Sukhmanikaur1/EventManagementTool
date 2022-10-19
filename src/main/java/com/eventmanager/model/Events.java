@@ -18,6 +18,7 @@ import javax.persistence.Table;
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private int eventid;
 		private String eventtype;
+		private String eventname;
 		private String eventplace;
 		private String eventaddress;
 		private String eventphone;
@@ -93,15 +94,24 @@ import javax.persistence.Table;
 		
 		
 	      
-	    public Events()
+	    public String getEventname() {
+			return eventname;
+		}
+
+		public void setEventname(String eventname) {
+			this.eventname = eventname;
+		}
+
+		public Events()
 	    {
 	    	
 	    }
 	    
-	    public Events(int id, String type, String place, String address, String phone ,String status , Date start, Date end) {
+	    public Events(int id, String name, String type, String place, String address, String phone ,String status , Date start, Date end) {
 			super();
 			this.eventid = id;
 			this.eventtype = type;
+			this.eventname = name;
 			this.eventplace = place;
 			this.eventaddress = address;
 			this.eventphone = phone;

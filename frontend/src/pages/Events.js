@@ -13,8 +13,8 @@ const Events = () => {
     let events = useSelector(state => state.events.events)
     let details = useSelector(state => state.events.details)
 
-    const renderEvents = () => {
-        return events.filter((e) => e.eventtype === 'paath').map(event => <Event key={event.eventid} event={event} />)
+    const renderEvents = (type) => {
+        return events.filter((e) => e.eventtype === type).map(event => <Event key={event.eventid} event={event} />)
     }
 
     // const toggleDetails = () => {
@@ -32,8 +32,17 @@ const Events = () => {
     console.log(events)
 
     return (
-        <div>
-            {renderEvents()}
+        <div className="manage-evt">
+            <h2 id="h-p">Paath Events</h2>
+            <div className='manage-p'>
+                {renderEvents('paath')}
+            </div>
+            
+            <h2 id="h-l">Langar Events</h2>
+            <div className='manage-l'>
+                {renderEvents('langar')}
+            </div>
+            
             {renderModal()}
 
             {/* Temporary buttons for Local Storage management */}

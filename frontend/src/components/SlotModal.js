@@ -11,7 +11,7 @@ import '../styles/slotModal.css'
 const SlotModal = ({ slot, closeModal }) => {
 
     let user = useSelector(state => state.users.currentUser)
-    let [phone, setPhone] = useState(slot.currentSlot?.eventphone ? slot.currentSlot.eventphone : '')
+    let [phone, setPhone] = useState(slot.currentSlot?.phone ? slot.currentSlot.phone : '')
 
     let nameRef = useRef()
     let emailRef = useRef()

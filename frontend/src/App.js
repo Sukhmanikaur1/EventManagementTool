@@ -23,7 +23,7 @@ import Paath from './pages/Paath';
 // import EventConfirmation from './pages/SignedIn/EventConfirmation';
 
 import NavBar from './components/GeneralComponents/NavBar';
-import { NavLinks_SI } from './components/SignedInComponenents/NavLinks_SI';
+import { NavLinksSi } from './components/SignedInComponenents/NavLinks_SI';
 import { About } from './pages/GeneralPages/About';
 import Contact from './pages/GeneralPages/Contact';
 import Home_NU from './pages/NewUserPages/Home_NU';
@@ -59,7 +59,7 @@ function App() {
         <div className="App">
 
         <Router>
-          <NavBar navlinkstype={<NavLinks_SI />} />
+          <NavBar navlinkstype={<NavLinksSi />} />
           <Switch>
             <Route exact path="/" component={Home_NU} />
             <Route path="/about" component={About} />

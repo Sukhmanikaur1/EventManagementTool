@@ -19,7 +19,7 @@ const BookASlot = () => {
                 <>
                     <h1>Paath events to choose from:</h1>
                     <section>
-                        {paaths.map(e => <p key={e.eventid} id={e.eventid} onClick={handlePaathClick}>{e.eventplace}</p>)}
+                        {paaths.map(e => <p key={e.eventid} id={e.eventid} onClick={handlePaathClick}>{e.eventname}</p>)}
                     </section>
                 </>
             :

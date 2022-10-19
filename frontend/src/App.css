@@ -419,7 +419,32 @@ div.login-signup-container {
     text-align: center;
 }
 
-/* .App {
+.App {
     height: 100%;
-} */
+}
 
+/* Manage Events */
+.manage-evt {
+    background-color: var(--purple-shade);
+    height: 100vh;
+}
+
+.manage-evt h2 {
+    text-align: center;
+}
+
+#h-p {
+    background-color: rgb(246, 210, 110);
+}
+
+#h-l {
+    background-color: rgb(101, 158, 228);
+}
+
+.manage-p {
+    background-color: var(--orange-shade);
+}
+
+.manage-l {
+    background-color: var(--blue-shade);
+}

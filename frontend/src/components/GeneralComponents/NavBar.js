@@ -1,5 +1,5 @@
 import React from 'react'
-import Login_SignUp from '../NewUserComponents/Login_SignUp'
+import LoginSignUp from '../NewUserComponents/Login_SignUp'
 
 const NavBar = (props) => {
     return (
@@ -10,7 +10,7 @@ const NavBar = (props) => {
             <ul className="home-nu-nav-links col-auto row align-content-center">
                 {props.navlinkstype}
             </ul>
-            <Login_SignUp />
+            <LoginSignUp />
         </nav>
     )
 }
