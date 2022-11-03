@@ -1,46 +1,61 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 import '../styles/home.css'
 
 const Home = () => {
 
+  let history = useHistory();
+
+  const handleButtonPress = (path) => {
+    history.push(path);
+  };
+  
   return (
     <main>
-      <section className="hero">
-        <h2>Book or create an event at your nearest Gurdwara Sahib!</h2>
-        <form>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter email address"
-          />
-          <button>
-            <Link to="/sign-up">
-              <label htmlFor="email">Sign Up for Free!</label>
-            </Link>
-          </button>
-        </form>
-      </section>
-      <section className="services-breakdown">
+      <section className="home-hero d-flex flex-column justify-content-center">
         <div>
-          <button>
-            <Link to="/new-event">Create an Event</Link>
-          </button>
-          <button>
-            <Link to="/sign-up">Manage Events</Link>
-          </button>
+          <h1 className="col-8">
+            Book or create an event at your nearest Gurdwara Sahib!
+          </h1>
+          <form className="row d-flex">
+            <input
+              className="col"
+              type="email"
+              placeholder="Enter your email address"
+            />
+            <button className="signup-btn" onClick={() => handleButtonPress('/signup')}>Sign up for free!</button>
+          </form>
         </div>
-        <img src="#" alt="home page example" />
       </section>
-      <section>
+      <section className="services">
         <div>
-          <h2>Get Started</h2>
-          <p>Discover Gurdwara Sahib events near you!</p>
-          <div>
-            <button>Log In</button>
-            <button>Sign Up</button>
+          <h2>Sign up or Log In to:</h2>
+            <span onClick={() => handleButtonPress('/book-a-slot/paath')}>
+              Book a Paath Slot
+            </span>
+            {/* <span onClick={() => handleButtonPress('/create-event/langar')}>
+              Book a Langar Slot
+            </span> */}
+          <span onClick={() => handleButtonPress('/create-event')}>
+            Create an Event
+          </span>
+          <span onClick={() => handleButtonPress('/manage-events')}>
+            Manage Events
+          </span>
+        </div>
+      </section>
+      <section className="login-signup-banner-container">
+        <div className="login-signup-banner">
+          <h2>Get started </h2>
+          <p>Discover Gurdwara Sahib events near you! </p>
+          <div className="login-signup-banner-btns">
+            <button>
+              <Link to="/login">Log In</Link>
+            </button>
+            <button>
+              <Link to="/signup">Signup</Link>
+            </button>
           </div>
         </div>
       </section>

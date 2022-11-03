@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-const Login_SignUp = () => {
+const EntryButtons = () => {
     return (
         <ul className="row align-items-center sign-up-custom">
             <li className="col-auto login-link"><Link to="/login">Log In</Link></li>
@@ -10,4 +10,4 @@ const Login_SignUp = () => {
     )
 }
 
-export default Login_SignUp
+export default EntryButtons

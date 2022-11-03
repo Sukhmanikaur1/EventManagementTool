@@ -2,25 +2,18 @@ import React from 'react';
 import Event from '../components/Event';
 
 import { useSelector } from 'react-redux'
-// import { useHistory } from 'react-router-dom'
 
-// import { toggleEventDetails } from '../actions/actions'
+import '../styles/manageEvents.css'
+import { Link } from 'react-router-dom';
 
 const Events = () => {
 
-    // let dispatch = useDispatch()
-    // let history = useHistory()
     let events = useSelector(state => state.events.events)
     let details = useSelector(state => state.events.details)
 
     const renderEvents = (type) => {
         return events.filter((e) => e.eventtype === type).map(event => <Event key={event.eventid} event={event} />)
     }
-
-    // const toggleDetails = () => {
-    //     dispatch(toggleEventDetails(false))
-    //     history.replace('/events')
-    // }
 
     const renderModal = () => {
         if (details)
@@ -33,6 +26,11 @@ const Events = () => {
 
     return (
         <div className="manage-evt">
+
+        <Link to="/create-event" style={{ textDecoration: 'none' }}>
+            <li className="col cr-ev-btn">Create Event</li> 
+        </Link>
+
             <h2 id="h-p">Paath Events</h2>
             <div className='manage-p'>
                 {renderEvents('paath')}

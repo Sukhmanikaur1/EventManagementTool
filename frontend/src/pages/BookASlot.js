@@ -2,6 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom'
 
+import '../styles/bookSlot.css'
+
 const BookASlot = () => {
 
     let paaths = useSelector((state) => state.events.events.filter((e) => e.eventtype === "paath"));

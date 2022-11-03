@@ -92,6 +92,30 @@
   }
 
 
+  /*  Create Event */
+
+.ne-form {
+  background-color: var(--purple-shade);
+  display: flex;
+  justify-content: center;
+  padding: 5%;
+  gap: 2%;
+}
+
+.ne-h {
+  position: absolute;
+  top: 70px;
+  width: 100%;
+  background-color: var(--purple-shade);
+  text-align: center;
+}
+
+.App {
+  height: 100%;
+}
+
+
+
 
   
  

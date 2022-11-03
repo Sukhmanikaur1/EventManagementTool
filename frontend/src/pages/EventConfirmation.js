@@ -2,6 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 
+import '../styles/eventConfirm.css'
+
 const EventConfirmation = () => {
 
     let { id } = useParams()
