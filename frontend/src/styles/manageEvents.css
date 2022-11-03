@@ -1,5 +1,5 @@
 .manage-evt {
-    background-color: var(--purple-shade);
+    background-color: var(--blue-shade);
     height: 100vh;
 }
 
@@ -7,24 +7,38 @@
     text-align: center;
 }
 
-#h-p {
-    background-color: rgb(246, 210, 110);
-}
+.manage-both {
+    background-color: white;
+    border: 3px solid var(--another-shade);
+    border-radius: 5px;
+    margin: 0 20px 0 20px;
 
-#h-l {
-    background-color: rgb(101, 158, 228);
-}
-
-.manage-p {
-    background-color: var(--orange-shade);
 }
 
 .manage-l {
-    background-color: var(--blue-shade);
+    margin-top: 20px;
 }
 
 .cr-ev-btn {
     text-align: center;
     font-size: 20pt;
     color: black;
+    border: 3px solid black;
+    width: 200px;
+    margin: 20px;
+    background-color: var(--purple-shade);
+}
+
+.cr-ev-btn-contain {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+
+/* local storage buttons (temp) */
+
+.flush {
+    margin-top: 60px;
+    opacity: .3;
 }

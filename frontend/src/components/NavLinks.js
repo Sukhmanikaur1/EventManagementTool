@@ -8,16 +8,19 @@ export const NavLinks = () => {
 
     return (
         <>
-            {role === 'guest' ?
-                <Link to="/create-event/langar"><li className="col">Book a Langar Slot</li> </Link>
-            :
-                <>
-                    <Link to="/manage-events"><li className="col">Manage Events</li> </Link>
-                    <Link to="/book-a-slot/paath"><li className="col">Book a Paath Slot</li> </Link>
-                    <Link to="/create-event/langar"><li className="col">Book a Langar Slot</li> </Link>
-                </>
-            }
+            <Link to="/manage-events">
+                <li className="col">Manage Events</li> 
+            </Link>
             
+            {role !== 'guest' && 
+                <Link to="/book-a-slot/paath">
+                    <li className="col">Book a Paath Slot</li> 
+                </Link>
+            }
+
+            <Link to="/create-event/langar">
+                <li className="col">Book a Langar Slot</li> 
+            </Link>
         </>
     )
 }

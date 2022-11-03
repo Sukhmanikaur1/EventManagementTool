@@ -1,47 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Event from '../components/Event';
 
 import { useSelector } from 'react-redux'
 
 import '../styles/manageEvents.css'
 import { Link } from 'react-router-dom';
+import { Modal } from 'bootstrap';
+import EventModal from '../components/EventModal';
 
 const Events = () => {
 
     let events = useSelector(state => state.events.events)
     let details = useSelector(state => state.events.details)
+    const role = useSelector(state => state.users.role)
+
+    let [modal, setModal] = useState(false)
 
     const renderEvents = (type) => {
-        return events.filter((e) => e.eventtype === type).map(event => <Event key={event.eventid} event={event} />)
+        return events
+                  .filter((e) => e.eventtype === type)
+                  .map(event => 
+                    <Event 
+                        key={event.eventid} 
+                        event={event} 
+                        setModal={setModal}
+                    />
+                  )
     }
-
-    const renderModal = () => {
-        if (details)
-            return null
-        else 
-            return null
-    }
-
-    console.log(events)
 
     return (
         <div className="manage-evt">
 
-        <Link to="/create-event" style={{ textDecoration: 'none' }}>
-            <li className="col cr-ev-btn">Create Event</li> 
-        </Link>
+            <div className='cr-ev-btn-contain'>
+                {role !== 'guest' &&
+                    <Link to="/create-event/paath" style={{ textDecoration: 'none' }}>
+                        <li className="col cr-ev-btn">Create Event</li> 
+                    </Link>
+                }
+            </div>
 
-            <h2 id="h-p">Paath Events</h2>
-            <div className='manage-p'>
-                {renderEvents('paath')}
+            <div className='manage-both'>
+                <div className='manage-p'>
+                    <h2 id="h-p">Paath Events</h2>
+                    {renderEvents('paath')}
+                </div>
+                
+                
+                {/* <div className='manage-l'>
+                    <h2 id="h-l">Langar Events</h2>
+                    {renderEvents('langar')}
+                </div> */}
             </div>
             
-            <h2 id="h-l">Langar Events</h2>
-            <div className='manage-l'>
-                {renderEvents('langar')}
-            </div>
-            
-            {renderModal()}
+            {modal && <EventModal event={modal} closeModal={setModal} />}
 
             {/* Temporary buttons for Local Storage management */}
             <button

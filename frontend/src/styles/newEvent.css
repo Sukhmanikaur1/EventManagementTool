@@ -95,27 +95,29 @@
   /*  Create Event */
 
 .ne-form {
-  background-color: var(--purple-shade);
+  background-color: white;
   display: flex;
   justify-content: center;
   padding: 5%;
   gap: 2%;
+  border: 3px solid var(--another-shade);
+  border-radius: 5px;
+  /* margin: 0 100px 0 100px; */
+  width: 400px;
+  max-height: 700px;
 }
 
 .ne-h {
-  position: absolute;
-  top: 70px;
   width: 100%;
-  background-color: var(--purple-shade);
+  background-color: var(--blue-shade);
   text-align: center;
+  padding: 20px;
 }
 
-.App {
-  height: 100%;
+.bk-slot {
+  background-color: var(--blue-shade);
+  height: 1050px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-
-
-
-  
- 

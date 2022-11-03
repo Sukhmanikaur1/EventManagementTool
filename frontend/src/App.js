@@ -6,7 +6,7 @@ import { database } from './services/EventService';
 import ManageEvents from './pages/ManageEvents';
 import NewEvent from './pages/NewEvent';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -28,6 +28,9 @@ function App() {
 
     let dispatch = useDispatch()
     let events = useSelector(state => state.events.events)
+    let role = useSelector(state => state.users.role)
+
+    let guest = role === 'guest' ? true : false
 
     useEffect(() => {
         
@@ -55,12 +58,26 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
-            <Route path="/book-a-slot" component={BookASlot} />
             <Route path="/create-event/event-confirmation/:id" component={EventConfirmation} />
             <Route path="/create-event/langar" render={() => <NewEvent events={events} />} />
-            <Route path="/create-event" render={() => <NewEvent events={events} />} />
             <Route exact path="/manage-events" component={ManageEvents} />
-            <Route path="/events/:id" component={Paath} />
+            {
+              !guest &&
+              <>
+                <Route path="/book-a-slot" component={BookASlot} />
+                <Route path="/create-event/paath" render={() => <NewEvent events={events} />} />
+                {/* <Route exact path="/create-event" render={() => <NewEvent events={events} />} /> */}
+                <Route path="/events/:id" component={Paath} />
+              </>
+            }
+            <Route path="*">
+              {
+                guest ? 
+                  <Redirect to="/login" />
+                :
+                  <Redirect to="/" />
+              }
+            </Route>
           </Switch>
         </Router>
       </div>

@@ -22,13 +22,19 @@ const NewEvent = (props) => {
     let history = useHistory()
     let detailsRef = useRef()
 
-    let typeOfEvent = history.location.pathname
+    let eventtype = history.location.pathname.split('/')[2] // result: -->  langar OR paath
+
+    useEffect(() => {
+        setEvent(prevState => ({ ...prevState, type: eventtype }))
+    }, [history.location.pathname])
+
+    console.log(history)
 
     let user = useSelector(state => state.users.currentUser)
 
     let [event, setEvent] = useState({
         user: user,
-        type: typeOfEvent.includes('langar') ? 'langar' : '',
+        type: eventtype ? eventtype : '',
         startDate: '',
         endDate: '',
         place: '',
@@ -82,7 +88,6 @@ const NewEvent = (props) => {
                 // Handle days in event month
                 if (mm === event.langarDate.mm &&
                     yy === event.langarDate.yy) {
-console.log('ok')
                     bookedDays[dd] = { dd, ev }
                 }
 
@@ -286,16 +291,14 @@ startdate:
     let interactMore = (!paath && !event.selectedDay.dd) || (paath && !event.startDate) ? greyedOutStyle : null
     let booked = event.bookedDetails
 
-    // let eventWord = event.type.slice(0, 1).toUpperCase() + event.type.slice(1)
-console.log(event.type)
     return (
-        <>
+        <div className='bk-slot'>
         <h1 className='ne-h'>{event.type === 'langar' ? `Book a Langar slot: ` : `Create a Paath event`}</h1>
         <form className="ne-form" onSubmit={handleSubmit}>
 
-            <label style={typeOfEvent.includes('langar') ? greyedOutStyle : null}>
+            <label style={eventtype ? greyedOutStyle : null}>
                 Event Type
-                <select defaultValue={typeOfEvent.includes('langar') ? 'langar' : 'choose'} onChange={handleChange} name="type" autoFocus>
+                <select value={eventtype ? eventtype : 'choose'} onChange={handleChange} name="type" autoFocus>
                     <option value="choose" disabled />
                     <option value="paath">Paath (Prayer)</option>
                     <option value="langar">Langar (Kitchen)</option>
@@ -406,7 +409,7 @@ console.log(event.type)
 
             <button style={buttInt} className='create-button'>Create</button>
         </form>
-        </>
+        </div>
     )
 }
 

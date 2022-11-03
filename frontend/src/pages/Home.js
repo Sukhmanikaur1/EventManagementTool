@@ -1,14 +1,21 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 
 import '../styles/home.css'
 
 const Home = () => {
 
+  const role = useSelector(state => state.users.role)
+
+  const guest = role === 'guest' ? true : false
+
   let history = useHistory();
 
   const handleButtonPress = (path) => {
-    history.push(path);
+    if (!guest) {
+      history.push(path);
+    }
   };
   
   return (
@@ -30,9 +37,19 @@ const Home = () => {
       </section>
       <section className="services">
         <div>
-          <h2>Sign up or Log In to:</h2>
-            <span onClick={() => handleButtonPress('/book-a-slot/paath')}>
-              Book a Paath Slot
+          <h2>
+            {guest ? 
+              "Sign up or Log In to:" 
+              : 
+              "Choose from:"
+            }
+          </h2>
+            <span onClick={() => handleButtonPress('/book-a-slot')}>
+              {guest ? 
+                "Book a Paath Slot" 
+                : 
+                "Book A Slot"
+              }
             </span>
             {/* <span onClick={() => handleButtonPress('/create-event/langar')}>
               Book a Langar Slot
