@@ -32,25 +32,32 @@ const Events = () => {
 
             <div className='cr-ev-btn-contain'>
                 {role !== 'guest' &&
-                    <Link to="/create-event/paath" style={{ textDecoration: 'none' }}>
+                    <Link to="/create-event" style={{ textDecoration: 'none' }}>
                         <li className="col cr-ev-btn">Create Event</li> 
                     </Link>
                 }
             </div>
 
-            <div className='manage-both'>
-                <div className='manage-p'>
-                    <h2 id="h-p">Paath Events</h2>
-                    {renderEvents('paath')}
+            <h2 id="h-p">{events.length ? "Paath Events" : "No events to manage"}</h2>
+
+            <div className='manage-both-contain'>
+                <div className='manage-both'>
+                    <table className="table manage-p">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Place</th>
+                                <th scope="col">Starts</th>
+                                <th scope="col">Ends</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {renderEvents('paath')}
+                        </tbody>
+                    </table>
                 </div>
-                
-                
-                {/* <div className='manage-l'>
-                    <h2 id="h-l">Langar Events</h2>
-                    {renderEvents('langar')}
-                </div> */}
             </div>
-            
+         
             {modal && <EventModal event={modal} closeModal={setModal} />}
 
             {/* Temporary buttons for Local Storage management */}

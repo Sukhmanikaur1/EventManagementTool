@@ -10,12 +10,12 @@ const Home = () => {
 
   const guest = role === 'guest' ? true : false
 
-  let history = useNavigate();
+  let navigate = useNavigate();
 
   const handleButtonPress = (path) => {
-    if (!guest) {
-      history.push(path);
-    }
+    
+      navigate(path);
+  
   };
   
   return (
@@ -44,22 +44,28 @@ const Home = () => {
               "Choose from:"
             }
           </h2>
-            <span onClick={() => handleButtonPress('/book-a-slot')}>
-              {guest ? 
-                "Book a Paath Slot" 
-                : 
-                "Book A Slot"
-              }
+            <span onClick={() => handleButtonPress('/book-a-slot/paath')}>
+            Book a Paath Slot
+            </span>
+            <span onClick={() => handleButtonPress('/create-event/langar')}>
+            Book a Langar
             </span>
             {/* <span onClick={() => handleButtonPress('/create-event/langar')}>
               Book a Langar Slot
             </span> */}
-          <span onClick={() => handleButtonPress('/create-event')}>
+
+          {
+            !guest &&
+            <>
+            <span onClick={() => handleButtonPress('/create-event')}>
             Create an Event
           </span>
-          <span onClick={() => handleButtonPress('/manage-events')}>
-            Manage Events
-          </span>
+            
+              <span onClick={() => handleButtonPress('/manage-events')}>
+                Manage Events
+              </span>
+              </>
+          }
         </div>
       </section>
       <section className="login-signup-banner-container">

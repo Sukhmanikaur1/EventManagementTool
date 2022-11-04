@@ -95,7 +95,7 @@
   /*  Create Event */
 
 .ne-form {
-  background-color: white;
+  background-color: #DFF6FF; /* 47B5FF  FFF4CF   */ 
   display: flex;
   justify-content: center;
   padding: 5%;
@@ -116,7 +116,7 @@
 
 .bk-slot {
   background-color: var(--blue-shade);
-  height: 1050px;
+  height: 900px;
   display: flex;
   flex-direction: column;
   align-items: center;

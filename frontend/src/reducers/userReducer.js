@@ -1,7 +1,7 @@
 export const initialState = {
     users: [],
     currentUser: 'Bob',
-    role: 'admin'
+    role: 'guest'
 }
 
 export default function eventReducer(state = initialState, action) {

@@ -59,15 +59,15 @@ function App() {
             <Route path="/login" element={<Login/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/create-event/event-confirmation/:id" element={<EventConfirmation/>} />
-            <Route path="/create-event/langar" element={<NewEvent events={events} />} />
-            <Route exact path="/manage-events" element={<ManageEvents/>} />
+            <Route path="/create-event/:eventtype" element={<NewEvent events={events} />} />
+            <Route path="/create-event" element={<NewEvent events={events} />} />
+            <Route path="/book-a-slot/paath" element={<BookASlot/>} />
+            <Route path="/events/:id" element={<Paath/>} />
             {
               !guest &&
               <>
-                <Route path="/book-a-slot" element={BookASlot} />
-                <Route path="/create-event/paath" element={<NewEvent events={events} />} />
+                <Route exact path="/manage-events" element={<ManageEvents/>} />
                 {/* <Route exact path="/create-event" render={() => <NewEvent events={events} />} /> */}
-                <Route path="/events/:id" element={Paath} />
               </>
             }
             {

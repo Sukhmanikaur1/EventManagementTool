@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 
 import { v4 as uuid } from 'uuid'
@@ -19,11 +19,9 @@ const NewEvent = (props) => {
     let [calendar, setCalendar] = useState(new Date())
 
     let dispatch = useDispatch()
-    let history = useNavigate()
-    let location = useLocation()
+    let navigate = useNavigate()
+    let { eventtype } = useParams()
     let detailsRef = useRef()
-
-    let eventtype = location.pathname.split('/')[2] // result: -->  langar OR paath
 
     useEffect(() => {
         setEvent(prevState => ({ ...prevState, type: eventtype }))
@@ -144,6 +142,7 @@ const NewEvent = (props) => {
 
         setEvent({ ...event, [name]: value })
     }
+  
 /*
 enddate: "2021-11-19T05:00:00.000+00:00"
 eventaddress: "123 Main Street"
@@ -210,7 +209,7 @@ startdate:
         */
 
         if (database) {
-            dispatch(addDbEvent({ newEvent, history }))
+            dispatch(addDbEvent({ newEvent, navigate }))
         } else {
             dispatch(addEvent(newEvent))
 
@@ -229,7 +228,7 @@ startdate:
             localStorage.setItem("events", stringNewStorage)
         }
         
-        // history.push('/create-event/event-confirmation')
+        // navigate.push('/create-event/event-confirmation')
 
     }
 
@@ -273,7 +272,7 @@ startdate:
     // }
 
     // const handleClickedDetails = () => {
-    //     history.push(`/events/${event.bookedDetails.ev.id}`)
+    //     navigate.push(`/events/${event.bookedDetails.ev.id}`)
     //     dispatch(toggleEventDetails(event.bookedDetails.ev))
     // }
 
@@ -292,12 +291,12 @@ startdate:
 
     return (
         <div className='bk-slot'>
-        <h1 className='ne-h'>{event.type === 'langar' ? `Book a Langar: ` : `Create a Paath event`}</h1>
+        <h1 className='ne-h'>{!event.type ? 'Create an event' : event.type === 'langar' ? `Book a Langar: ` : `Create a Paath event`}</h1>
         <form className="ne-form" onSubmit={handleSubmit}>
 
-            <label style={eventtype ? greyedOutStyle : null}>
+             <label > {/* style={eventtype ? greyedOutStyle : null} */}
                 Event Type
-                <select value={eventtype ? eventtype : 'choose'} onChange={handleChange} name="type" autoFocus>
+                <select value={event.type ? event.type : eventtype ? eventtype : 'choose'} onChange={handleChange} name="type" autoFocus>
                     <option value="choose" disabled />
                     <option value="paath">Paath (Prayer)</option>
                     <option value="langar">Langar (Kitchen)</option>
@@ -362,7 +361,7 @@ startdate:
                 </label>}
 
             {paath &&
-            <label style={interactMore}>
+            <label style={interact}> {/* style={interactMore} */}
                 Event Name
                 <input
                     name="name"
@@ -372,7 +371,7 @@ startdate:
                 />
             </label>}
 
-            <label style={interactMore}>
+            <label style={interact}>
                 Place Name
                 <input
                     name="place"
@@ -382,7 +381,7 @@ startdate:
                 />
             </label>
 
-            <label style={interactMore}>
+            <label style={interact}>
                 Address
                 <input
                     name="address"
@@ -392,7 +391,7 @@ startdate:
                 />
             </label>
 
-            <label style={interactMore}>
+            <label style={interact}>
                 Phone Number
                 <input
                     type= "tel"
