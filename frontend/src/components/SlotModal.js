@@ -45,24 +45,6 @@ const SlotModal = ({ slot, closeModal }) => {
             }
         }
 
-        /*
-            slotid
-            slottime
-            slotdate
-            userid
-            name
-            email
-            phone
-            eventid
-            eventtype
-            eventaddress
-        */
-
-        if (slot.currentSlot)
-            localStorageStuff('update', newSlot)
-        else
-            localStorageStuff('create', newSlot)
-
         if (slot.currentSlot)
             dispatch(updateSlot(newSlot))
         else 
@@ -72,38 +54,7 @@ const SlotModal = ({ slot, closeModal }) => {
         closeModal(false)
     }
 
-    const localStorageStuff = (type, newSlot) => {
-         /*
-            Same type of temporary local storage used here as was used
-            in the NewEvent component's handleSubmit function
-        */
-
-            let currentStorage = localStorage.getItem("slots")
-
-            if (!currentStorage) {
-                localStorage.setItem("slots", JSON.stringify([]))
-                currentStorage = localStorage.getItem("slots")
-            }
-    
-            let parsedCurrentSlots = JSON.parse(currentStorage)
-    
-            let newStorage;
-        
-            if (type === 'update')
-                newStorage = parsedCurrentSlots.map(s => s.id === newSlot.id ? newSlot : s)
-            else if (type === 'create')
-                newStorage = [...parsedCurrentSlots, newSlot]
-            else 
-                newStorage = parsedCurrentSlots.filter(s => s.id !== slot.currentSlot.id)
-    
-            let stringNewStorage = JSON.stringify(newStorage)
-    
-            localStorage.setItem("slots", stringNewStorage)
-    }
-
     const handleDelete = () => {
-       localStorageStuff('delete')
-
         alert('Slot deleted.')
         dispatch(deleteSlot(slot.currentSlot.id))
         closeModal(false)

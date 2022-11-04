@@ -36,12 +36,9 @@ const TimeSlots = ({ event }) => {
 
     useEffect(() => {
 
-        let currentStorage = localStorage.getItem("slots")
-        if (currentStorage) {
-            let parsedStorage = JSON.parse(currentStorage)
-            console.log(parsedStorage)
-            dispatch(setSlot(parsedStorage))
-        }
+        // won't be null with database... 
+        // but if null parsed local storage would be the value
+        dispatch(setSlot(null))
 
         let currentDate = new Date(startdate);
         currentDate.setDate(currentDate.getDate() + 1);
