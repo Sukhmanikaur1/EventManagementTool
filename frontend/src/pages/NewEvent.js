@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { v4 as uuid } from 'uuid'
 
-import { addEvent, addDbEvent } from '../actions/actions';
+import { addEvent } from '../actions/actions';
 
 import { database } from '../services/EventService';
 
@@ -143,22 +143,8 @@ const NewEvent = (props) => {
         setEvent({ ...event, [name]: value })
     }
   
-/*
-enddate: "2021-11-19T05:00:00.000+00:00"
-eventaddress: "123 Main Street"
-eventid: 1
-eventphone: "888-999-1021"
-eventplace: "CJSA"
-eventstatus: "created"
-eventtype: "langar"
-startdate:
-*/
     const packageEvent = () => {
-        let newEvent;
-
-        // for development purposes
-        if (database)
-            newEvent = { 
+        let newEvent = { 
                 startdate: event.startDate,
                 enddate: event.endDate,
                 eventaddress: event.address, 
@@ -167,69 +153,25 @@ startdate:
                 eventplace: event.place, 
                 eventphone: phone,
                 eventstatus: "created"
-            }
-        else
-            newEvent = { ...newEvent, user, id: uuid() }
+        }
+        
+        if (!database)
+            newEvent = { ...newEvent, user, eventid: uuid() }
 
         if (event.type === "langar" && !newEvent.startdate)
             newEvent.startdate = formatRegular(event.selectedDay)
-
-        // console.log(newEvent)
-        // if (event.type === "langar") {
-        //     newEvent = {
-        //         ...baseEvent,
-        //         langarDate: event.selectedDay
-        //     }
-        // } else {
-        //     newEvent = {
-        //         ...baseEvent,
-        //         startDate: event.startDate,
-        //         endDate: event.endDate
-        //     }
-        // }
 
         return newEvent
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        // console.log(event)
-
+     
         let newEvent = packageEvent()
-        
-
-        /*
-            (NOTE: All local storage code below can be deleted. Mostly for development purposes)
-            
-                1. Get pretend backend from local storage
-                2. If no pretend backend present, create it
-                3. Parse local storage string into javascript object/array
-                4. Spread resulting array into new array with new event included
-                5. Store the new array in local storage
-        */
-
-        if (database) {
-            dispatch(addDbEvent({ newEvent, navigate }))
-        } else {
-            dispatch(addEvent(newEvent))
-
-            let currentStorage = localStorage.getItem("events")
-
-            if (!currentStorage) {
-                localStorage.setItem("events", JSON.stringify([]))
-                currentStorage = localStorage.getItem("events")
-            }
-
-            let parsedCurrentEvents = JSON.parse(currentStorage)
-
-            let newStorage = [...parsedCurrentEvents, newEvent]
-            let stringNewStorage = JSON.stringify(newStorage)
-
-            localStorage.setItem("events", stringNewStorage)
-        }
-        
-        // navigate.push('/create-event/event-confirmation')
-
+console.log(newEvent)
+        dispatch(addEvent(newEvent))
+ 
+        navigate(`/create-event/event-confirmation/${newEvent.eventid}`)
     }
 
     const handleBookedDayStyle = ({ date }) => {

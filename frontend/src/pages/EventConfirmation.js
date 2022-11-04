@@ -7,7 +7,12 @@ import '../styles/eventConfirm.css'
 const EventConfirmation = () => {
 
     let { id } = useParams()
-    let event = useSelector(e => e.events.events.filter(ev => ev.eventid === Number(id))[0])
+
+    // for development... can remove later... basically checking if it's an auto-incremented number id 
+    // or a string of characters like a uuid (MongoDB)
+    id = isNaN(Number(id)) ? id : Number(id)
+
+    let event = useSelector(e => e.events.events.filter(ev => ev.eventid === id)[0]) // .filter(ev => ev.eventid === Number(id))[0]
 
     return (
         <main className="event-confirmation-pg">

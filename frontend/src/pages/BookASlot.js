@@ -20,10 +20,16 @@ const BookASlot = () => {
         <section className='book-a-slot'>
             {path.includes('paath') ?
                 <>
-                    <h1>Paath events to choose from:</h1>
-                    <section>
-                        {paaths.map(e => <p key={e.eventid} id={e.eventid} onClick={handlePaathClick}>{e.eventname}</p>)}
-                    </section>
+                    {paaths.length ? 
+                        <>
+                            <h1>Paath events to choose from:</h1> 
+                            <section>
+                                {paaths.map(e => <p key={e.eventid} id={e.eventid} onClick={handlePaathClick}>{e.eventname}</p>)}
+                            </section>
+                        </>
+                        : 
+                        <h1>No paath events to choose from</h1>
+                    }
                 </>
             :
                 <>

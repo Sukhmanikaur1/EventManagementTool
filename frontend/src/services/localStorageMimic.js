@@ -1,22 +1,28 @@
-// import { database } from '../services/EventService'
+import { database } from '../services/EventService'
+
+const parseOrStringifyStorage = (item, newStorage) => {
+
+    if (newStorage) {
+        let stringNewStorage = JSON.stringify(newStorage)
+        localStorage.setItem(item, stringNewStorage)
+        return
+    }
+
+    let currentStorage = localStorage.getItem(item)
+
+    if (!currentStorage || currentStorage === 'undefined') {
+        localStorage.setItem(item, JSON.stringify([]))
+        currentStorage = localStorage.getItem(item)
+    }
+
+    return JSON.parse(currentStorage)
+}
 
 const slots = (type, newSlot, slotId) => {
         // if a databse exists, ignore 
-        // if (database) return 
-    /*
-       Same type of temporary local storage used here as was used
-       in the NewEvent component's handleSubmit function
-   */
+        if (database) return 
 
-       let currentStorage = localStorage.getItem("slots")
-
-       if (!currentStorage || currentStorage === 'undefined') {
-           localStorage.setItem("slots", JSON.stringify([]))
-           currentStorage = localStorage.getItem("slots")
-       }
-
-       let parsedCurrentSlots = JSON.parse(currentStorage)
-
+       let parsedCurrentSlots = parseOrStringifyStorage("slots")
        let newStorage;
 
        switch(type) {
@@ -33,19 +39,50 @@ const slots = (type, newSlot, slotId) => {
                 newStorage = parsedCurrentSlots
                 break;
             default:
+                console.log('test')
                 break;
        }
 
-       let stringNewStorage = JSON.stringify(newStorage)
+       parseOrStringifyStorage("slots", newStorage)
 
-       localStorage.setItem("slots", stringNewStorage)
+       if (type === 'set') return newStorage
+}
 
-       if (type === 'set')
-            return newStorage
+
+
+const events = (type, newEvent, eventId) => {
+    // if a databse exists, ignore 
+    if (database) return 
+
+   let parsedCurrentEvents = parseOrStringifyStorage("events")
+   let newStorage;
+
+   switch(type) {
+        case 'update':
+            newStorage = parsedCurrentEvents.map(s => s.eventid === newEvent.eventid ? newEvent : s)
+            break;
+        case 'create':
+            newStorage = [...parsedCurrentEvents, newEvent]
+            break;
+        case 'delete':
+            newStorage = parsedCurrentEvents.filter(s => s.eventid !== eventId)
+            break;
+        case 'set':
+            newStorage = parsedCurrentEvents
+            break;
+        default:
+            console.log('test')
+            break;
+   }
+
+   parseOrStringifyStorage("events", newStorage)
+
+   if (type === 'set') return newStorage
 }
 
 const service = {
-    slots
+    slots,
+    events
 }
 
 export default service

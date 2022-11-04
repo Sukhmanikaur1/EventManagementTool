@@ -7,6 +7,18 @@ export const addEvent = (data) => ({
     payload: data
 })
 
+export const DELETE_EVENT = 'DELETE_EVENT'
+export const deleteEvent = (data) => ({
+    type: DELETE_EVENT,
+    payload: data
+})
+
+export const UPDATE_EVENT = 'UPDATE_EVENT'
+export const updateEvent = (data) => ({
+    type: UPDATE_EVENT,
+    payload: data
+})
+
 export const SET_EVENT = 'SET_EVENT'
 export const setEvent = (data) => ({
     type: SET_EVENT,

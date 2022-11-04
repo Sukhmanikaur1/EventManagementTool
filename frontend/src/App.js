@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import './App.css';
 
-import { database } from './services/EventService';
-
 import ManageEvents from './pages/ManageEvents';
 import NewEvent from './pages/NewEvent';
 
@@ -10,7 +8,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import { setEvent, getDbEvents } from './actions/actions'
+import { setEvent } from './actions/actions'
 
 import Paath from './pages/Paath';
 
@@ -33,20 +31,8 @@ function App() {
     let guest = role === 'guest' ? true : false
 
     useEffect(() => {
-        
-        if (database) {
-            // real backend
-           dispatch(getDbEvents())
-        } else {
-
-            // pretend backend
-            let currentStorage = localStorage.getItem("events")
-            if (currentStorage) {
-                let parsedStorage = JSON.parse(currentStorage)
-                console.log(parsedStorage)
-                dispatch(setEvent(parsedStorage))
-            }
-        }
+      // won't be null if db 
+      dispatch(setEvent(null))
     }, [dispatch]) // Only adding this because it was complaining without it. Still a ComponentDidMount
 
     return (

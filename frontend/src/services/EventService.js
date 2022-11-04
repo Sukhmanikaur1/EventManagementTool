@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const database = true
+export const database = false
 
 let api = 'http://localhost:8081/api'
 

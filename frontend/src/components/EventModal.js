@@ -3,19 +3,43 @@ import Modal from "./Modal";
 
 import "../styles/slotModal.css";
 import "../styles/eventModal.css";
+import { useDispatch } from "react-redux";
+import { deleteEvent, updateEvent } from "../actions/actions";
 
 const EventModal = ({ event, closeModal }) => {
+
   let nameRef = useRef();
   let startRef = useRef();
   let endRef = useRef();
   let placeRef = useRef();
   let addressRef = useRef();
+  let phoneRef = useRef();
+
+  let dispatch = useDispatch()
+
+  const packageEvent = (event) => ({
+    ...event,
+    startdate: startRef.current.value,
+    enddate: endRef.current.value,
+    eventaddress: addressRef.current.value, 
+    eventname: nameRef.current.value,
+    eventplace: placeRef.current.value, 
+    eventphone: phoneRef.current.value
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    alert('Updated event')
+    let payload = packageEvent(event)
+    dispatch(updateEvent(payload))
+    closeModal(false)
   };
 
-  const handleDelete = (e) => {};
+  const handleDelete = () => {
+    alert('Event removed.')
+    dispatch(deleteEvent(event.eventid))
+    closeModal(false)
+  };
 
   const formatDateForInput = (date) => {
     let mm = date.split('-')[1]
@@ -84,7 +108,7 @@ const EventModal = ({ event, closeModal }) => {
 
               <input
                 id="em-phone"
-                // ref={phoneRef}
+                ref={phoneRef}
                 defaultValue={event.eventphone}
                 // value={phone}
                 // onChange={handlePhone}

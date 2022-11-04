@@ -9,7 +9,7 @@ import EventModal from '../components/EventModal';
 
 const Events = () => {
 
-    let events = useSelector(state => state.events.events)
+    let events = useSelector(state => state.events.events.filter((e) => e.eventtype === 'paath'))
     // let details = useSelector(state => state.events.details)
     const role = useSelector(state => state.users.role)
 
@@ -17,7 +17,6 @@ const Events = () => {
 
     const renderEvents = (type) => {
         return events
-                  .filter((e) => e.eventtype === type)
                   .map(event => 
                     <Event 
                         key={event.eventid} 
@@ -26,7 +25,7 @@ const Events = () => {
                     />
                   )
     }
-
+console.log(events)
     return (
         <div className="manage-evt">
 
@@ -38,29 +37,38 @@ const Events = () => {
                 }
             </div>
 
-            <h2 id="h-p">{events.length ? "Paath Events" : "No events to manage"}</h2>
-
-            <div className='manage-both-contain'>
-                <div className='manage-both'>
-                    <table className="table manage-p">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Place</th>
-                                <th scope="col">Starts</th>
-                                <th scope="col">Ends</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {renderEvents('paath')}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <div id='me-contain'>
+                {events.length ? 
+                <>
+                    <h2 id="h-p">Paath Events</h2>
+                
+                    <div className='manage-both-contain'>
+                        <div className='manage-both'>
+                            <table className="table manage-p">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Place</th>
+                                        <th scope="col">Start Date</th>
+                                        <th scope="col">End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {renderEvents('paath')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </>
+                :
+                    <h2 id="h-p">No paath events to manage</h2>
+                }
+             </div>
          
             {modal && <EventModal event={modal} closeModal={setModal} />}
 
             {/* Temporary buttons for Local Storage management */}
+            <div id='ls-temp-btns'>
             <button
                 className="flush"
                 onClick={() => { localStorage.removeItem("events"); alert('Local Storage (events) cleared.') }}
@@ -82,6 +90,7 @@ const Events = () => {
             >
                 Clear Local Storage (all)
             </button>
+            </div>
         </div>
     )
 }
