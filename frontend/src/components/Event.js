@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom';
+import React from 'react'
 
-import { toggleEventDetails } from '../actions/actions'
+// import { toggleEventDetails } from '../actions/actions'
 
 import '../styles/event.css'
 
 const Event = ({ event, setModal }) => {
-
-    let dispatch = useDispatch()
-    let history = useHistory()
 
     const handleClick = () => {
         // dispatch(toggleEventDetails(event))

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 
 import { v4 as uuid } from 'uuid'
@@ -19,16 +19,15 @@ const NewEvent = (props) => {
     let [calendar, setCalendar] = useState(new Date())
 
     let dispatch = useDispatch()
-    let history = useHistory()
+    let history = useNavigate()
+    let location = useLocation()
     let detailsRef = useRef()
 
-    let eventtype = history.location.pathname.split('/')[2] // result: -->  langar OR paath
+    let eventtype = location.pathname.split('/')[2] // result: -->  langar OR paath
 
     useEffect(() => {
         setEvent(prevState => ({ ...prevState, type: eventtype }))
-    }, [history.location.pathname])
-
-    console.log(history)
+    }, [eventtype])
 
     let user = useSelector(state => state.users.currentUser)
 
@@ -46,14 +45,12 @@ const NewEvent = (props) => {
         selectedDay: { dd: '', mm: '', yy: '' }
     })
 
-    console.log(event)
-
     let [phone, setPhone] = useState('')
 
     useEffect(() => {
         // Determine default dates for Langar type events
         // Using a functional update because otherwise it complains. Besides that nothing different going on here
-        console.log({ dd: currentDay(), mm: currentMonth(), yy: currentYear() })
+        // console.log({ dd: currentDay(), mm: currentMonth(), yy: currentYear() })
         if (event.type === "langar") {
             setEvent(prevEvent => ({
                 ...prevEvent,
@@ -103,9 +100,9 @@ const NewEvent = (props) => {
 
     // Utility functions... maybe to be put in a separate file and exported
     // const calcDaysInMonth = (year, month) => new Date(year, month, 0).getDate()
-    const currentYear = () => String(new Date().getFullYear())
-    const currentMonth = () => String(new Date().getMonth() + 1)
-    const currentDay = () => String(new Date().getDay())
+    // const currentYear = () => String(new Date().getFullYear())
+    // const currentMonth = () => String(new Date().getMonth() + 1)
+    // const currentDay = () => String(new Date().getDay())
     // const createMonthArr = (initial, cutoffPoint) => [...Array(initial).keys()].slice(cutoffPoint)
     // const calcNextYear = () => Number(currentYear()) + 1
     // const addAzero = (date) => date < 10 ? '0' + String(date) : date
@@ -178,7 +175,7 @@ startdate:
         if (event.type === "langar" && !newEvent.startdate)
             newEvent.startdate = formatRegular(event.selectedDay)
 
-        console.log(newEvent)
+        // console.log(newEvent)
         // if (event.type === "langar") {
         //     newEvent = {
         //         ...baseEvent,
@@ -197,7 +194,7 @@ startdate:
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(event)
+        // console.log(event)
 
         let newEvent = packageEvent()
         
@@ -240,7 +237,7 @@ startdate:
         let tileDate = String(date.getDate())
         tileDate = tileDate < 10 ? '0' + tileDate : tileDate
         if (tileDate in event.bookedDays) {
-            console.log('we in')
+            // console.log('we in')
             return 'booked-day'
         }
         else
@@ -249,7 +246,7 @@ startdate:
 
     const handlePreviousOrNext = ({ activeStartDate }) => {
         setEvent({ ...event, langarDate: formatLangarDate(activeStartDate) })
-        console.log('next or previous')
+        // console.log('next or previous')
     }
 
     const handlePhone = (e) => {
@@ -285,15 +282,17 @@ startdate:
         pointerEvents: "none"
     }
 
+    let { yy, mm, dd } = event.selectedDay
+
     let interact = !event.type ? greyedOutStyle : null
-    let buttInt = ((event.type === 'langar' && event.selectedDay.dd) || (event.type === 'paath' && event.startDate && event.endDate)) && event.place && phone && event.address ? null : greyedOutStyle
+    let buttInt = ((event.type === 'langar' && dd) || (event.type === 'paath' && event.startDate && event.endDate)) && event.place && phone && event.address ? null : greyedOutStyle
     let paath = event.type !== "langar"
-    let interactMore = (!paath && !event.selectedDay.dd) || (paath && !event.startDate) ? greyedOutStyle : null
+    let interactMore = (!paath && !dd) || (paath && !event.startDate) ? greyedOutStyle : null
     let booked = event.bookedDetails
 
     return (
         <div className='bk-slot'>
-        <h1 className='ne-h'>{event.type === 'langar' ? `Book a Langar slot: ` : `Create a Paath event`}</h1>
+        <h1 className='ne-h'>{event.type === 'langar' ? `Book a Langar: ` : `Create a Paath event`}</h1>
         <form className="ne-form" onSubmit={handleSubmit}>
 
             <label style={eventtype ? greyedOutStyle : null}>
@@ -310,7 +309,7 @@ startdate:
                     Date
                     <input
                         name="endDate"
-                        value={`${event.selectedDay.yy}-${event.selectedDay.mm}-${event.selectedDay.dd}`}
+                        value={yy && mm && dd ? `${yy}-${mm}-${dd}` : ''}
                         type="date"
                         disabled
                     />

@@ -22,14 +22,12 @@ export const toggleEventDetails = (data) => ({
 export const getDbEvents = () => async dispatch => {
     let events = await EventServices.getEvents()
     events = events.data
-    console.log(events)
     dispatch(setEvent(events))
 }
 
 export const addDbEvent = ({ newEvent, history }) => async dispatch => {
     let event = await EventServices.createEvent(newEvent)
     event = event.data
-    console.log(event)
     history.push(`/create-event/event-confirmation/${event.eventid}`)
     dispatch(addEvent(event))
 }

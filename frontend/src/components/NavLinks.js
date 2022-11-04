@@ -19,7 +19,7 @@ export const NavLinks = () => {
             }
 
             <Link to="/create-event/langar">
-                <li className="col">Book a Langar Slot</li> 
+                <li className="col">Book a Langar</li> 
             </Link>
         </>
     )

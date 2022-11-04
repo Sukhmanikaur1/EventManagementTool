@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import '../styles/home.css'
 
@@ -10,7 +10,7 @@ const Home = () => {
 
   const guest = role === 'guest' ? true : false
 
-  let history = useHistory();
+  let history = useNavigate();
 
   const handleButtonPress = (path) => {
     if (!guest) {

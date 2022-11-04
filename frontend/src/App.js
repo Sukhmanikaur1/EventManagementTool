@@ -6,7 +6,7 @@ import { database } from './services/EventService';
 import ManageEvents from './pages/ManageEvents';
 import NewEvent from './pages/NewEvent';
 
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -54,31 +54,29 @@ function App() {
 
         <Router>
           <NavBar navlinkstype={<NavLinks />} />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/create-event/event-confirmation/:id" component={EventConfirmation} />
-            <Route path="/create-event/langar" render={() => <NewEvent events={events} />} />
-            <Route exact path="/manage-events" component={ManageEvents} />
+          <Routes>
+            <Route exact path="/" element={<Home/>} />
+            <Route path="/login" element={<Login/>} />
+            <Route path="/signup" element={<SignUp/>} />
+            <Route path="/create-event/event-confirmation/:id" element={<EventConfirmation/>} />
+            <Route path="/create-event/langar" element={<NewEvent events={events} />} />
+            <Route exact path="/manage-events" element={<ManageEvents/>} />
             {
               !guest &&
               <>
-                <Route path="/book-a-slot" component={BookASlot} />
-                <Route path="/create-event/paath" render={() => <NewEvent events={events} />} />
+                <Route path="/book-a-slot" element={BookASlot} />
+                <Route path="/create-event/paath" element={<NewEvent events={events} />} />
                 {/* <Route exact path="/create-event" render={() => <NewEvent events={events} />} /> */}
-                <Route path="/events/:id" component={Paath} />
+                <Route path="/events/:id" element={Paath} />
               </>
             }
-            <Route path="*">
-              {
-                guest ? 
-                  <Redirect to="/login" />
+            {
+            guest ?
+              <Route path="*" element={<Navigate to="/login" />} />
                 :
-                  <Redirect to="/" />
-              }
-            </Route>
-          </Switch>
+              <Route path="*" element={<Navigate to="/" />} />
+            }
+          </Routes>
         </Router>
       </div>
     );

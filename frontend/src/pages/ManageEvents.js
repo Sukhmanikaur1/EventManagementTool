@@ -5,13 +5,12 @@ import { useSelector } from 'react-redux'
 
 import '../styles/manageEvents.css'
 import { Link } from 'react-router-dom';
-import { Modal } from 'bootstrap';
 import EventModal from '../components/EventModal';
 
 const Events = () => {
 
     let events = useSelector(state => state.events.events)
-    let details = useSelector(state => state.events.details)
+    // let details = useSelector(state => state.events.details)
     const role = useSelector(state => state.users.role)
 
     let [modal, setModal] = useState(false)
