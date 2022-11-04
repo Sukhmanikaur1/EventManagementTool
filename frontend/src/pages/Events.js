@@ -14,7 +14,7 @@ const Events = () => {
     let details = useSelector(state => state.events.details)
 
     const renderEvents = () => {
-        return events.filter((e) => e.eventtype === 'paath').map(event => <Event key={event.eventid} event={event} />)
+        return events.filter((e) => e.eventtype === 'paath').map(event => <Event key={event.idEvent} event={event} />)
     }
 
     // const toggleDetails = () => {

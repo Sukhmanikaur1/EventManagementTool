@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 const EventConfirmation = () => {
 
     let { id } = useParams()
-    let event = useSelector(e => e.events.events.filter(ev => ev.eventid === Number(id))[0])
+    let event = useSelector(e => e.events.events.filter(ev => ev.idEvent === Number(id))[0])
 
     return (
         <main className="event-confirmation-pg">

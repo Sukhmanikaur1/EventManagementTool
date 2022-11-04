@@ -13,7 +13,7 @@ const Event = ({ event }) => {
 console.log(event)
     const handleClick = () => {
         dispatch(toggleEventDetails(event))
-        history.replace(`/events/${event.eventid}`)
+        history.replace(`/events/${event.idEvent}`)
     }
 
     const displayDate = () => {
