@@ -26,10 +26,6 @@ const User = sequelize.define(
         type: DataTypes.STRING,
         allowNull: true,
       },
-      lname: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
       email: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -140,4 +136,6 @@ BookSlotEvent.belongsTo(Event,{foreignKey: {name:"idEvent",allowNull: false}})
   BookSlotEvent.belongsTo(Event,{foreignKey: {name:"eventtype",allowNull: false}})
     BookSlotEvent.belongsTo(Event,{foreignKey: {name:"eventaddresss",allowNull: false}})
   
+    User.hasMany(Event,{foreignKey: {name:"idEvent",allowNull: false, as: "event"}})
+    Event.belongsTo(User,{foreignKey: {name:"idUser",allowNull: false}})
   module.exports = {User,Event,BookSlotEvent}

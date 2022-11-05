@@ -19,6 +19,7 @@ const sequelize = new Sequelize(userdb, username, password, {
 });
 UserRouter.use(express.json());
 UserRouter.post("/register", async (req, res) => {
+  console.log(req.body)
   try {
     console.log(req.body)
     const salt = await bcrypt.genSalt();
@@ -78,19 +79,19 @@ UserRouter.post("/login", async (req, res) => {
   }
 })
 function userAuth(req, res, next){
-  const authHeader = req.headers.get('Authorization')
-  const token= authHeader && authHeader.split(' ')[1]
-  if(token == null ){
-    return res.sendStatus(401)
-  }
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user)=>{
-    if (err ){
-      res.sendStatus(403)
+    const authHeader = req.headers.get('Authorization')
+    const token= authHeader && authHeader.split(' ')[1]
+    if(token == null ){
+      return res.sendStatus(401)
     }
-    req.user = user;
-    next()
-  })
-}
+  
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user)=>{
+      if (err ){
+        res.sendStatus(403)
+      }
+      req.user = user;
+      next()
+    })
+  }
 UserRouter.put("/", userAuth, async (req, res) => {});
-module.exports = UserRouter;
+module.exports = {UserRouter, userAuth};

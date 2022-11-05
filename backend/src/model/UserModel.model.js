@@ -26,10 +26,6 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    lname: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     email: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -57,12 +53,10 @@ const addUser = async (user) => {
     username: user.username,
     password: user.password,
     fname: user.fname,
-    lname: user.lname,
     email: user.email,
     role:"guest",
     tokenId:null
   });
-  console.log(newUser);
   try{
     let user={}
   await newUser.save().then((res) => {

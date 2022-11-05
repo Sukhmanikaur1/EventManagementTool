@@ -5,6 +5,7 @@ const config = require("../config/config");
 const configure = require("dotenv");
 const {Event,findAllEvents, findById, addEvent, deleteEventById} = require("../model/EventModel")
 require('dotenv').config()
+const {userAuth} = require('./UserRoute')
 const cors = require('cors')
 const host = process.env.DB_HOST;
 const username = process.env.DB_USERNAME;
@@ -17,8 +18,9 @@ const sequelize = new Sequelize(userdb, username, password, {
   dialect: "mysql" /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
 });
 EventRouter.use(express.json());
-EventRouter.post("/addevent", cors(),async (req, res) => {
+EventRouter.post("/addevent/:tokenId", userAuth ,cors(),async (req, res) => {
   try {
+    const user= req.user
     console.log(req.body)
     const event = {
         enddate: req.body.event.enddate,

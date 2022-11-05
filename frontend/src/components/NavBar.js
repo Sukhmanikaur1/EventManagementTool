@@ -1,8 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React,{useEffect} from 'react';
+import { Link ,useHistory} from 'react-router-dom';
 
 const NavBar = () => {
-
+    const history = useHistory();
+    useEffect(() => {
+        // Update the document title using the browser API
+        history.listen((location) => { 
+            console.log(location.state)
+         }) 
+      },[history]);
     return (
         <nav>
             <ul>

@@ -1,14 +1,20 @@
 import React,{useRef} from 'react'
 import {login} from '../../services/UserService'
-import { Link } from 'react-router-dom'
+import { Link,useHistory,useLocation } from 'react-router-dom'
 
 const Login = () => {
+    const history = useHistory();
+    const location= useLocation()
     let password =useRef('')
     let email = useRef('')
     const handleSubmit = async(e) => {
         e.preventDefault();
         const res = await login(email, password)
         console.log(res)
+        if (res?.data?.success ===true){
+            console.log(res.data.user)
+            history.push({pathname:`/`,search:`?tokenId=${res.data.user.tokenId}`,state:{user:res.data.user}})
+        }
     }
     return (
         <main className="login-pg register-pgs">

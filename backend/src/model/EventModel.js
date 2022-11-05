@@ -69,11 +69,9 @@ enddate: {
     startdate: event.startdate,
     eventplace:event.eventplace,
     eventtype:event.eventtype,
-    eventname:""
+    eventname:event.eventname
   });
   
-  console.log('ne sswevent')
-  console.log(newEvent);
   try{
     let event={}
   await newEvent.save().then((res) => {

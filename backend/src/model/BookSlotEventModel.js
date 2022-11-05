@@ -33,11 +33,12 @@ const bookSlot= async(bookedSlot) => {
   const newBookSlot = await BookSlotEvent.build(
     {
       phonenumber:bookedSlot.phonenumber,
-      userid: bookedSlot.userid,
-      eventid: bookedSlot.eventid,
+      idUser: bookedSlot.idUser,
+      idEvent: bookedSlot.idEvent,
       fname: bookedSlot.fname,
       email: bookedSlot.email,
       eventtype: bookedSlot.eventtype,
+      eventaddress: bookedSlot.eventaddress,
     })
     try{
       let bookedEvent={}
