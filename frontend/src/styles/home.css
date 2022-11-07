@@ -68,7 +68,9 @@
     background: var(--purple-shade);
     color: var(--orange-shade);
     border-radius: 10px;
-    padding: 2%;
+    width: 120px;
+    font-size: 15px;
+    padding: 0 6px 0 6px;
 }
 
 .sign-up-custom .signup-btn {
@@ -77,3 +79,58 @@
   cursor: pointer;
 }
 
+.su-active {
+    color: black;
+    border: 1px solid black;
+    background: var(--purple-shade);
+    border-radius: 10px;
+    width: 120px;
+    padding: 0 3px 0 3px;
+    font-weight: 700;
+}
+
+.login-link:nth-child(1) {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0 3% 0 3%;
+}
+
+.signup-btn:nth-child(2) {
+    margin: 10px;
+    width: 140px;
+}
+
+
+
+
+.l-cal .bk-slot {
+    height: fit-content;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.l-cal h2 {
+    text-align: center;
+}
+
+
+
+
+
+.mid-sec {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--orange-shade);
+}
+
+
+
+@media screen and (max-width: 900px) { 
+    .l-cal {
+        background-color: var(--orange-shade);
+    }
+    .mid-sec {
+        display: block;
+    }
+}

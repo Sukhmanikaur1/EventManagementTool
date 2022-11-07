@@ -17,13 +17,14 @@ nav ul {
 }
 
 .home-nu-nav-links li {
-    color: black;
+    transition: font-weight .1s;
 }
 
+
 .home-nu-nav-links li:hover {
-    color: var(--purple-shade);
+    /* background-color: rgb(96, 36, 108); */
+    /* color: var(--purple-shade); */
     font-weight: 700;
-    margin: -1;
 }
 
 .navbar-brand i {
@@ -35,4 +36,15 @@ nav ul {
     font-size: 1.5rem;
     font-weight: 800;
     min-width: 340px;
+}
+
+.n-btn {
+    cursor: pointer;
+    border: none;
+    
+    border-radius: 5px;
+    width: 140px;
+    text-align: center;
+
+    font-size: 15px;
 }

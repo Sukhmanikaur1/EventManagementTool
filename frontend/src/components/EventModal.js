@@ -53,7 +53,7 @@ const EventModal = ({ event, closeModal }) => {
   return (
     <Modal>
       <div className="event-modal">
-        <div className="event-details">
+        <div className="event-details" id="em-details">
           <p className="event-p">
             <span>{event.eventname}</span> Event Details
           </p>

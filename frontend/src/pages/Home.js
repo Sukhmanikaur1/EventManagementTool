@@ -1,12 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import LangarCalendar from "../components/LangarCalendar";
 
 import '../styles/home.css'
 
 const Home = () => {
 
   const role = useSelector(state => state.users.role)
+  const events = useSelector(state => state.events.events)
 
   const guest = role === 'guest' ? true : false
 
@@ -35,6 +37,7 @@ const Home = () => {
           </form>
         </div>
       </section>
+      <article className="mid-sec">
       <section className="services">
         <div>
           <h2>
@@ -68,6 +71,11 @@ const Home = () => {
           }
         </div>
       </section>
+      <section className="l-cal">
+        <h2>Langar</h2>
+        <LangarCalendar events={events} />
+      </section>
+      </article>
       <section className="login-signup-banner-container">
         <div className="login-signup-banner">
           <h2>Get started </h2>

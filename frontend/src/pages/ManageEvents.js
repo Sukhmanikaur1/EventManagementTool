@@ -25,7 +25,7 @@ const Events = () => {
                     />
                   )
     }
-console.log(events)
+
     return (
         <div className="manage-evt">
 

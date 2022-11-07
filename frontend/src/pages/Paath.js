@@ -13,7 +13,7 @@ const Paath = () => {
         <div>
             {paath &&
                 <div className='event-details'>
-                    <p className='event-p'><span>{paath.eventplace.toUpperCase()}</span><span>type: {paath.eventtype}</span> <span></span></p>
+                    <p className='event-p'><span>{paath.eventplace.toUpperCase()}</span><span></span> <span></span></p>
                     <TimeSlots event={paath} />
                 </div>
             }

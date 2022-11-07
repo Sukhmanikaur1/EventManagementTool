@@ -1,27 +1,50 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 export const NavLinks = () => {
 
     const role = useSelector(state => state.users.role)
 
+    const normalStyle = {
+        textDecoration: 'none',
+        backgroundColor: 'var(--purple-shade)',
+        color: 'var(--orange-shade)',
+        borderRadius: '5px',
+
+    }
+
+    const activeStyle = {
+        textDecoration: 'none',
+        backgroundColor: 'var(--purple-shade)',
+        color: 'black',
+        borderRadius: '5px',
+        border: '1px solid black',
+        fontWeight: '700'
+    }
+
     return (
         <>
         {role !== 'guest' && 
-            <Link to="/manage-events">
-                <li className="col">Manage Events</li> 
-            </Link>
+            <NavLink to="/manage-events" style={({ isActive }) =>
+            isActive ? activeStyle : normalStyle
+            }>
+                <li className="col n-btn">Manage Events</li> 
+            </NavLink>
         }
             
-                <Link to="/book-a-slot/paath">
-                    <li className="col">Book a Paath Slot</li> 
-                </Link>
+                <NavLink to="/book-a-slot/paath" style={({ isActive }) =>
+                    isActive ? activeStyle : normalStyle
+                }>
+                    <li className="col n-btn">Book a Paath Slot</li> 
+                </NavLink>
             
 
-            <Link to="/create-event/langar">
-                <li className="col">Book a Langar</li> 
-            </Link>
+            <NavLink to="/create-event/langar" style={({ isActive }) =>
+                    isActive ? activeStyle : normalStyle
+            }>
+                <li className="col n-btn">Book a Langar</li> 
+            </NavLink>
         </>
     )
 }

@@ -9,19 +9,20 @@ import { addEvent } from '../actions/actions';
 
 import { database } from '../services/EventService';
 
-import Calendar from 'react-calendar';
-
 import '../styles/calendar.css'
 import '../styles/newEvent.css';
+import LangarModal from '../components/LangarModal';
+import LangarCalendar from '../components/LangarCalendar';
 
-const NewEvent = (props) => {
+const NewEvent = () => {
 
-    let [calendar, setCalendar] = useState(new Date())
+    let [modal, setModal] = useState(false)
+
+    const events = useSelector(state => state.events.events)
 
     let dispatch = useDispatch()
     let navigate = useNavigate()
     let { eventtype } = useParams()
-    let detailsRef = useRef()
 
     useEffect(() => {
         setEvent(prevState => ({ ...prevState, type: eventtype }))
@@ -64,47 +65,6 @@ const NewEvent = (props) => {
         setEvent(prevEvent => ({ ...prevEvent, endDate: '' }))
     }, [event.startDate])
 
-    useEffect(() => {
-        // Handles filtering of available days and months for langar events when necessary 
-        if (event.type === "langar") {
-
-            let bookedDays = {}
-
-            // Find days that have aleady been taken. 
-            for (let i = 0; i < props.events.length; i++) {
-
-                let ev = props.events[i]
-                if (!ev) break
-                if (ev.enddate) continue // if it has an end date then it's a paath type event, so skip
-
-                let [yy, mm, dd] = ev.startdate.split('-')
-                dd = dd.slice(0,2)
-
-                // Handle days in event month
-                if (mm === event.langarDate.mm &&
-                    yy === event.langarDate.yy) {
-                    bookedDays[dd] = { dd, ev }
-                }
-
-            }
-
-            setEvent(prevEvent => ({
-                ...prevEvent,
-                bookedDays
-            }))
-
-        }
-    }, [event.langarDate, event.type, event.langarDate.mm, event.langarDate.yy, props.events])
-
-    // Utility functions... maybe to be put in a separate file and exported
-    // const calcDaysInMonth = (year, month) => new Date(year, month, 0).getDate()
-    // const currentYear = () => String(new Date().getFullYear())
-    // const currentMonth = () => String(new Date().getMonth() + 1)
-    // const currentDay = () => String(new Date().getDay())
-    // const createMonthArr = (initial, cutoffPoint) => [...Array(initial).keys()].slice(cutoffPoint)
-    // const calcNextYear = () => Number(currentYear()) + 1
-    // const addAzero = (date) => date < 10 ? '0' + String(date) : date
-
     const formatLangarDate = (date) => {
         let mm = date.getMonth() + 1
         let yy = date.getFullYear()
@@ -127,17 +87,6 @@ const NewEvent = (props) => {
         if (e.target) {
             name = e.target.name
             value = e.target.value
-        } else {
-            // handles selection of a date in the calendar
-            let day = e.getDate()
-            day = day < 10 ? '0' + day : day
-            if (day in event.bookedDays) {
-                detailsRef.current.classList.add('active')
-                setEvent({ ...event, bookedDetails: event.bookedDays[day], selectedDay: blank() })
-                return
-            }
-            setEvent({ ...event, langarDate: formatLangarDate(e), selectedDay: formatLangarDate(e) })
-            return
         }
 
         setEvent({ ...event, [name]: value })
@@ -168,26 +117,10 @@ const NewEvent = (props) => {
         e.preventDefault()
      
         let newEvent = packageEvent()
-console.log(newEvent)
+
         dispatch(addEvent(newEvent))
  
         navigate(`/create-event/event-confirmation/${newEvent.eventid}`)
-    }
-
-    const handleBookedDayStyle = ({ date }) => {
-        let tileDate = String(date.getDate())
-        tileDate = tileDate < 10 ? '0' + tileDate : tileDate
-        if (tileDate in event.bookedDays) {
-            // console.log('we in')
-            return 'booked-day'
-        }
-        else
-            return null
-    }
-
-    const handlePreviousOrNext = ({ activeStartDate }) => {
-        setEvent({ ...event, langarDate: formatLangarDate(activeStartDate) })
-        // console.log('next or previous')
     }
 
     const handlePhone = (e) => {
@@ -205,31 +138,22 @@ console.log(newEvent)
         setPhone(value)
     }
 
-    // const weeksFromNow = (n) => {
-    //     let dayInFuture = addWeeks(new Date(event.startDate), n)
-    //     let mm = dayInFuture.getMonth() + 1
-    //     let dd = dayInFuture.getDate()
-    //     let yy = dayInFuture.getFullYear()
-    //     return `${yy}-${mm}-${dd}`
-    // }
-
-    // const handleClickedDetails = () => {
-    //     navigate.push(`/events/${event.bookedDetails.ev.id}`)
-    //     dispatch(toggleEventDetails(event.bookedDetails.ev))
-    // }
+    const liftSelectedDate = (selectedDay) => {
+        console.log(selectedDay)
+        setEvent({ ...event, selectedDay })
+    }
 
     let greyedOutStyle = {
         opacity: ".1",
         pointerEvents: "none"
     }
 
-    let { yy, mm, dd } = event.selectedDay
+    let { dd } = event.selectedDay
 
     let interact = !event.type ? greyedOutStyle : null
     let buttInt = ((event.type === 'langar' && dd) || (event.type === 'paath' && event.startDate && event.endDate)) && event.place && phone && event.address ? null : greyedOutStyle
     let paath = event.type !== "langar"
     let interactMore = (!paath && !dd) || (paath && !event.startDate) ? greyedOutStyle : null
-    let booked = event.bookedDetails
 
     return (
         <div className='bk-slot'>
@@ -245,37 +169,9 @@ console.log(newEvent)
                 </select>
             </label>
 
-            {!paath &&
-                <label style={interact} id="date-langar">
-                    Date
-                    <input
-                        name="endDate"
-                        value={yy && mm && dd ? `${yy}-${mm}-${dd}` : ''}
-                        type="date"
-                        disabled
-                    />
-                    <Calendar
-                        name={"langarDate"}
-                        value={calendar}
-                        onChange={setCalendar}
-                        minDate={new Date()}
-                        maxDetail={"month"}
-                        showNeighboringMonth={false}
-                        onClickDay={handleChange}
-                        tileClassName={handleBookedDayStyle}
-                        onActiveStartDateChange={handlePreviousOrNext}
-                    />
-                    <div
-                        className="booked-details"
-                        ref={detailsRef}
-                        onClick={() => detailsRef.current.classList.remove('active')}
-                    >
-                        <div><span>{`${booked.ev?.startdate.split('-')[1]}/${booked.ev?.startdate.split('-')[2].slice(0,2)}/${booked.ev?.startdate.split('-')[0]}`}</span> has already been booked</div>
-                        <div><span>Booked by:</span> {booked.ev?.user}</div>
-                        <div><span>Phone number:</span> {booked.ev?.eventphone}</div>
-                        {/* <div onClick={handleClickedDetails}><span>More details</span></div> */}
-                    </div>
-                </label>}
+            {!paath && <LangarCalendar events={events} liftSelectedDate={liftSelectedDate} />}
+
+            {modal && <LangarModal event={modal} closeModal={setModal} />}
 
             {paath &&
                 <label style={interact}>
