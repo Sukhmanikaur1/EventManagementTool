@@ -7,6 +7,18 @@ export const addEvent = (data) => ({
     payload: data
 })
 
+export const DELETE_EVENT = 'DELETE_EVENT'
+export const deleteEvent = (data) => ({
+    type: DELETE_EVENT,
+    payload: data
+})
+
+export const UPDATE_EVENT = 'UPDATE_EVENT'
+export const updateEvent = (data) => ({
+    type: UPDATE_EVENT,
+    payload: data
+})
+
 export const SET_EVENT = 'SET_EVENT'
 export const setEvent = (data) => ({
     type: SET_EVENT,
@@ -27,10 +39,9 @@ export const getDbEvents = () => async dispatch => {
     dispatch(setEvent(events))
 }
 
-export const addDbEvent = ({ newEvent, history }) => async dispatch => {
+export const addDbEvent = ({ newEvent, navigate }) => async dispatch => {
     let event = await EventServices.createEvent(newEvent)
     event = event.data.data.events
-    console.log(event)
-    history.push(`/create-event/event-confirmation/${event.idEvent}`)
+    navigate(`/create-event/event-confirmation/${event.idEvent}`)
     dispatch(addEvent(event))
 }

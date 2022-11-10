@@ -1,0 +1,38 @@
+/* Navigation Bar */
+
+nav ul {
+    list-style: none;
+}
+
+.sign-up-custom {
+  display: flex;
+  justify-content: space-around;
+  min-width: 200px;
+}
+
+.home-nu-nav-links {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.home-nu-nav-links li {
+    color: black;
+}
+
+.home-nu-nav-links li:hover {
+    color: var(--purple-shade);
+    font-weight: 700;
+    margin: -1;
+}
+
+.navbar-brand i {
+    padding-right: 5%;
+    color: var(--orange-shade);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 800;
+    min-width: 340px;
+}

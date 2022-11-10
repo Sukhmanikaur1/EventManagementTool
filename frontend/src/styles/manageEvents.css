@@ -1,0 +1,81 @@
+.manage-evt {
+    background-color: var(--blue-shade);
+    height: 100vh;
+}
+
+.manage-evt h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.manage-both {
+    background-color: white;
+    border: 3px solid var(--another-shade);
+    border-radius: 5px;
+    /* margin: 0 20px 0 20px; */
+    /* min-width: 500px; */
+}
+
+.manage-both-contain {
+    display: flex;
+    justify-content: center;
+}
+
+.manage-l {
+    margin-top: 20px;
+}
+
+.cr-ev-btn {
+    text-align: center;
+    font-size: 15pt;
+    color: black;
+    border: 1px solid black;
+    width: 150px;
+    border-radius: 10px;
+    margin: 20px;
+    background-color: rgb(211, 211, 211);
+}
+
+.cr-ev-btn:hover {
+    background-color: rgb(116, 249, 253);
+}
+
+.cr-ev-btn:active {
+    background-color: black;
+    color: white;
+}
+
+.cr-ev-btn-contain {
+    display: flex;
+    justify-content: right;
+    width: 100%;
+}
+
+.manage-p {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px;
+    padding: 0 30px 0 30px;
+}
+
+#me-contain {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+    margin-top: -5%;
+}
+
+
+/* local storage buttons (temp) */
+
+.flush {
+    margin-top: 60px;
+    opacity: .3;
+}
+
+#ls-temp-btns {
+    position: absolute;
+    bottom: 0;
+}

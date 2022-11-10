@@ -92,6 +92,32 @@
   }
 
 
+  /*  Create Event */
 
-  
- 
+.ne-form {
+  background-color: #DFF6FF; /* 47B5FF  FFF4CF   */ 
+  display: flex;
+  justify-content: center;
+  padding: 5%;
+  gap: 2%;
+  border: 3px solid var(--another-shade);
+  border-radius: 5px;
+  /* margin: 0 100px 0 100px; */
+  width: 400px;
+  max-height: 700px;
+}
+
+.ne-h {
+  width: 100%;
+  background-color: var(--blue-shade);
+  text-align: center;
+  padding: 20px;
+}
+
+.bk-slot {
+  background-color: var(--blue-shade);
+  height: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

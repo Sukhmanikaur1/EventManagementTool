@@ -1,5 +1,8 @@
 const {SET_LOGIN,SET_SLOT, UPDATE_SLOT,DELETE_SLOT} = require('../actions/userActions')
 export const initialState = {
+    users: [],
+    currentUser: 'Bob',
+    role: 'admin'
     user:{},
     currentUser:{},
 }

@@ -1,5 +1,8 @@
 import React,{useState,useRef} from 'react'
 import { Link } from 'react-router-dom'
+
+import '../styles/loginSignup.css'
+
 import {registerUser} from '../../services/UserService'
 const SignUp = () => {
     const fname = useRef('')

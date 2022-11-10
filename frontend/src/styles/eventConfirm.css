@@ -1,0 +1,44 @@
+/* Event Confirmation page */
+
+.event-confirmation-pg {
+    background-color: var(--blue-shade);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-confirmation-pg div {
+    background-color: white;
+    border: var(--orange-shade) 5px solid;
+    width: fit-content;
+    padding: 5%;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.event-confirmation-pg h1 {
+    margin-bottom: 10px;
+}
+
+.event-confirmation-pg ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-confirmation-pg li {
+    padding: 1% 0;
+}
+
+.event-confirmation-pg ul li span:nth-child(2) {
+    color: var(--purple-shade);
+}
+
+.done {
+    margin-top: 20px;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #cee7ff;
+}

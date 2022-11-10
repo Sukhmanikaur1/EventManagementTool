@@ -1,0 +1,90 @@
+/* Sign up or login in section */
+
+.login-signup-banner-container {
+    background-color: var(--purple-shade);
+    display: flex;
+    justify-content: center;
+    padding: 5%;
+    gap: 2%;
+}
+
+.login-signup-banner {
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    width: fit-content;
+    padding: 5% 15%;
+    border-radius: 20px;
+}
+
+.login-signup-banner-btns button {
+    border: none;
+    background-color: var(--orange-shade);
+    padding: 2%;
+    margin: 2%;
+}
+
+/* Registration Pages */
+
+.register-pgs {
+    background-color: var(--orange-shade);
+    height: 100vh;
+}
+
+/* Login Page */
+
+.login-pg {
+    display: flex;
+    gap: 2%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-pg h1 {
+    font-weight: 900;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.login-pg h1 i {
+    padding-right: 1%;
+}
+
+div.login-signup-container {
+    background-color: var(--blue-shade);
+    padding: 5%;
+    width: fit-content;
+    border-radius: 20px;
+}
+
+.login-signup-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 3% 0;
+}
+
+.login-signup-container form input, .login-signup-container form button {
+    margin: 2% 0;
+}
+
+.login-signup-container form input {
+    padding: 2%;
+    border-radius: 10px;
+}
+
+.login-signup-container form button {
+    padding: 2%;
+    background-color: var(--orange-shade);
+    border: none;
+}
+
+.login-signup-container span a {
+    color: var(--orange-shade);
+    text-decoration: var(--orange-shade) solid;
+}
+
+
+

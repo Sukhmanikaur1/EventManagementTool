@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const {apiServerPort}= require('./config/config')
 const DataTypes = require('./model/DataTypes')
-const {UserRouter} = require('./routes/UserRoute')
-const EventRouter= require('./routes/EventRoute')
-const BookSlotRouter = require('./routes/BookSlotRoute')
+// const {UserRouter} = require('./routes/UserRoute')
+// const EventRouter= require('./routes/EventRoute')
+// const BookSlotRouter = require('./routes/BookSlotRoute')
 var cors = require('cors')
 const corsOptions ={
     origin:'http://localhost:3000', 
@@ -18,9 +18,9 @@ app.options('/event', function (req, res) {
     res.end();
   });
 app.use(cors())//, function(req, res, next) {
-app.use('/user',UserRouter)
-app.use('/event',EventRouter)
-app.use('/book',BookSlotRouter)
+// app.use('/user',UserRouter)
+// app.use('/event',EventRouter)
+// app.use('/book',BookSlotRouter)
 //     res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
 //     res.header(
 //       "Access-Control-Allow-Headers",

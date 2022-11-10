@@ -27,4 +27,4 @@ console.log(tokenId)
     )
 }
 
-export default Login_SignUp
+export default EntryButtons

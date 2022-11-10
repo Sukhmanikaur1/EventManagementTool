@@ -1,4 +1,6 @@
 import axios from 'axios'
+
+export const database = false
 const config = {
     headers: {
       "Access-Control-Allow-Origin": "*",

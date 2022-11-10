@@ -1,22 +1,26 @@
-import React,{useEffect} from 'react';
-import { Link ,useHistory} from 'react-router-dom';
+import React from 'react'
+import LoginSignUp from './EntryButtons'
 
-const NavBar = () => {
-    const history = useHistory();
-    useEffect(() => {
-        // Update the document title using the browser API
-        history.listen((location) => { 
-            console.log(location.state)
-         }) 
-      },[history]);
+import '../styles/navbar.css'
+import { Link } from 'react-router-dom'
+
+const NavBar = (props) => {
     return (
-        <nav>
-            <ul>
-                <li><Link to="/events">Events</Link></li>
-                <li><Link to="/new-event">New Event</Link></li>
+        <nav className="row p-2">
+            <ul className="col-auto">
+                <Link style={{ textDecoration: 'none' }} to='/'>
+                    <li className="navbar-brand">
+                        <i id="logo" className="fas fa-calendar-check"></i>
+                        Event Management Tool
+                    </li>
+                </Link>
             </ul>
+            <ul className="home-nu-nav-links col-auto row align-content-center">
+                {props.navlinkstype}
+            </ul>
+            <LoginSignUp />
         </nav>
     )
 }
 
-export default NavBar;
+export default NavBar

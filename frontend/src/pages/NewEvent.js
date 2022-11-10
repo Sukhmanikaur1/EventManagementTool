@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 
 import { v4 as uuid } from 'uuid'
 
-import { addEvent, addDbEvent } from '../actions/actions';
+import { addEvent } from '../actions/actions';
 
 import { database } from '../services/EventService';
 
@@ -19,19 +19,23 @@ const NewEvent = (props) => {
     let [calendar, setCalendar] = useState(new Date())
 
     let dispatch = useDispatch()
-    let history = useHistory()
+    let navigate = useNavigate()
+    let { eventtype } = useParams()
     let detailsRef = useRef()
 
-    let typeOfEvent = history.location.pathname
+    useEffect(() => {
+        setEvent(prevState => ({ ...prevState, type: eventtype }))
+    }, [eventtype])
 
     let user = useSelector(state => state.users.currentUser)
 
     let [event, setEvent] = useState({
         user: user,
-        type: typeOfEvent.includes('langar') ? 'langar' : '',
+        type: eventtype ? eventtype : '',
         startDate: '',
         endDate: '',
         place: '',
+        name: '',
         address: '',
         langarDate: { dd: '', mm: '', yy: '' },
         bookedDetails: {},
@@ -39,14 +43,12 @@ const NewEvent = (props) => {
         selectedDay: { dd: '', mm: '', yy: '' }
     })
 
-    console.log(event)
-
     let [phone, setPhone] = useState('')
 
     useEffect(() => {
         // Determine default dates for Langar type events
         // Using a functional update because otherwise it complains. Besides that nothing different going on here
-        console.log({ dd: currentDay(), mm: currentMonth(), yy: currentYear() })
+        // console.log({ dd: currentDay(), mm: currentMonth(), yy: currentYear() })
         if (event.type === "langar") {
             setEvent(prevEvent => ({
                 ...prevEvent,
@@ -81,7 +83,6 @@ const NewEvent = (props) => {
                 // Handle days in event month
                 if (mm === event.langarDate.mm &&
                     yy === event.langarDate.yy) {
-console.log('ok')
                     bookedDays[dd] = { dd, ev }
                 }
 
@@ -97,9 +98,9 @@ console.log('ok')
 
     // Utility functions... maybe to be put in a separate file and exported
     // const calcDaysInMonth = (year, month) => new Date(year, month, 0).getDate()
-    const currentYear = () => String(new Date().getFullYear())
-    const currentMonth = () => String(new Date().getMonth() + 1)
-    const currentDay = () => String(new Date().getDay())
+    // const currentYear = () => String(new Date().getFullYear())
+    // const currentMonth = () => String(new Date().getMonth() + 1)
+    // const currentDay = () => String(new Date().getDay())
     // const createMonthArr = (initial, cutoffPoint) => [...Array(initial).keys()].slice(cutoffPoint)
     // const calcNextYear = () => Number(currentYear()) + 1
     // const addAzero = (date) => date < 10 ? '0' + String(date) : date
@@ -141,99 +142,43 @@ console.log('ok')
 
         setEvent({ ...event, [name]: value })
     }
-/*
-enddate: "2021-11-19T05:00:00.000+00:00"
-eventaddress: "123 Main Street"
-eventid: 1
-eventphone: "888-999-1021"
-eventplace: "CJSA"
-eventstatus: "created"
-eventtype: "langar"
-startdate:
-*/
+  
     const packageEvent = () => {
-        let newEvent;
-
-        // for development purposes
-        if (database)
-            newEvent = { 
+        let newEvent = { 
                 startdate: event.startDate,
                 enddate: event.endDate,
                 eventaddress: event.address, 
                 eventtype: event.type, 
+                eventname: event.name ? event.name : "none",
                 eventplace: event.place, 
                 eventphone: phone,
                 eventstatus: "created"
-            }
-        else
-            newEvent = { ...newEvent, user, id: uuid() }
+        }
+        
+        if (!database)
+            newEvent = { ...newEvent, user, eventid: uuid() }
 
         if (event.type === "langar" && !newEvent.startdate)
             newEvent.startdate = formatRegular(event.selectedDay)
-
-        console.log(newEvent)
-        // if (event.type === "langar") {
-        //     newEvent = {
-        //         ...baseEvent,
-        //         langarDate: event.selectedDay
-        //     }
-        // } else {
-        //     newEvent = {
-        //         ...baseEvent,
-        //         startDate: event.startDate,
-        //         endDate: event.endDate
-        //     }
-        // }
 
         return newEvent
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(event)
-
+     
         let newEvent = packageEvent()
-        
-
-        /*
-            (NOTE: All local storage code below can be deleted. Mostly for development purposes)
-            
-                1. Get pretend backend from local storage
-                2. If no pretend backend present, create it
-                3. Parse local storage string into javascript object/array
-                4. Spread resulting array into new array with new event included
-                5. Store the new array in local storage
-        */
-
-        if (database) {
-            dispatch(addDbEvent({ newEvent, history }))
-        } else {
-            dispatch(addEvent(newEvent))
-
-            let currentStorage = localStorage.getItem("events")
-
-            if (!currentStorage) {
-                localStorage.setItem("events", JSON.stringify([]))
-                currentStorage = localStorage.getItem("events")
-            }
-
-            let parsedCurrentEvents = JSON.parse(currentStorage)
-
-            let newStorage = [...parsedCurrentEvents, newEvent]
-            let stringNewStorage = JSON.stringify(newStorage)
-
-            localStorage.setItem("events", stringNewStorage)
-        }
-        
-        // history.push('/create-event/event-confirmation')
-
+console.log(newEvent)
+        dispatch(addEvent(newEvent))
+ 
+        navigate(`/create-event/event-confirmation/${newEvent.eventid}`)
     }
 
     const handleBookedDayStyle = ({ date }) => {
         let tileDate = String(date.getDate())
         tileDate = tileDate < 10 ? '0' + tileDate : tileDate
         if (tileDate in event.bookedDays) {
-            console.log('we in')
+            // console.log('we in')
             return 'booked-day'
         }
         else
@@ -242,7 +187,7 @@ startdate:
 
     const handlePreviousOrNext = ({ activeStartDate }) => {
         setEvent({ ...event, langarDate: formatLangarDate(activeStartDate) })
-        console.log('next or previous')
+        // console.log('next or previous')
     }
 
     const handlePhone = (e) => {
@@ -269,7 +214,7 @@ startdate:
     // }
 
     // const handleClickedDetails = () => {
-    //     history.push(`/events/${event.bookedDetails.ev.id}`)
+    //     navigate.push(`/events/${event.bookedDetails.ev.id}`)
     //     dispatch(toggleEventDetails(event.bookedDetails.ev))
     // }
 
@@ -278,22 +223,22 @@ startdate:
         pointerEvents: "none"
     }
 
+    let { yy, mm, dd } = event.selectedDay
+
     let interact = !event.type ? greyedOutStyle : null
-    let buttInt = ((event.type === 'langar' && event.selectedDay.dd) || (event.type === 'paath' && event.startDate && event.endDate)) && event.place && phone && event.address ? null : greyedOutStyle
+    let buttInt = ((event.type === 'langar' && dd) || (event.type === 'paath' && event.startDate && event.endDate)) && event.place && phone && event.address ? null : greyedOutStyle
     let paath = event.type !== "langar"
-    let interactMore = (!paath && !event.selectedDay.dd) || (paath && !event.startDate) ? greyedOutStyle : null
+    let interactMore = (!paath && !dd) || (paath && !event.startDate) ? greyedOutStyle : null
     let booked = event.bookedDetails
 
-    // let eventWord = event.type.slice(0, 1).toUpperCase() + event.type.slice(1)
-console.log(event.type)
     return (
-        <>
-        <h1 className='ne-h'>{event.type === 'langar' ? `Book a Langar slot: ` : `Create a Paath event`}</h1>
+        <div className='bk-slot'>
+        <h1 className='ne-h'>{!event.type ? 'Create an event' : event.type === 'langar' ? `Book a Langar: ` : `Create a Paath event`}</h1>
         <form className="ne-form" onSubmit={handleSubmit}>
 
-            <label style={typeOfEvent.includes('langar') ? greyedOutStyle : null}>
+             <label > {/* style={eventtype ? greyedOutStyle : null} */}
                 Event Type
-                <select defaultValue={typeOfEvent.includes('langar') ? 'langar' : 'choose'} onChange={handleChange} name="type" autoFocus>
+                <select value={event.type ? event.type : eventtype ? eventtype : 'choose'} onChange={handleChange} name="type" autoFocus>
                     <option value="choose" disabled />
                     <option value="paath">Paath (Prayer)</option>
                     <option value="langar">Langar (Kitchen)</option>
@@ -305,7 +250,7 @@ console.log(event.type)
                     Date
                     <input
                         name="endDate"
-                        value={`${event.selectedDay.yy}-${event.selectedDay.mm}-${event.selectedDay.dd}`}
+                        value={yy && mm && dd ? `${yy}-${mm}-${dd}` : ''}
                         type="date"
                         disabled
                     />
@@ -357,7 +302,18 @@ console.log(event.type)
                     />
                 </label>}
 
-            <label style={interactMore}>
+            {paath &&
+            <label style={interact}> {/* style={interactMore} */}
+                Event Name
+                <input
+                    name="name"
+                    value={event.name}
+                    onChange={handleChange}
+                    required
+                />
+            </label>}
+
+            <label style={interact}>
                 Place Name
                 <input
                     name="place"
@@ -367,7 +323,7 @@ console.log(event.type)
                 />
             </label>
 
-            <label style={interactMore}>
+            <label style={interact}>
                 Address
                 <input
                     name="address"
@@ -377,7 +333,7 @@ console.log(event.type)
                 />
             </label>
 
-            <label style={interactMore}>
+            <label style={interact}>
                 Phone Number
                 <input
                     type= "tel"
@@ -393,7 +349,7 @@ console.log(event.type)
 
             <button style={buttInt} className='create-button'>Create</button>
         </form>
-        </>
+        </div>
     )
 }
 
