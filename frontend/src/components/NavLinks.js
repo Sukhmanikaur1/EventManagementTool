@@ -6,41 +6,28 @@ export const NavLinks = () => {
 
     const role = useSelector(state => state.users.role)
 
-    const normalStyle = {
-        textDecoration: 'none',
-        backgroundColor: 'var(--purple-shade)',
-        color: 'var(--orange-shade)',
-        borderRadius: '5px',
+    const normalStyle = 'normal-style'
 
-    }
-
-    const activeStyle = {
-        textDecoration: 'none',
-        backgroundColor: 'var(--purple-shade)',
-        color: 'black',
-        borderRadius: '5px',
-        border: '1px solid black',
-        fontWeight: '700'
-    }
+    const activeStyle = 'active-style'
 
     return (
         <>
         {role !== 'guest' && 
-            <NavLink to="/manage-events" style={({ isActive }) =>
+            <NavLink to="/manage-events" className={({ isActive }) =>
             isActive ? activeStyle : normalStyle
             }>
                 <li className="col n-btn">Manage Events</li> 
             </NavLink>
         }
             
-                <NavLink to="/book-a-slot/paath" style={({ isActive }) =>
+                <NavLink to="/book-a-slot/paath" className={({ isActive }) =>
                     isActive ? activeStyle : normalStyle
                 }>
                     <li className="col n-btn">Book a Paath Slot</li> 
                 </NavLink>
             
 
-            <NavLink to="/create-event/langar" style={({ isActive }) =>
+            <NavLink to="/create-event/langar" className={({ isActive }) =>
                     isActive ? activeStyle : normalStyle
             }>
                 <li className="col n-btn">Book a Langar</li> 

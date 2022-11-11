@@ -2,17 +2,21 @@
 
 nav ul {
     list-style: none;
+    z-index: 11;
 }
 
 .sign-up-custom {
   display: flex;
   justify-content: space-around;
   min-width: 200px;
+  margin-top: 3px;
 }
 
 .home-nu-nav-links {
   display: flex;
   justify-content: space-around;
+  margin-top: 5px;
+  margin-left: 320px;
   width: 100%;
 }
 
@@ -41,10 +45,254 @@ nav ul {
 .n-btn {
     cursor: pointer;
     border: none;
-    
     border-radius: 5px;
     width: 140px;
     text-align: center;
-
     font-size: 15px;
+}
+
+.active-style {
+    text-decoration: none;
+    background-color: var(--purple-shade);
+    color: black;
+    border-radius: 5px;
+    border: 1px solid black;
+    font-weight: 700;
+}
+
+.normal-style {
+        text-decoration: none;
+        background-color: var(--purple-shade);
+        color: var(--orange-shade);
+        border-radius: 5px;
+}
+
+
+.nav-login {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0 10px 0 10px;
+    margin: 0 10px 0 10px;
+}
+
+.nav-signup {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0 10px 0 10px;
+    margin: 0 10px 0 10px;
+}
+
+.hammy {
+    display: none;
+    cursor: pointer;
+}
+
+.hammy:hover span {
+    background-color: var(--purple-shade);
+}
+
+.hammy.active:hover span {
+    background-color: red;
+}
+
+.hammy.active span:nth-child(2) {
+    transition: rotate .5s;
+}
+
+.hammy.active span:nth-child(3) {
+    transition: rotate .5s;
+}
+
+.hammy.active span:nth-child(1) {
+    display: none;
+}
+
+.hammy.active span:nth-child(2) {
+    rotate: 50deg;
+    translate: 0 6px;
+}
+
+.hammy.active span:nth-child(3) {
+    rotate: 130deg;
+    translate: 0 -6px;
+}
+
+/* hamburger menu output */
+.hammy-active-output {
+    display: none;
+    /* border-bottom: 3px solid black; */
+    background-color: white;
+    position: absolute;
+    top: 34px;
+    z-index: 20;
+    width: 100%;
+    flex-direction: column;
+    user-select: none;
+
+    /* height: 1px;
+    overflow: hidden;
+
+    transition: height 350ms; */
+}
+
+
+.hammy-active-output li {
+    background-color: white;
+    color: black;
+    text-transform: uppercase;
+    border-bottom: 1px solid black;
+    width: 100%;
+    text-align: center;
+}
+
+.hammy-active-output .login-link {
+    padding: 10px 0 10px 0;
+    width: 3px solid orange;
+}
+
+.fade-back {
+    border: 3px solid black;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: black;
+    z-index: 10;
+    opacity: .7;
+}
+
+.navbar-brand-contain {
+    background-color: white;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 33px;
+    z-index: 11;
+}
+
+/* .su-active {
+    color: black;
+    border: 1px solid black;
+    background: var(--purple-shade);
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+} */
+
+
+
+/* hamburger menu appears */ 
+@media screen and (max-width: 980px) { 
+    .hammy-active-output.active {
+        display: flex;
+    }
+    .home-nu-nav-links {
+        display: none;
+    }
+    .hammy {
+        height: 30px;
+        margin: 2px;
+        /* border: 1px solid black; */
+        width: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        margin-left: 20px;
+        z-index: 20;
+    }
+    .hammy-active-output .login-link .su-active {
+        background-color: inherit;
+        border: none;
+    }
+    .hammy span {
+        border-bottom: 1px;
+        border-radius: 10px;
+        height: 5px;
+        background-color: black;
+    }
+    .hammy .login-link {
+        font-weight: 1000;
+        border: 5px solid blue;
+    }
+    .sign-up-custom {
+        /* border: 3px solid red; */
+        width: 100%;
+        justify-content: right;
+    }
+    .navbar-brand {
+        position: absolute;
+        top: 0px;
+        left: 50px;
+    }
+    .active-style {
+        border: none;
+        width: 100%;
+    }
+    .normal-style {
+        border: none;
+        width: 100%;
+    }
+    .active-style li {
+        width: 100%;
+        border-radius: 1px;
+        padding: 10px 0 10px 0;
+    }
+    .normal-style li {
+        width: 100%;
+        border-radius: 1px;
+        padding: 10px 0 10px 0;
+    }
+    .normal-style li:hover {
+        font-weight: 700;
+    }
+    .login-link:hover {
+        font-weight: 700;
+    }
+    .hammy-active-output .nav-login {
+        width: 100%;
+        border: none;
+        color: var(--purple-shade);
+        margin: 0;
+        padding: 0;
+    }
+    .hammy-active-output .nav-signup {
+        border: none;
+        width: 100%;
+        color: var(--orange-shade);
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* login and signup buttons dissappear */
+@media screen and (max-width: 600px) { 
+    .hammy {
+        margin-left: 0;
+        margin-right: 20px;
+    }
+    .p-2 {
+        justify-content: right;
+    }
+    .sign-up-custom {
+        display: none;
+    }
+    .home-hero form input {
+        width: 100%;
+    }
+    .signup-btn {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    
+}
+
+/* the navbar brand */
+@media screen and (max-width: 430px) { 
+    .navbar-brand {
+        font-size: 1.3rem;
+        min-width: 340px;
+        align-self: left;
+        left: -5px;
+        top: 2px;
+    }
 }

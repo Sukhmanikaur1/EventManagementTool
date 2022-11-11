@@ -1,43 +1,51 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 
-const normalLogin = {}
+const normalLogin = {
+    textDecoration: 'none'
+}
 
 const activeLogin = {
     color: 'black',
-    fontWeight: '700'
+    fontWeight: '700',
+    textDecoration: 'none'
 }
 
 const normalSignUp = {
+    textDecoration: 'none',
     color: 'var(--orange-shade)',
-    backgroundColor: 'none'
+    backgroundColor: 'var(--purple-shade)',
+    borderRadius: '10px',
 }
-
 const activeSignUp = {
-    backgroundColor: 'yellow',
-    fontWeight: '700'
+    textDecoration: 'none',
+    fontWeight: '700',
+    backgroundColor: 'var(--purple-shade)',
+    borderRadius: '10px',
+    color: 'black'
 }
-
-const activeClassName = 'su-active'
 
 const EntryButtons = () => {
     return (
-        <ul className="row align-items-center sign-up-custom">
-            <li className="col-auto login-link">
-                <NavLink to="/login" style={({ isActive }) =>
-                    isActive ? activeLogin : normalLogin
-                }>Log In</NavLink>
-            </li>
-            <li className="col-auto  login-link">
-            <NavLink to="/signup" className={({ isActive }) =>
-                    isActive ? activeClassName : 'signup-btn'
-                }>
+        <>
             
+                <NavLink to="/login" className='nav-login' style={({ isActive }) =>
+                    isActive ? activeLogin : normalLogin
+                }>
+                    <li className="col-auto login-link">
+                    Log In
+                    </li>
+                    </NavLink>
+            
+            <NavLink to="/signup" className='nav-signup' style={({ isActive }) =>
+                    isActive ? activeSignUp : normalSignUp
+                }>
+            <li className="col-auto  login-link">
                 Sign Up
+                </li>
                     {/* <button className="signup-btn p-1">Sign Up</button> */}
                 </NavLink>
-            </li>
-        </ul>
+        </>
     )
 }
 
