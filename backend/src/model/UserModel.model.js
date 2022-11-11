@@ -1,52 +1,6 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
-const sequelize = new Sequelize("userdb", "host", "Password1", {
-  host: "localhost",
-  port: 3306,
-  dialect: "mysql",
-});
-const User = sequelize.define(
-  "User",
-  {
-    idUser: {
-      type: "integer",
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+const {User,BookSlotEvent,Langar,Paath} = require("./DataTypes")
 
-    fname: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: true,
-    },
-    role:{
-      type:DataTypes.STRING,
-      allowNull: false,
-    },
-    tokenId:{
-      type: DataTypes.STRING(1000),
-      allowNull: true,
-      
-    }
-  },
-  {
-    tableName: "users",
-  }
-);
-// BookSlotEvent.belongsTo(User)
-sequelize.sync();
 
 const addUser = async (user) => {
   const newUser = await User.build({
@@ -85,7 +39,7 @@ const updateUser = async (user)=>{
     const updateUser= await User.update(user,{where: {email:user.email}})
     updateUser.dataValues=user
     console.log(updateUser)
-    
+    return updateUser.toJSON()
   }catch(err){
     console.log(err)
   }

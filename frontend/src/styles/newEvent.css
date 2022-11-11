@@ -83,7 +83,10 @@
   }
 
   .booked-details div:nth-child(4) span {
-    color: rgb(114, 155, 243);
+    /* color: rgb(114, 155, 243); */
+    color: grey;
+    display: flex;
+    flex-direction: column;
   }
 
   .booked-details div:nth-child(4) :hover {
@@ -111,7 +114,7 @@
   width: 100%;
   background-color: var(--blue-shade);
   text-align: center;
-  padding: 20px;
+  padding: 20px 0;
 }
 
 .bk-slot {

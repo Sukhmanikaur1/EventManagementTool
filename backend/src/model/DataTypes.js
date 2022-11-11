@@ -72,6 +72,10 @@ const Langar = sequelize.define(
       phonenumber: {
         type: DataTypes.STRING,
         allowNull:false,
+      }, 
+      fullName:{
+        type: DataTypes.STRING,
+        allowNull: false,
       }
       
     },
@@ -127,7 +131,15 @@ const Langar = sequelize.define(
         primaryKey: true,
         unique: true,
       },
+      fullName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       phonenumber:{
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email:{
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -149,18 +161,10 @@ const Langar = sequelize.define(
   // (User,{foreignKey: {name:"idUser",allowNull: false},
   // as: "userid"})
   Langar.belongsTo(User,{foreignKey: {name:"idLangar",allowNull: false}})
-  Langar.belongsTo(User,{foreignKey: {name:"fname",allowNull: false}})
-  
-  Langar.belongsTo(User,{foreignKey: {name:"lname",allowNull: false}})
   Paath.hasMany(BookSlotEvent,{foreignKey: {name:"idBookSlot",allowNull: false}
 , as:"Paath"})
   BookSlotEvent.belongsTo(Paath,{foreignKey:{name:"idPaath",allowNull: false}})
   BookSlotEvent.belongsTo(User,{foreignKey: {name:"idUser",allowNull: false},
   })
-  BookSlotEvent.belongsTo(User,{foreignKey: {name:"email",allowNull: false},
-  })
-  BookSlotEvent.belongsTo(User,{foreignKey: {name:"fname",allowNull: false}, 
-  })
-  BookSlotEvent.belongsTo(User,{foreignKey: {name:"lname",allowNull: false}})
   sequelize.sync();
   module.exports = {User,BookSlotEvent,Langar,Paath}

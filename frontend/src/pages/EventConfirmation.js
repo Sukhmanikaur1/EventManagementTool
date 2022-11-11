@@ -22,7 +22,12 @@ const EventConfirmation = () => {
                 <ul>
                     <li><span>Event Type:</span> <span>{event?.eventtype}</span></li>                 
                     <li><span>Start Date:</span> <span>{event?.startdate?.slice(0, 10)}</span></li>
-                    <li><span>End Date:</span>  <span>{event?.enddate?.slice(0, 10)}</span></li>
+                    {event?.eventtype === 'paath' && 
+                        <li>
+                            <span>End Date:</span>  
+                            <span>{event?.enddate?.slice(0, 10)}</span>
+                        </li>
+                    }
                     <li><span>Location:</span> <span>{event?.eventplace}</span></li>
                     <li><span>Address:</span> <span>{event?.eventaddress}</span></li>
                     <li><span>Phone Number:</span> <span>{event?.eventphone}</span></li>

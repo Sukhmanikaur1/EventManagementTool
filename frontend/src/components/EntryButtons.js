@@ -1,7 +1,31 @@
-import React,{useState,useEffect} from 'react'
-import { Link, useHistory,useLocation } from 'react-router-dom';
+import React ,{useState,useHistory,useLocation,useEffect}from 'react'
+import { NavLink } from 'react-router-dom';
 
-const Login_SignUp = () => {
+const normalLogin = {
+    textDecoration: 'none'
+}
+
+const activeLogin = {
+    color: 'black',
+    fontWeight: '700',
+    textDecoration: 'none'
+}
+
+const normalSignUp = {
+    textDecoration: 'none',
+    color: 'var(--orange-shade)',
+    backgroundColor: 'var(--purple-shade)',
+    borderRadius: '10px',
+}
+const activeSignUp = {
+    textDecoration: 'none',
+    fontWeight: '700',
+    backgroundColor: 'var(--purple-shade)',
+    borderRadius: '10px',
+    color: 'black'
+}
+
+const EntryButtons = () => {
 const [tokenId, setTokenId] = useState(null)
 const history = useHistory()
 const locations = useLocation()
@@ -16,14 +40,25 @@ useEffect(() => {
   },[history]);
 console.log(tokenId)
     return (
-        <ul className="row align-items-center sign-up-custom">
-            {tokenId?<><li className="col-auto login-link"><Link to="/">Sign Out</Link></li></>:
-            <>
-            <li className="col-auto login-link"><Link to="/login">Log In</Link></li>
-            <li className="col-auto  login-link"><Link to="/signup"><button className="signup-btn p-1">Sign Up</button></Link></li>
-            </>}
+        <>
             
-        </ul>
+                <NavLink to="/login" className='nav-login' style={({ isActive }) =>
+                    isActive ? activeLogin : normalLogin
+                }>
+                    <li className="col-auto login-link">
+                    Log In
+                    </li>
+                    </NavLink>
+            
+            <NavLink to="/signup" className='nav-signup' style={({ isActive }) =>
+                    isActive ? activeSignUp : normalSignUp
+                }>
+            <li className="col-auto  login-link">
+                Sign Up
+                </li>
+                    {/* <button className="signup-btn p-1">Sign Up</button> */}
+                </NavLink>
+        </>
     )
 }
 

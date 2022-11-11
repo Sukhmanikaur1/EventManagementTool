@@ -37,7 +37,6 @@
     position: absolute;
     top: 50px;
     right: 0px;
-
     background-color: rgba(255, 255, 255, 0.632);
     padding: 1%;
     width: 28%;
@@ -68,12 +67,81 @@
     background: var(--purple-shade);
     color: var(--orange-shade);
     border-radius: 10px;
-    padding: 2%;
+    width: 120px;
+    font-size: 15px;
+    padding: 3px 6px 3px 6px;
+}
+
+
+.sign-up-custom:nth-child(2) {
+    border: 3px solid blue;
+}
+
+.home-hero .signup-btn:nth-child(2) {
+    margin: 10px;
+    width: 140px;
+}
+
+
+.sign-up-custom .signup-btn .login-link {
+   
+   width: 60px;
+   padding: 0;
+   margin: 0;
+   text-align: center;
+   padding: 2px 10px 2px 10px;
 }
 
 .sign-up-custom .signup-btn {
-  width: 80px;
-  height: 30px;
-  cursor: pointer;
+    padding: 0;
+    width: fit-content;
 }
+
+
+
+
+.l-cal .bk-slot {
+    height: fit-content;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.l-cal h2 {
+    text-align: center;
+}
+
+
+
+
+
+.mid-sec {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--orange-shade);
+}
+
+
+
+@media screen and (max-width: 900px) { 
+    .l-cal {
+        background-color: var(--orange-shade);
+    }
+    .mid-sec {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 600px) { 
+    .home-hero div {
+        width: 70%;
+        top: 380px;
+        font-size: 13px;
+    }
+    .home-hero div input {
+        width: 100%;
+        display: none;
+    }
+}
+
 

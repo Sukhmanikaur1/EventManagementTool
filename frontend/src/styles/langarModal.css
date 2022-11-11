@@ -1,0 +1,14 @@
+#la-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#la-details .create-button {
+    margin: 0;
+}
+
+#la-details div {
+    text-align: center;
+}

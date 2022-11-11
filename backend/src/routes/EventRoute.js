@@ -39,7 +39,7 @@ EventRouter.post("/addevent/:tokenId", userAuth ,cors(),async (req, res) => {
     res.status(500).send({message:"server Error", err});
   }
 });
-EventRouter.delete("/delete", async (req, res) => {
+EventRouter.delete("/delete", userAuth ,async (req, res) => {
   let idEvent = req.body.idEvent;
   await deleteEventById(idEvent);
   return res.status(200).send(idEvent+" deleted successfully deleted")

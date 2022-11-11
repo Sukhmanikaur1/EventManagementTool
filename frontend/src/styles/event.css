@@ -1,17 +1,28 @@
-/* .event {
+.event {
     border: 1px solid black;
-    text-align: center;
-    display: flex;
-    justify-content: space-around;
-  } */
+  }
+
+  .event td {
+    border-bottom: 1px solid black;
+    padding: 10px;
+  }
+
+  .event:nth-child(odd) td {
+
+    background-color: rgb(231, 231, 231);
+  }
+
+ .event {
+  border: 10px solid black;
+ }
   
   .event:hover {
     cursor: pointer;
-    background-color: rgb(228, 228, 228);
+
   }
   
   .event:active {
-    background-color: rgb(121, 155, 194);
+    
   }
   
   /* .event h5 {
