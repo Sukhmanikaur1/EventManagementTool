@@ -22,7 +22,7 @@ const TimeSlots = ({ event }) => {
 
     let [days] = useState(daysInitialValue)
     let [modal, setModal] = useState(false)
-
+    console.log(days)
     let [slotDate, setSlotDate] = useState({})
     let [slotTime, setSlotTime] = useState({})
     let [slotsDisabled, setSlotsDisabled] = useState({})
@@ -30,7 +30,7 @@ const TimeSlots = ({ event }) => {
     let [gridRows] = useState([...Array(amountOfRows)])
     let [gridCols] = useState([...Array(days + 1)])
 
-    let slots = useSelector(state => state.slots.slots.filter(s => s.eventId === event.id))
+    let slots = useSelector(state => state.slots.slots.filter(s => s.idEvent === event.id))
     let user = useSelector(state => state.users.currentUser)
     let dispatch = useDispatch()
 

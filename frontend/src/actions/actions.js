@@ -33,13 +33,15 @@ export const toggleEventDetails = (data) => ({
 
 export const getDbEvents = () => async dispatch => {
     let events = await EventServices.getEvents()
-    events = events.data
+    console.log(events)
+    events = events.data.events
+    console.log(events)
     dispatch(setEvent(events))
 }
 
 export const addDbEvent = ({ newEvent, navigate }) => async dispatch => {
     let event = await EventServices.createEvent(newEvent)
-    event = event.data
-    navigate(`/create-event/event-confirmation/${event.eventid}`)
+    event = event.data.data.events
+    navigate(`/create-event/event-confirmation/${event.idEvent}`)
     dispatch(addEvent(event))
 }

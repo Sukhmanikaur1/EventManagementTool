@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useState,useHistory,useLocation,useEffect}from 'react'
 import { NavLink } from 'react-router-dom';
 
 const normalLogin = {
@@ -26,6 +26,19 @@ const activeSignUp = {
 }
 
 const EntryButtons = () => {
+const [tokenId, setTokenId] = useState(null)
+const history = useHistory()
+const locations = useLocation()
+useEffect(() => {
+    // Update the document title using the browser API
+    history.listen((location) => { 
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        setTokenId(urlParams.get('tokenId'));
+        console.log(location.state)
+     }) 
+  },[history]);
+console.log(tokenId)
     return (
         <>
             
