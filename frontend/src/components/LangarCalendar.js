@@ -34,8 +34,7 @@ const LangarCalendar = (props) => {
 
     useEffect(() => {
         // Handles filtering of available days and months for langar events when necessary 
-      
-
+    
             let bookedDays = {}
 
             // Find days that have aleady been taken. 
@@ -52,6 +51,7 @@ const LangarCalendar = (props) => {
                 if (mm === event.langarDate.mm &&
                     yy === event.langarDate.yy) {
                     bookedDays[dd] = { dd, ev }
+                    console.log(bookedDays)
                 }
 
             }
