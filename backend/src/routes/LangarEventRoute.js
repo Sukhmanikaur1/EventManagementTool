@@ -1,38 +1,104 @@
 const express = require("express");
+
 const LangarEventRouter = express.Router();
 const Sequelize = require("sequelize");
 
 const config = require("../config/config");
 const configure = require("dotenv");
+LangarEventRouter.use(express.json());
 
 require('dotenv').config()
 const {userAuth} = require('./UserRoute')
 const cors = require('cors')
-const {addLangar,findLangarById,findAllLangar,updateLangarbyId} = require('../model/LangarEvent.model')
-LangarEventRouter.post('/addLangarEvent/:tokenId', userAuth,async (req, res, next) =>{
+const {findByEmail} =require('../model/UserModel.model')
+const {addLangar,findLangarById,findAllLangar,updateLangarbyId} = require('../model/LangarEvent.model');
+LangarEventRouter.post('/addLangarEvent/:tokenId', userAuth,async (req, res) =>{
     try{
-        const user = req.body.user
+        console.log(req.body)
+        const user = await findByEmail(req.user)
+        console.log("user")
+        console.log(user)
+        let allLangar=[]
+        await findAllLangar().then((res)=>allLangar=res)
+    
+        allLangar.forEach(langar=>{if(langar.date===req.body.langar.date) return res.status(200).json({code:"error",msg:"Langar at the date already exists"})})
         const langar = {
             date: req.body.langar.date,
             eventaddress: req.body.langar.eventaddress,
             orgname: req.body.langar.orgname,
             phonenumber: req.body.langar.phonenumber,
-            idUser: user.idUser,
+            UserIdUser: user.idUser,
             fullname:user.fname+" "+ user.lname
         }
-        const addedlangar = await addLangar(langar)
-        return res
+        
+        let allAndAddedlangar = []
+        await addLangar(langar).then((res) => {
+            console.log(res)
+            allAndAddedlangar=res})
+        
+       
+        return res.status(201).json({code:"SUCCESS",data:allAndAddedlangar})
     }
     catch(err){
         console.log(err)
         res.status(500)
     }
 })
-LangarEventRouter.get('/allLangarEvents/:tokenId', userAuth,(req, res, next)=>{
+LangarEventRouter.get('/allLangarEvents/', async(req, res, next)=>{
     try{
-
+        let allLangarEvents=[]
+        await findAllLangar().then((response)=>{
+            allLangarEvents= response
+        })
+        return res.status(200).json({code:"SUCCESS",data:allLangarEvents.length>0?allLangarEvents:[]})
     }
     catch (err){
+        console.log(err)
+        res.status(500)
+    }
+})
+LangarEventRouter.patch('/updateLangarEvent/:tokenId', userAuth,async (req, res) =>{
+    try{
+        console.log("langar update body")
+        console.log(req.body.langar)
+        if (req.user !== req.body.langar.User.email){
+            res.status(200).json({code:"FAIL", msg:"unauthorized user"})
+        }
+        await updateLangarbyId(req.body.langar)
+        console.log(req.user)
+        res.status(200)
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({msg:err})
+    }
+})
+LangarEventRouter.patch('/deletelangarevent/:tokenId', userAuth,async (req, res) =>{
+    try{
+        console.log(req.body)
+        const user = await findByEmail(req.user)
+        console.log(user)
+        console.log(deletePersonalEventbyId)
+        const langarEvent = {
+            idLangar:req.body.langar.idLangar,
+            date: req.body.langar.date,
+            eventaddress: req.body.langar.eventaddress,
+            orgname: req.body.langar.orgname,
+            phonenumber: req.body.langar.eventphone,
+            fullName: req.body.langar.fullName,
+            UserIdUser: req.body.langar.UserIdUser
+          }
+        let allLangarEvents=[]
+        await deleteLangarEventbyId(langarEvent).then(async (res) => {allLangarEvents= res})
+        
+        return res.status(200).json({
+            code:"SUCCESS",
+            data: allLangarEvents,
+            lastIndex: allLangarEvents.length-1
+        }
+        )
+    }
+    catch(err){
         console.log(err)
         res.status(500)
     }

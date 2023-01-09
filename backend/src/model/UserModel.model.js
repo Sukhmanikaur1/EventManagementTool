@@ -7,14 +7,17 @@ const addUser = async (user) => {
     username: user.username,
     password: user.password,
     fname: user.fname,
+    lname:user.lname,
     email: user.email,
-    role:"guest",
+    role:"member",
     tokenId:null
   });
   try{
     let user={}
   await newUser.save().then((res) => {
     user= res.toJSON()
+    const result = {user:user , code:"success"}
+    return result
   });
   return user
   }catch(err){
@@ -24,11 +27,14 @@ const addUser = async (user) => {
 const deletebyUsername = async (email)=>{
     User.destroy({where: {email: email}})
 }
+const findUserByUserId = async (id)=>{
+  
+}
 const findByEmail = async (email)=>{
     try{
   const user = await User.findOne({where: {email: email}})
-  console.log(user.toJSON())
-  return user.toJSON();
+  
+  return user;
     }
     catch (err){
         console.log(err)
@@ -36,12 +42,11 @@ const findByEmail = async (email)=>{
 }
 const updateUser = async (user)=>{
   try{
-    const updateUser= await User.update(user,{where: {email:user.email}})
-    updateUser.dataValues=user
-    console.log(updateUser)
-    return updateUser.toJSON()
+    await User.update(user,{where: {email:user.email}}).then((res)=>{console.log(res)})
+    return user
   }catch(err){
     console.log(err)
+    return err
   }
 }
 module.exports = { User,findByEmail,updateUser, addUser, deletebyUsername};

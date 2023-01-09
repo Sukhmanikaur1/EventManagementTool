@@ -18,6 +18,11 @@ export const updateEvent = (data) => ({
     type: UPDATE_EVENT,
     payload: data
 })
+export const UPDATE_EVENT_OUTDATED = 'UPDATE_EVENT_OUTDATED'
+export const updateEventOutdated = () => ({
+    type: UPDATE_EVENT,
+    payload: {}
+})
 
 export const SET_EVENT = 'SET_EVENT'
 export const setEvent = (data) => ({

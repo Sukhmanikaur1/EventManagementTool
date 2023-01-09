@@ -3,17 +3,25 @@ import LoginSignUp from './EntryButtons'
 
 import '../styles/navbar.css'
 import { Link, useLocation } from 'react-router-dom'
+import {useSelector} from 'react-redux'
 
 
 const NavBar = (props) => {
 
     let [toggleNav, setToggleNav] = useState(false)
-
+    let user = useSelector(state => state.users.currentUser)
+    // console.log(JSON.parse(sessionStorage.getItem('user')))
+    // user?.tokenId? console.log("userdata"):
+    // console.log(JSON.parse(sessionStorage.getItem('user')))
+    
     const hammyRef = useRef()
     const hammyOutputRef = useRef()
-
+    console.log(user)
     let location = useLocation()
-
+    if (!user.fname && JSON.parse(sessionStorage.getItem('user'))?.fname)
+    user= JSON.parse(sessionStorage.getItem('user'))
+    console.log(JSON.parse(sessionStorage.getItem('user'))?.fname)
+    console.log(user.fname)
     const toggleNavAndClasses = () => {
         setToggleNav(!toggleNav)
         hammyRef.current.classList.toggle('active')
@@ -25,9 +33,9 @@ const NavBar = (props) => {
             toggleNavAndClasses()
         }
     }, [location.pathname])
-
+    
     return (
-        <nav className="row p-2">
+        <nav className="p-2 navbar-sticky">
 
             {/* hamburger button */}
             <div className='hammy' ref={hammyRef} onClick={() => {
@@ -58,11 +66,13 @@ const NavBar = (props) => {
                     </li>
                 </Link>
             </ul>
-            <ul className="home-nu-nav-links col-auto row align-content-center">
+            <ul className="home-nu-nav-links col-auto align-content-center">
                 {props.navlinkstype}
             </ul>
-            
-            <ul className="row align-items-center sign-up-custom">
+            <ul className=" p-2 sign-out-name-custom ">
+            {user.fname?<span className="hello">Hello {user.fname} {user.lname}</span>:<></>}
+            </ul>
+            <ul className="align-items-center sign-up-custom">
                 <LoginSignUp />
             </ul>
         </nav>

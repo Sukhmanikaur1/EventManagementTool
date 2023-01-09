@@ -11,7 +11,16 @@
     flex-direction: column;
     margin: 10px;
   }
-  
+  .containerdiv-bkslot{
+    display: flex;
+    flex-direction: row;
+  }
+  .langar-text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+  }
   .create-button {
     width: 100px;
     margin-top: 50px;
@@ -107,7 +116,7 @@
   border-radius: 5px;
   /* margin: 0 100px 0 100px; */
   width: 400px;
-  max-height: 700px;
+  max-height: 1000px;
 }
 
 .ne-h {
@@ -119,7 +128,7 @@
 
 .bk-slot {
   background-color: var(--blue-shade);
-  height: 900px;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;

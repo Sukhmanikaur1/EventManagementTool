@@ -27,6 +27,7 @@ const Event = ({ event, setModal }) => {
       <td>{event.eventplace}</td>
       <td>{displayDate(event.startdate)}</td>
       <td>{displayDate(event.enddate)}</td>
+      <td>{event.status}</td>
     </tr>
   );
 };

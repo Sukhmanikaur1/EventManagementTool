@@ -1,38 +1,57 @@
 import React, { useState, useEffect, useRef } from 'react';
-
+import {createNewLangarEvent} from '../actions/langarActions'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 
 import { v4 as uuid } from 'uuid'
-
+import {createNewPersonalEvent} from '../actions/personalActions'
 import { addEvent } from '../actions/actions';
-
+import Calendar from 'react-calendar';
 import { database } from '../services/EventService';
-
 import '../styles/calendar.css'
 import '../styles/newEvent.css';
 import LangarModal from '../components/LangarModal';
 import LangarCalendar from '../components/LangarCalendar';
-
+import { getLangarEvents } from "../actions/langarActions";
+import {getAllEvents} from "../services/LangarEventService";
 const NewEvent = () => {
-
+    const [langarEventsData,setLangarEventsData]= useState()
     let [modal, setModal] = useState(false)
-
-    const events = useSelector(state => state.events.events)
-
+    const [personalEvents, setPersonalEvents] = useState([])
+    // const events = useSelector(state => state.events.events)
     let dispatch = useDispatch()
     let navigate = useNavigate()
-    let { eventtype } = useParams()
-
+    let { eventtype, tokenId } = useParams()
+    const assignLangarEvents = async() => {
+        dispatch(getLangarEvents())
+        let res = await getAllEvents()
+        
+        console.log(res.data.code==="SUCCESS")
+        console.log(sessionStorage.getItem('langar'))
+        if(sessionStorage.getItem('langar')){
+            setLangarEventsData(JSON.parse(sessionStorage.getItem('langar')))
+            
+        }
+        console.log("langarEventsData")
+        console.log(langarEventsData)
+        if(res?.data?.code==="SUCCESS"){
+            setLangarEventsData(res.data.data)
+        }
+        
+      }
     useEffect(() => {
         setEvent(prevState => ({ ...prevState, type: eventtype }))
+        if(event.eventtype==="langar")
+        assignLangarEvents()
     }, [eventtype])
-
     let user = useSelector(state => state.users.currentUser)
+    if(!user?.fname && JSON.parse(sessionStorage.getItem('user'))?.fname)
+    user = JSON.parse(sessionStorage.getItem('user'))
 
     let [event, setEvent] = useState({
-        user: user,
-        type: eventtype ? eventtype : '',
+    
+        user: user.fname+user.lname,
+        type: eventtype ? eventtype : 'paath',
         startDate: '',
         endDate: '',
         place: '',
@@ -41,16 +60,26 @@ const NewEvent = () => {
         langarDate: { dd: '', mm: '', yy: '' },
         bookedDetails: {},
         bookedDays: {},
-        selectedDay: { dd: '', mm: '', yy: '' }
+        selectedDay: { dd: '', mm: '', yy: '' },
+        startTime:0,
+        endTime:0,
+        hostName:"",
+        eventDescription:"",
+        startTime:new Date(),
+        endTime: new Date(),
+        phone:"",
     })
 
     let [phone, setPhone] = useState('')
-
+    useEffect(()=>{
+        assignLangarEvents()
+    },[])
     useEffect(() => {
         // Determine default dates for Langar type events
         // Using a functional update because otherwise it complains. Besides that nothing different going on here
         // console.log({ dd: currentDay(), mm: currentMonth(), yy: currentYear() })
         if (event.type === "langar") {
+
             setEvent(prevEvent => ({
                 ...prevEvent,
                 langarDate: formatLangarDate(new Date()),
@@ -81,17 +110,18 @@ const NewEvent = () => {
 
     const blank = () => ({ mm: '', yy: '', dd: '' })
 
-    const handleChange = (e, e2) => {
+    const handleChange = (e) => {
         let name, value;
-
+        console.log(e)
         if (e.target) {
+            console.log(e.target)
             name = e.target.name
             value = e.target.value
         }
 
         setEvent({ ...event, [name]: value })
     }
-  
+  console.log(event)
     const packageEvent = () => {
         let newEvent = { 
                 startdate: event.startDate,
@@ -101,11 +131,11 @@ const NewEvent = () => {
                 eventname: event.name ? event.name : "none",
                 eventplace: event.place, 
                 eventphone: phone,
-                eventstatus: "created"
+                status: "New"
         }
         
         if (!database)
-            newEvent = { ...newEvent, user, eventid: uuid() }
+            newEvent = { ...newEvent, user:user.username, eventid: uuid() }
 
         if (event.type === "langar" && !newEvent.startdate)
             newEvent.startdate = formatRegular(event.selectedDay)
@@ -115,19 +145,65 @@ const NewEvent = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-     
+        
         let newEvent = packageEvent()
-
-        dispatch(addEvent(newEvent))
- 
-        navigate(`/create-event/event-confirmation/${newEvent.eventid}`)
+        if(event.type === "langar"&&user?.tokenId){
+            dispatch(createNewLangarEvent({
+                  date:newEvent.startdate,
+                  eventaddress: newEvent.eventaddress,
+                  orgname: newEvent.eventplace,
+                  phonenumber: newEvent.eventphone, 
+                  fullName:user.fname+" "+user.lname,
+            },user.tokenId))
+            dispatch(addEvent(newEvent))
+        }
+        else if( event.type === "paath"  && user?.tokenId){
+            dispatch(addEvent(newEvent))
+            // dispatch(createNewPaathEvent({
+            // },user.tokenId))
+        }
+        else if( event.type === "personal" && user?.tokenId){
+            let valid= true
+            personalEvents?.map(evnt=>{ console.log(evnt.starttime)
+                console.log(event.startTime) 
+                if (evnt.eventdate==event.startDate) {
+                    if(Number(event.startTime.substr(0,2))>12){
+                        setEvent({...event, startTime:(Number(event.startTime.substr(0,2))-12)+event.startTime.substr(2)+"PM"})
+                    }
+                    if(evnt.starttime.substr(0,5)>= event.startTime.substr(0,5)&&event.startTime.substr(0,5)<=evnt.endtime.substr(0,5)){
+                        console.log(evnt.starttime+"here")
+                        valid= false
+                    }
+                    else if(evnt.endtime.substr(0,5)== event.endTime)
+                    valid= false
+                    console.log(true+" same startdate start time")
+                
+                }
+                else{ console.log("different start datte")}})
+                console.log(valid)
+            const currentEvent ={phonenumber:phone,
+                hostname: event.hostname,
+                eventdate: event.startDate,
+                eventdescription: event.eventdescription,
+                eventaddress: event.address,
+                eventplace: event.place,
+                eventname: event.name,
+                eventtimestart: event.startTime,
+                eventtimeend: event.endTime,
+            }
+            
+            dispatch(createNewPersonalEvent(user?.tokenId,currentEvent))
+            
+        }
+        setTimeout(() =>navigate(`/create-event/event-confirmation/${newEvent.eventid}`),500)
+        
     }
 
     const handlePhone = (e) => {
         let { value } = e.target
         let lstChTypd = value.slice(-1)
         
-        if (!/[1-9]/.test(Number(lstChTypd)) && lstChTypd !== '-' && lstChTypd) return
+        if (!/[0-9]/.test(Number(lstChTypd)) && lstChTypd !== '-' && lstChTypd) return
         if (value.length === 13) return
 
         if (value.length === 4 && !value.includes('-')) {
@@ -151,29 +227,42 @@ const NewEvent = () => {
     let { dd } = event.selectedDay
 
     let interact = !event.type ? greyedOutStyle : null
-    let buttInt = ((event.type === 'langar' && dd) || (event.type === 'paath' && event.startDate && event.endDate)) && event.place && phone && event.address ? null : greyedOutStyle
-    let paath = event.type !== "langar"
-    let interactMore = (!paath && !dd) || (paath && !event.startDate) ? greyedOutStyle : null
+    let buttInt = ((event.type === 'langar' && dd) || (((event.type === 'paath' && event?.endDate) ||event?.type === 'personal')&& event?.startDate )) && event.place && phone && event.address ? null : greyedOutStyle
+    let paath = event.type==="paath"?"paath":false
+    let personal = event.type ==="personal"?"personal":false;
 
+    let interactMore = (!(paath||personal) && !dd) || ((paath==="paath"||personal==='personal') && !event.startDate) ? greyedOutStyle : null
+    let todayDate= new Date().toISOString().split('T')[0]
+    let personalTodaydate=new Date()
+    personalTodaydate.setDate(personalTodaydate.getDate()+1)
+    personalTodaydate= personalTodaydate.toISOString().split('T')[0]
+    console.log(todayDate)
     return (
         <div className='bk-slot'>
         <h1 className='ne-h'>{!event.type ? 'Create an event' : event.type === 'langar' ? `Book a Langar: ` : `Create a Paath event`}</h1>
+        <div className='containerdiv-bkslot'>
+        <div className='langar-text'>
+            <span>In Sikhism, a langar (Punjabi: ਲੰਗਰ, 'kitchen') is the community kitchen of a gurdwara, which serves meals to all free of charge, regardless of religion, caste, gender, economic status, or ethnicity. People sit on the floor and eat together, and the kitchen is maintained and serviced by Sikh community volunteers.The meals served at a langar are always lacto-vegetarian.
+
+</span>
+        </div>
         <form className="ne-form" onSubmit={handleSubmit}>
 
              <label > {/* style={eventtype ? greyedOutStyle : null} */}
                 Event Type
-                <select value={event.type ? event.type : eventtype ? eventtype : 'choose'} onChange={handleChange} name="type" autoFocus>
+                <select value={event.type ? event.type : eventtype ? eventtype : 'paath'} onChange={handleChange} name="type" autoFocus>
                     <option value="choose" disabled />
                     <option value="paath">Paath (Prayer)</option>
+                    <option value="personal">Personal</option>
                     <option value="langar">Langar (Kitchen)</option>
                 </select>
             </label>
-
-            {!paath && <LangarCalendar events={events} liftSelectedDate={liftSelectedDate} />}
-
+        
+            {!(paath==="paath" ||personal==="personal") && <LangarCalendar events={langarEventsData} liftSelectedDate={liftSelectedDate} />}
+            
             {modal && <LangarModal event={modal} closeModal={setModal} />}
 
-            {paath &&
+            {paath ==="paath" &&
                 <label style={interact}>
                     Start Date
                     <input
@@ -181,24 +270,73 @@ const NewEvent = () => {
                         type="date"
                         value={event.startDate}
                         onChange={handleChange}
+                        min={todayDate}
                     />
                 </label>}
 
-            {paath &&
+            {paath ==="paath" &&
                 <label style={interactMore}>
                     End Date
                     <input
                         name="endDate"
-                        min={event.startDate}
-                        // max={weeksFromNow(2)}
                         type="date"
                         value={event.endDate}
                         onChange={handleChange}
-                        required
+                        min={event.startDate}
                     />
+                    
+                </label>}
+                {personal &&
+                <label >
+                    {/* style={interactMore}> */}
+                    Start Date
+                    <input
+                        name="startDate"
+                        type="date"
+                        value={event.startDate}
+                        onChange={handleChange}
+                        min={personalTodaydate}
+                    />
+                    
+                </label>}
+                                {personal &&
+                <label >
+                {/* // style={interactMore}> */}
+                    Start Time
+                    <input
+                        name="startTime"
+                        type="time"
+                        value={event.startTime}
+                        onChange={handleChange}
+                        
+                    />
+                    
+                </label>}
+                {personal &&
+                <label >
+                    {/* style={interactMore}> */}
+                    End Time
+                    <input
+                        name="endTime"
+                        type="time"
+                        value={event.endTime}
+                        onChange={handleChange}
+                        min={event.startTime}
+                    />
+                    
                 </label>}
 
-            {paath &&
+            {paath==="paath" &&
+            <label style={interact}> {/* style={interactMore} */}
+                Event Name
+                <input
+                    name="name"
+                    value={event.name}
+                    onChange={handleChange}
+                    required
+                />
+            </label>}
+            {personal==="personal" &&
             <label style={interact}> {/* style={interactMore} */}
                 Event Name
                 <input
@@ -218,6 +356,24 @@ const NewEvent = () => {
                     required
                 />
             </label>
+            {personal==='personal'&&<label style={interact}>
+                Host Name
+                <input
+                    name="hostname"
+                    value={event.hostname}
+                    onChange={handleChange}
+                    required
+                />
+            </label>}
+            {personal==='personal'&&<label style={interact}>
+                Event Description
+                <input
+                    name="eventdescription"
+                    value={event.eventdescription}
+                    onChange={handleChange}
+                    required
+                />
+            </label>}
 
             <label style={interact}>
                 Address
@@ -245,6 +401,12 @@ const NewEvent = () => {
 
             <button style={buttInt} className='create-button'>Create</button>
         </form>
+        <div className="langar-text">
+        <span>In Sikhism, a langar (Punjabi: ਲੰਗਰ, 'kitchen') is the community kitchen of a gurdwara, which serves meals to all free of charge, regardless of religion, caste, gender, economic status, or ethnicity. People sit on the floor and eat together, and the kitchen is maintained and serviced by Sikh community volunteers.The meals served at a langar are always lacto-vegetarian.
+
+</span>
+        </div>
+        </div>
         </div>
     )
 }

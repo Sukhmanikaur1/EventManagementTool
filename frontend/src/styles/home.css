@@ -24,7 +24,7 @@
 
 .home-hero {
     width: 100%;
-    height: 500px;
+    height: 58vw;
     background-image: url("/src/images/golden-temple.jpg");
     background-position: center;
     background-size: 100%;
@@ -33,14 +33,6 @@
     position: relative;
 }
 
-.home-hero div {
-    position: absolute;
-    top: 50px;
-    right: 0px;
-    background-color: rgba(255, 255, 255, 0.632);
-    padding: 1%;
-    width: 28%;
-}
 
 .home-hero div h1 {
     font-weight: 700;
@@ -60,7 +52,17 @@
 .home-hero input {
   width: 170px;
 }
-
+.text-item-td{
+    font-size: 0.65em;
+}
+.home-hero-container{
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    background-color: rgba(255, 255, 255, 0.632);
+    padding: 1%;
+    width: 28%;
+}
 .signup-btn {
     cursor: pointer;
     border: none;
@@ -116,6 +118,7 @@
 
 .mid-sec {
     display: flex;
+    flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
     background-color: var(--orange-shade);
@@ -132,6 +135,44 @@
     }
 }
 
+.personal-event-box{
+display: flex;
+flex-direction: column;
+}
+h1{
+    font-size:calc(1.075rem + 1.0vw);
+}
+.personal-table-th{
+    max-height: 44px;
+    width:33%;
+    padding:4px,4px,4px,4px;
+}
+.text-heading{
+    font-size: 0.75em
+}
+.pagination-buttons{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+}
+.table-Container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height:322px;
+    overflow-y: visible;
+    max-height: 322px;
+    align-items: center;
+}
+.table-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+table{
+    max-height: 322px;
+    overflow-y: scroll;
+}
 @media screen and (max-width: 600px) { 
     .home-hero div {
         width: 70%;

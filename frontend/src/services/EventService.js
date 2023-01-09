@@ -7,13 +7,12 @@ const config = {
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
     }
   };
-export const database = true
 
 let api = 'http://localhost:4000/'
 
 class EventService {
-    getEvents() {
-        return axios.get(api + 'event/allevents')
+    getEvents(tokenId) {
+        return axios.get(api + 'event/allevents/:tokenId')
     }
     createEvent(eventObj) {
         console.log(eventObj)

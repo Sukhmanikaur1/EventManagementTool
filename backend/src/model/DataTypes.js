@@ -37,7 +37,7 @@ const User = sequelize.define(
         allowNull: false,
       },
       tokenId:{
-        type: DataTypes.STRING(1000),
+        type: DataTypes.STRING(8000),
         allowNull: true,
         
       }
@@ -58,7 +58,7 @@ const Langar = sequelize.define(
         unique: true,
       },
   date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       eventaddress: {
@@ -114,6 +114,10 @@ const Langar = sequelize.define(
         phonenumber: {
           type: DataTypes.STRING,
           allowNull: false,
+        },
+        status:{
+          type: DataTypes.STRING,
+          allowNull: false,
         }
       },
 
@@ -153,18 +157,71 @@ const Langar = sequelize.define(
     }
   )
   // console.log(getBooked)
-  
+  const PersonalEvent = sequelize.define(
+    "personalevent",
+    {
+      personaleventid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        unique: true,
+      },
+      eventname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      eventplace: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      eventaddress: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      phonenumber:{
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      hostname:{
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      eventdate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+      starttime: {
+        type: DataTypes.TIME,
+        allowNull: false,
+      },
+      endtime: {
+        type: DataTypes.TIME,
+        allowNull: false,
+      },
+      eventdescription: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      tableName: "personalevent",
+    }
+  )
+
   User.hasMany(BookSlotEvent,{foreignKey: {name:"idBookSlot",allowNull: false},
   as: "bookedSlot"})
-  User.hasMany(Langar,{foreignKey: {name:"idLangar",allowNull: false},as : "langar"})
+  User.hasMany(Langar)
+    // ,{foreignKey: {name:"idUser",allowNull: false},as : "langar"})
   // BookSlotEvent.hasOne()
   // (User,{foreignKey: {name:"idUser",allowNull: false},
   // as: "userid"})
-  Langar.belongsTo(User,{foreignKey: {name:"idLangar",allowNull: false}})
+  Langar.belongsTo(User)
+  // ,{foreignKey: {name:"id",allowNull: false}})
   Paath.hasMany(BookSlotEvent,{foreignKey: {name:"idBookSlot",allowNull: false}
 , as:"Paath"})
   BookSlotEvent.belongsTo(Paath,{foreignKey:{name:"idPaath",allowNull: false}})
   BookSlotEvent.belongsTo(User,{foreignKey: {name:"idUser",allowNull: false},
   })
   sequelize.sync();
-  module.exports = {User,BookSlotEvent,Langar,Paath}
+  module.exports = {User,BookSlotEvent,Langar,Paath,PersonalEvent}

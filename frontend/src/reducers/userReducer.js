@@ -1,23 +1,46 @@
-const {SET_LOGIN,SET_SLOT, UPDATE_SLOT,DELETE_SLOT} = require('../actions/userActions')
-export const initialState = {
-    users: [],
-    currentUser: 'Bob',
-    role: 'admin'
-    user:{},
-    currentUser:{},
-}
+const {REGISTRATION,SIGNOUT,START_LOGIN,END_LOGIN, UPDATE_SLOT,DELETE_SLOT} = require('../actions/userActions')
 
-export default function eventReducer(state = initialState, action) {
+export const initialState = {
+    user: {},
+    currentUser: {},
+    role: '',
+    
+} 
+
+export default function userReducer(state = initialState, action) {
     switch(action.type) {
-        case SET_LOGIN:
+        // case REGISTRATION:return {}
+            // const res = await registerUser(action.payload)
+            // if (res.data.code === 'success') {
+            //     return{
+
+            //         registration: true
+            //      }
+            // }
+            // else{
+            //     return{
+            //         registration: false
+            //     }
+            // }
+            
+        
+        case START_LOGIN:
+            return {
+                user: action.payload,
+                isFetching: false,
+                currentUser:action.payload
+            }
+            case END_LOGIN:
             return {
                 
-                user: {...action.payload},
+                // user: {...action.payload},
+                
             }
-        case SET_SLOT:
+        case SIGNOUT:
             return {
-                ...state,
-                slots: action.payload
+                user:{},
+                currentUser: {},
+                isFetching:false
             }
         case DELETE_SLOT:
             return {

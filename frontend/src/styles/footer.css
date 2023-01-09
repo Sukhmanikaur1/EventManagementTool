@@ -1,0 +1,20 @@
+.footer-container{
+    background-color:#2192ff;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.footer-img1{
+    width: 49vw;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+.copyright-text{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.container-img{
+    margin-top: 10px;
+}

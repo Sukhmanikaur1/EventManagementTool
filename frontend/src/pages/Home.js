@@ -1,82 +1,153 @@
-import React from "react";
+import React,{ useEffect,useMemo, useState} from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import LangarCalendar from "../components/LangarCalendar";
-
+import {useDispatch} from 'react-redux'
+import {updateEventOutdated} from '../actions/actions'
+import PersonalEvent from '../components/PersonalEventTable'
+import PersonalEventModal from '../components/PersonalEventModal'
+import {getPersonalEvents} from '../actions/personalActions'
 import '../styles/home.css'
+import { setLangarEvents } from "../actions/langarActions";
 
+import Footer from '../components/Footer'
 const Home = () => {
 
   const role = useSelector(state => state.users.role)
   const events = useSelector(state => state.events.events)
-
+  const dispatch = useDispatch()
+  const user = JSON.parse(sessionStorage.getItem('user'))
   const guest = role === 'guest' ? true : false
-
   let navigate = useNavigate();
+  const columns = useMemo(()=>[{
+    Header:"Event Name",
+    accessor:"eventname"
+},
+{
+    Header:"Date",
+    accessor:"eventdatetime"
+},
+{
+    Header:"Host Name",
+    accessor:"hostname"
+},
+{
+    Header:"Description",
+    accessor:"eventdescription"
+}])
+var dateObj = new Date();
+var month = dateObj.getUTCMonth() + 1; //months from 1-12
+var day = dateObj.getUTCDate();
+var year = dateObj.getUTCFullYear();
 
+let newdate = year + "/" + month + "/" + day;
+  const [personalEvents,setPersonalEvents]= useState([{}])
+  const [ howManyPersonalEvents, setHowManyPersonalEvents] = useState(5)
+  const [hasMorePersonalEvents,setHasMorePersonalEvents]  = useState(true)
+ 
+ 
+  
   const handleButtonPress = (path) => {
     
       navigate(path);
   
   };
+  const [modal, setModal]= useState(false)
+  const [modalData, setModalData]= useState({})
+  const setModals =(data)=>{
+    setModalData(data)
+    setModal(true)
+  }
+  let personalEventsData =[]
+  const assignPersonalData=() => {
+    setTimeout(()=> setPersonalEvents(JSON.parse(sessionStorage.getItem('personalEvents'))),1400)
+    personalEventsData=JSON.parse(sessionStorage.getItem('personalEvents'))
+  }
+  const [langarEventsData,setLangarEventsData] =useState([])
+  const assignLangarEvents = async() => {
+    setTimeout(()=> setLangarEvents(JSON.parse(sessionStorage.getItem('langar'))),1400)
+    setLangarEventsData(JSON.parse(sessionStorage.getItem('langar')))
+    console.log("langarEventsData")
+    console.log(langarEventsData)
+  }
+  useEffect(() => {
+    dispatch(updateEventOutdated())
+    dispatch(getPersonalEvents())
+    
+    setPersonalEvents()
+    // setLangarEvents()
+    assignPersonalData()
+    assignLangarEvents()
+  },[])
   
+  
+  
+  console.log(personalEvents)
+  if(!personalEventsData)
+    personalEventsData=[{}]
+  console.log(howManyPersonalEvents)
   return (
     <main>
       <section className="home-hero d-flex flex-column justify-content-center">
-        <div>
+        <div className="home-hero-container">
           <h1 className="col-8">
             Book or create an event at your nearest Gurdwara Sahib!
           </h1>
-          <form className="row d-flex">
+          
+          {!user?.fname?<form className="row d-flex">
             <input
               className="col"
               type="email"
               placeholder="Enter your email address"
             />
             <button className="signup-btn" onClick={() => handleButtonPress('/signup')}>Sign up for free!</button>
-          </form>
+          </form>:
+          // <h1 className="col-8">Welcome {user?.fname} {user?.lname}!</h1>
+          <><div className='cr-ev-btn-contain'>
+          {user.role === 'admin' &&
+              <Link to={"/create-event/paath/"+user.tokenId} style={{ textDecoration: 'none' }}>
+                  <li className="col cr-ev-btn">Create Event</li> 
+              </Link>
+          }
+      </div></>}
         </div>
       </section>
       <article className="mid-sec">
       <section className="services">
-        <div>
-          <h2>
+      <h2 className="table-title">Personal Events</h2>
+        <div className="personal-event-box">
+        
+          <PersonalEvent setModals={setModals}columns={columns} data={personalEvents?.length>0?personalEvents:personalEventsData} />
+          {/* <h2>
             {guest ? 
               "Sign up or Log In to:" 
               : 
               "Choose from:"
             }
           </h2>
-            <span onClick={() => handleButtonPress('/book-a-slot/paath')}>
+            <span onClick={() => { if(JSON.parse(sessionStorage.getItem('user'))?.fname) handleButtonPress('/book-a-slot/paath')
+            else { handleButtonPress('/login')}
+            }}>
             Book a Paath Slot
             </span>
-            <span onClick={() => handleButtonPress('/create-event/langar')}>
+            <span onClick={() =>{if(JSON.parse(sessionStorage.getItem('user'))?.fname) handleButtonPress('/create-event/langar/'+user.tokenId)
+          else { handleButtonPress('/login')}}}>
             Book a Langar
-            </span>
+            </span> */}
             {/* <span onClick={() => handleButtonPress('/create-event/langar')}>
               Book a Langar Slot
             </span> */}
 
-          {
-            !guest &&
-            <>
-            <span onClick={() => handleButtonPress('/create-event')}>
-            Create an Event
-          </span>
-            
-              <span onClick={() => handleButtonPress('/manage-events')}>
-                Manage Events
-              </span>
-              </>
-          }
+{modal && <PersonalEventModal personalEvent={modalData} closeModal={setModal} show={modal}/>}
         </div>
       </section>
       <section className="l-cal">
         <h2>Langar</h2>
-        <LangarCalendar events={events} />
+        <LangarCalendar events={langarEventsData} />
       </section>
       </article>
-      <section className="login-signup-banner-container">
+      <Footer/>
+      {/* {user?.fname?<section className="login-signup-banner-container">
         <div className="login-signup-banner">
           <h2>Get started </h2>
           <p>Discover Gurdwara Sahib events near you! </p>
@@ -89,7 +160,7 @@ const Home = () => {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 };

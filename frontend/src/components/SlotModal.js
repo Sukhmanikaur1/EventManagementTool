@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Modal from './Modal';
 
 import { v4 as uuid } from 'uuid'
@@ -8,22 +8,35 @@ import { addSlot, deleteSlot, updateSlot } from '../actions/slotActions'
 
 import '../styles/slotModal.css'
 
-const SlotModal = ({ slot, closeModal }) => {
+const SlotModal = ({ setModalMessage,setShowModalMessage ,slot, closeModal }) => {
 
     let user = useSelector(state => state.users.currentUser)
+    if (!user.fname && JSON.parse(sessionStorage.getItem('user')).fname)
+    user= JSON.parse(sessionStorage.getItem('user'))
     let [phone, setPhone] = useState(slot.currentSlot?.phone ? slot.currentSlot.phone : '')
-
+    console.log(user)
+    console.log(slot)
     let nameRef = useRef()
     let emailRef = useRef()
     // let phoneRef = useRef()
-
+    useEffect(() => {
+        if(slot.currentSlot?.user){
+            console.log("here")
+        nameRef.current.value=`${slot.currentSlot?.name}`
+        emailRef.current.value=slot.currentSlot?.email
+        }
+        else { 
+            
+        nameRef.current.value=`${user.fname} ${user.lname}`
+        emailRef.current.value=user.username
+        }
+    },[])
     let dispatch = useDispatch()
 
     const handleSubmit = (e) => {
         e.preventDefault()
         
         let newSlot;
-        
         if (slot.currentSlot) {
             newSlot = {
                 ...slot.currentSlot,
@@ -36,7 +49,7 @@ const SlotModal = ({ slot, closeModal }) => {
                 name: nameRef.current.value,
                 email: emailRef.current.value,
                 phone,
-                eventId: slot.event.id,
+                eventId: slot.event.eventid,
                 place: slot.event.place,
                 time: slot.time,
                 date: slot.date,
@@ -49,13 +62,16 @@ const SlotModal = ({ slot, closeModal }) => {
             dispatch(updateSlot(newSlot))
         else 
             dispatch(addSlot(newSlot))
-
-        alert('Slot saved!')
+        
+        setModalMessage('Slot saved!')
+        setShowModalMessage(true)
         closeModal(false)
     }
-
+console.log('current slot')
+console.log(slot)
     const handleDelete = () => {
-        alert('Slot deleted.')
+        setModalMessage('Slot deleted.')
+        setShowModalMessage(true)
         dispatch(deleteSlot(slot.currentSlot.id))
         closeModal(false)
     }
@@ -64,7 +80,7 @@ const SlotModal = ({ slot, closeModal }) => {
         let { value } = e.target
         let lstChTypd = value.slice(-1)
 
-        if (!/[1-9]/.test(Number(lstChTypd)) && lstChTypd !== '-' && lstChTypd) return
+        if (!/[0-9]/.test(Number(lstChTypd)) && lstChTypd !== '-' && lstChTypd) return
         if (value.length === 13) return
 
         if (value.length === 4 && !value.includes('-')) {
@@ -91,6 +107,7 @@ const SlotModal = ({ slot, closeModal }) => {
                                     style={slot.viewOnly ? { backgroundColor: 'rgb(224, 236, 255)' } : null}
                                     ref={nameRef} 
                                     required
+                                    
                                 />
                             </label>
 
@@ -124,7 +141,7 @@ const SlotModal = ({ slot, closeModal }) => {
                         </div>
 
                         <div>
-                            {!slot.viewOnly ? <button>{slot.currentSlot ? 'Update' : 'Create'}</button> : null}
+                            {!slot.viewOnly ? <button>{slot.currentSlot?.user?.username==user?.username ? 'Update' : 'Create'}</button> : null}
                             {slot.currentSlot && !slot.viewOnly ? <button type="button" onClick={handleDelete}>Delete</button> : null}
                             <button type="button" onClick={() => closeModal(false)}>Cancel</button>
                         </div>

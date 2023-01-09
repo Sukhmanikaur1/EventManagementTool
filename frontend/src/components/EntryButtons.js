@@ -1,6 +1,7 @@
-import React ,{useState,useHistory,useLocation,useEffect}from 'react'
-import { NavLink } from 'react-router-dom';
-
+import React ,{useState,useEffect}from 'react'
+import { NavLink , useNavigate, useLocation} from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {signOut_handler} from "../actions/userActions"
 const normalLogin = {
     textDecoration: 'none'
 }
@@ -26,22 +27,40 @@ const activeSignUp = {
 }
 
 const EntryButtons = () => {
+    let user = useSelector(state => state.users.currentUser)
+    const dispatch=useDispatch()
+    
+    if (!user.fname && JSON.parse(sessionStorage.getItem('user'))?.fname)
+    user= JSON.parse(sessionStorage.getItem('user'))
 const [tokenId, setTokenId] = useState(null)
-const history = useHistory()
+const navigate = useNavigate()
 const locations = useLocation()
-useEffect(() => {
-    // Update the document title using the browser API
-    history.listen((location) => { 
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        setTokenId(urlParams.get('tokenId'));
-        console.log(location.state)
-     }) 
-  },[history]);
+// useEffect(() => {
+//     // Update the document title using the browser API
+//     navigate.listen((location) => { 
+//         const queryString = window.location.search;
+//         const urlParams = new URLSearchParams(queryString);
+//         setTokenId(urlParams.get('tokenId'));
+//         console.log(location.state)
+//      }) 
+//   },[navigate]);
+const handleClick =() =>{
+    sessionStorage.removeItem('user')
+    dispatch(signOut_handler())
+}
 console.log(tokenId)
-    return (
+    return (<>
+        {user?.role?
         <>
-            
+        
+        <NavLink to="/" className='nav-login' style={({ isActive }) =>
+        isActive ? activeLogin : normalLogin
+    }>
+        <li onClick = { handleClick } className="col-auto login-link">
+        Sign out 
+        </li>
+        </NavLink>
+          </>  :<>            
                 <NavLink to="/login" className='nav-login' style={({ isActive }) =>
                     isActive ? activeLogin : normalLogin
                 }>
@@ -58,7 +77,8 @@ console.log(tokenId)
                 </li>
                     {/* <button className="signup-btn p-1">Sign Up</button> */}
                 </NavLink>
-        </>
+        </>}
+    </>
     )
 }
 

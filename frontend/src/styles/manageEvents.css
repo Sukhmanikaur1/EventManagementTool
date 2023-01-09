@@ -14,11 +14,16 @@
     border-radius: 5px;
     /* margin: 0 20px 0 20px; */
     /* min-width: 500px; */
+    overflow-y: scroll;
+    max-height: 35vh;
 }
 
 .manage-both-contain {
     display: flex;
     justify-content: center;
+    overflow-y: scroll;
+    max-height: 35vh;
+
 }
 
 .manage-l {
@@ -63,7 +68,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 70%;
+    height: 90%;
     margin-top: -5%;
 }
 

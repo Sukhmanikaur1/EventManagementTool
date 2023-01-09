@@ -20,6 +20,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import BookASlot from './pages/BookASlot';
 import EventConfirmation from './pages/EventConfirmation';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {
@@ -27,8 +28,7 @@ function App() {
     let dispatch = useDispatch()
     let events = useSelector(state => state.events.events)
     let role = useSelector(state => state.users.role)
-
-    let guest = role === 'guest' ? true : false
+    let guest = role === 'member' ? true : false
 
     useEffect(() => {
       // won't be null if db 
@@ -45,10 +45,10 @@ function App() {
             <Route path="/login" element={<Login/>} />
             <Route path="/signup" element={<SignUp/>} />
             <Route path="/create-event/event-confirmation/:id" element={<EventConfirmation/>} />
-            <Route path="/create-event/:eventtype" element={<NewEvent events={events} />} />
+            <Route path="/create-event/:eventtype/:tokenId" element={<NewEvent events={events} />} />
             <Route path="/create-event" element={<NewEvent events={events} />} />
             <Route path="/book-a-slot/paath" element={<BookASlot/>} />
-            <Route path="/events/:id" element={<Paath/>} />
+            <Route exact path="/events/:id" element={<Paath/>} />
             {
               !guest &&
               <>

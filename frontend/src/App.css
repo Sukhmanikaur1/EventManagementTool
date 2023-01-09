@@ -55,35 +55,19 @@ h1 svg {
 
 .services {
     height: 100%;
-    padding: 5%;
+    padding: 2%;
     background-color: var(--orange-shade);
 }
 
 .services div {
-    display: flex;
-    flex-direction: column;
-    gap: 5%;
-    padding: 5%;
-    justify-content: center;
-    width: max-content;
-    background-color: white;
-    margin: 2%;
-    width: 400px;
+    
+    
 }
 
-.services div span {
-    text-align: center;
-    font-weight: 800;
-    font-size: 1.2rem;
-    padding: 10%;
-    margin: 5%;
-    background-color: var(--blue-shade);
-    width: 300px;
-}
+
 
 .services div span:hover {
     cursor: pointer;
-    background-color: var(--purple-shade);
 }
 
 .services div span:active {
@@ -91,7 +75,7 @@ h1 svg {
 }
 
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
   .services {
     padding-left: 0;
     padding-right: 0;

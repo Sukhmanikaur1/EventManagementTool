@@ -7,7 +7,7 @@ import '../styles/paath.css'
 
 const Paath = () => {
     let params = useParams()
-    let paath = useSelector((state) => state.events.events.filter((e) => String(e.idEvent) === params.id)[0]);
+    let paath = useSelector((state) => state.events.events.filter((e) => String(e.eventid) === params.id)[0]);
     console.log(paath)
     return (
         <div>

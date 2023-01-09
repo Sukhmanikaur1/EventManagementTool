@@ -6,15 +6,21 @@ import SlotModal from './SlotModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSlot } from '../actions/slotActions'
 
+import MessageModal from '../components/MessageModal'
 
 const TimeSlots = ({ event }) => {
-
+        const [showModalMessage, setShowModalMessage]= useState(false)
+      const [modalMessage, setModalMessage] = useState('')
     let { startdate, enddate } = event
 
     let slotDateRef = useRef({})
     let slotTimeRef = useRef({})
     let slotDisableRef = useRef({})
-
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    console.log(params)
+    const tokenId = params.get("id");
+    console.log(tokenId)
     let rawDateRange = new Date(enddate) - new Date(startdate)
     let rawDaysRange = rawDateRange / 1000 / 60 / 60 / 24
     let daysInitialValue = Number(rawDaysRange.toFixed(0))
@@ -30,8 +36,9 @@ const TimeSlots = ({ event }) => {
     let [gridRows] = useState([...Array(amountOfRows)])
     let [gridCols] = useState([...Array(days + 1)])
 
-    let slots = useSelector(state => state.slots.slots.filter(s => s.idEvent === event.id))
+    let slots = useSelector(state => state.slots.slots.filter(s => s.eventid === event.id))
     let user = useSelector(state => state.users.currentUser)
+    user= JSON.parse(sessionStorage.getItem('user'))
     let dispatch = useDispatch()
 
     useEffect(() => {
@@ -39,7 +46,7 @@ const TimeSlots = ({ event }) => {
         // won't be null with database... 
         // but if null parsed local storage would be the value
         dispatch(setSlot(null))
-
+     
         let currentDate = new Date(startdate);
         currentDate.setDate(currentDate.getDate() + 1);
     
@@ -115,7 +122,9 @@ const TimeSlots = ({ event }) => {
         let currentSlot = slots.filter(s => s.time === time && s.date === date)[0]
         if (currentSlot) {
             // Grant access only to a logged in user who created it originally
-            if (currentSlot.user === user) {
+            
+            if (currentSlot.user?.username === user?.username|| user?.role==="admin") {
+                console.log("here i am here")
                 modal ? setModal(!modal) : setModal({ row, col, time, date, event, currentSlot })
             }
             else modal ? setModal(!modal) : setModal({ row, col, time, date, event, currentSlot, viewOnly: true })
@@ -142,9 +151,8 @@ const TimeSlots = ({ event }) => {
         return (
             <div className={`s-deet ${slot.user !== user ? 'cur-user-no' : ''}`}>
                 <p className='s-deets'>{slot.name}</p>
-                <p className='s-deets'>{slot.email}</p>
                 <p className='s-deets'>{slot.phone}</p>
-                <p className={`minus-symbol ${slot.user !== user ? 'not-cur-user' : 'cur-user-yes'}`}><span>-</span></p>
+                <p className={`minus-symbol ${slot.user.username !== user.username ? 'not-cur-user' : 'cur-user-yes'}`}></p>
             </div>
         )
     }
@@ -154,8 +162,8 @@ const TimeSlots = ({ event }) => {
         let date = slotDateRef.current[`${col}`]
         let time = slotTimeRef.current[`${row}`]
        
-        let currentSlot = slots.filter(s => s.time === time && s.date === date)[0]
-        
+        let currentSlot = slots.filter(s => s.time === time && s.date === date && s.eventId===event.eventid )[0]
+        console.log(currentSlot)
         if (currentSlot) 
             return slotMiniDetails(currentSlot) 
         else if (slotsDisabled[`${col}`] && disabledSlotRange(row))
@@ -188,7 +196,9 @@ const TimeSlots = ({ event }) => {
                     </div>
                 )
             })}
-            {modal && <SlotModal slot={modal} closeModal={setModal} />}
+            {modal &&(modal.viewOnly?(modal.currentSlot?false:true):true)&& <SlotModal setModalMessage={setModalMessage} setShowModalMessage={setShowModalMessage} slot={modal} closeModal={setModal} />}
+            {showModalMessage&& <MessageModal message={modalMessage} closeModal={setShowModalMessage} show={showModalMessage}/>}
+            
         </div>
     )
 }

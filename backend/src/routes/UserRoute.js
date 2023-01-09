@@ -21,20 +21,22 @@ UserRouter.use(express.json());
 UserRouter.post("/register", async (req, res) => {
   console.log(req.body)
   try {
-    console.log(req.body)
     const salt = await bcrypt.genSalt();
-    console.log(salt)
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    console.log(hashedPassword)
+    
     const user = {
       username: req.body.username.toLowerCase(),
       password: hashedPassword,
       fname: req.body.fname,
       lname: req.body.lname,
-      email: req.body.email,
+      email: req.body.username.toLowerCase(),
     };
     const result = await addUser(user);
+    console.log(result)
+    if(result)
     res.status(201).send({data:{code: 'success'}});
+    else
+    res.status(403).send({data:{code: 'fail'}})
   } catch (err){
     console.log(err)
     res.status(500).send({message:"server Error", err});
@@ -47,19 +49,27 @@ UserRouter.delete("/delete", async (req, res) => {
 })
 UserRouter.post("/login", async (req, res) => {
   try {
-    const user = await findByEmail(req.body.email.toLowerCase()); //uers.find(user => user.username == req.body.username);
-    console.log(user)
-    if(user == null){
+    const userRetreived = await findByEmail(req.body.email.toLowerCase()); //uers.find(user => user.username == req.body.username);
+    
+    if(userRetreived == null){
       return res.status(400).send('user does not exist')
     }
-      if(await bcrypt.compare(req.body.password,user.password)){
-        const tokenId=jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)  
+      if(await bcrypt.compare(req.body.password,userRetreived.password)){
+        const tokenId=jwt.sign(userRetreived.email, process.env.ACCESS_TOKEN_SECRET)  
         // console.log(process.aenv.ACCESS_TOKEN_SECRET)
-        user.tokenId=tokenId;
-        updateUser(user)
+        userRetreived.tokenId=tokenId;
+        
+        await updateUser(userRetreived)
+        let user={
+          fname:userRetreived.fname,
+          lname: userRetreived.lname,
+          username: userRetreived.email,
+          tokenId:userRetreived.tokenId,
+          role:userRetreived.role
+        }
         res.status(200).json({
               success: true, 
-              user,
+              user:user,
               tokenId
           }) 
 
@@ -79,14 +89,16 @@ UserRouter.post("/login", async (req, res) => {
   }
 })
 function userAuth(req, res, next){
-    const authHeader = req.headers.get('Authorization')
-    const token= authHeader && authHeader.split(' ')[1]
+  console.log(req.body)
+    const authHeader = req.headers['authorization']
+    const token= authHeader && authHeader.split(" ")[1]
     if(token == null ){
       return res.sendStatus(401)
     }
   
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user)=>{
       if (err ){
+        console.log(err)
         res.sendStatus(403)
       }
       req.user = user;

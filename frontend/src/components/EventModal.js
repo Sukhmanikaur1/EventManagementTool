@@ -1,12 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "./Modal";
 
 import "../styles/slotModal.css";
 import "../styles/eventModal.css";
 import { useDispatch } from "react-redux";
 import { deleteEvent, updateEvent } from "../actions/actions";
-
-const EventModal = ({ event, closeModal }) => {
+import MessageModal from "../components/MessageModal"
+const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal }) => {
 
   let nameRef = useRef();
   let startRef = useRef();
@@ -14,9 +14,9 @@ const EventModal = ({ event, closeModal }) => {
   let placeRef = useRef();
   let addressRef = useRef();
   let phoneRef = useRef();
-
+  let statusRef = useRef();
   let dispatch = useDispatch()
-
+  
   const packageEvent = (event) => ({
     ...event,
     startdate: startRef.current.value,
@@ -24,19 +24,22 @@ const EventModal = ({ event, closeModal }) => {
     eventaddress: addressRef.current.value, 
     eventname: nameRef.current.value,
     eventplace: placeRef.current.value, 
-    eventphone: phoneRef.current.value
+    eventphone: phoneRef.current.value,
+    status:statusRef.current.value
   })
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Updated event')
+    setModalMessage('Updated event')
+    setShowModalMessage(true)
     let payload = packageEvent(event)
     dispatch(updateEvent(payload))
     closeModal(false)
   };
 
   const handleDelete = () => {
-    alert('Event removed.')
+    setModalMessage('Event removed.')
+    setShowModalMessage(true)
     dispatch(deleteEvent(event.eventid))
     closeModal(false)
   };
@@ -51,6 +54,7 @@ const EventModal = ({ event, closeModal }) => {
 // value "11-03-2022" does not conform to the required format, "yyyy-MM-dd".
 
   return (
+      <>
     <Modal>
       <div className="event-modal">
         <div className="event-details" id="em-details">
@@ -66,6 +70,7 @@ const EventModal = ({ event, closeModal }) => {
               <label htmlFor="em-place">Place:</label>
               <label htmlFor="em-address">Address:</label>
               <label htmlFor="em-phone">Phone:</label>
+              <label htmlFor="em-status">Status:</label>
             </div>
 
             <div id="em-inputs">
@@ -75,6 +80,7 @@ const EventModal = ({ event, closeModal }) => {
                 defaultValue={formatDateForInput(event.startdate)}
                 ref={startRef}
                 required
+                
               />
 
               <input
@@ -117,6 +123,11 @@ const EventModal = ({ event, closeModal }) => {
                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                 required
               />
+              <select ref={statusRef} defaultValue={event.status}name="cars" id="cars">
+                <option value="New">New</option>
+                <option value="Inprogress">Inprogress</option>
+                <option value="Closed">Closed</option>
+              </select>
             </div>
 
             <div id='em-buttons'>
@@ -136,7 +147,9 @@ const EventModal = ({ event, closeModal }) => {
         className="event-modal-cloud"
         onClick={() => closeModal(false)}
       ></div>
+      {}
     </Modal>
+        </>
   );
 };
 

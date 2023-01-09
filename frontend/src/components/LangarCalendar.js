@@ -1,24 +1,62 @@
 import React, { useState, useEffect } from 'react';
 
-import Calendar from 'react-calendar';
+import { useDispatch,useSelector } from "react-redux";
 
+import { deleteEvent, updateEvent } from "../actions/actions";
+import { updateLangarEventById,deleteLangarEventById } from "../actions/langarActions"
+import Calendar from 'react-calendar';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/calendar.css'
 import '../styles/newEvent.css';
-
 import LangarModal from '../components/LangarModal';
 
 const LangarCalendar = (props) => {
-
+    let user = useSelector(state => state.users.currentUser)
+    if(!user?.fname && JSON.parse(sessionStorage.getItem('user'))?.fname)
+    user = JSON.parse(sessionStorage.getItem('user'))
+    const navigate = useNavigate()
+    const dispatch=useDispatch();
     let [calendar, setCalendar] = useState(new Date())
     let [modal, setModal] = useState(false)
-
+    console.log(props)
     let [event, setEvent] = useState({
         langarDate: { dd: '', mm: '', yy: '' },
         bookedDetails: {},
         bookedDays: {},
         selectedDay: { dd: '', mm: '', yy: '' }
     })
+    const callondate = () =>{
+        
 
+            let bookedDays = {}
+            
+            // Find days that have aleady been taken. 
+            for (let i = 0; i < props?.events?.length; i++) {
+                
+                let ev = props?.events[i]
+                if (!ev) break
+                if (ev.enddate) continue // if it has an end date then it's a paath type event, so skip
+                console.log("ev")
+                console.log(ev.date)
+                let [yy, mm, dd] = ev.date.split('-')
+                dd = dd.slice(0,2)
+                
+                // Handle days in event month
+                if (mm === event.langarDate.mm &&
+                    yy === event.langarDate.yy) {
+                        bookedDays[dd] = { dd, ev }
+                        console.log(bookedDays)
+                    }
+                    
+                }
+                
+                setEvent(prevEvent => ({
+                    ...prevEvent,
+                    bookedDays
+                }))
+          
+            }
+    
     useEffect(() => {
         // Determine default dates for Langar type events
         // Using a functional update because otherwise it complains. Besides that nothing different going on here
@@ -27,7 +65,8 @@ const LangarCalendar = (props) => {
                 ...prevEvent,
                 langarDate: formatLangarDate(new Date()),
             }))
-       
+            callondate()
+           
 
     }, [])
 
@@ -38,13 +77,14 @@ const LangarCalendar = (props) => {
             let bookedDays = {}
 
             // Find days that have aleady been taken. 
-            for (let i = 0; i < props.events.length; i++) {
+            for (let i = 0; i < props?.events?.length; i++) {
 
-                let ev = props.events[i]
+                let ev = props?.events[i]
                 if (!ev) break
                 if (ev.enddate) continue // if it has an end date then it's a paath type event, so skip
-
-                let [yy, mm, dd] = ev.startdate.split('-')
+                console.log("ev")
+                console.log(ev.date)
+                let [yy, mm, dd] = ev.date.split('-')
                 dd = dd.slice(0,2)
 
                 // Handle days in event month
@@ -73,9 +113,10 @@ const LangarCalendar = (props) => {
         dd = String(dd)
         mm = String(mm)
         yy = String(yy)
+        console.log("here"+dd+mm+yy)
         return { dd, mm, yy }
     }
-
+console.log(event)
     const blank = () => ({ mm: '', yy: '', dd: '' })
 
     const handleChange = (e, e2) => {
@@ -85,12 +126,15 @@ const LangarCalendar = (props) => {
             name = e.target.name
             value = e.target.value
         } else {
+            console.log('inside')
             // handles selection of a date in the calendar
             let day = e.getDate()
             day = day < 10 ? '0' + day : day
             if (day in event.bookedDays) {
+                console.log(event.bookedDays[day])
                 // detailsRef.current.classList.add('active')
                 setModal(event.bookedDays[day])
+                console.log(event.bookedDays[day])
                 setEvent({ ...event, bookedDetails: event.bookedDays[day], selectedDay: blank() })
                 return
             }
@@ -127,18 +171,36 @@ const LangarCalendar = (props) => {
             props.liftSelectedDate(langarDate)
         }
     }
-
+    useEffect(() => {},[modal])
     let { yy, mm, dd } = event.selectedDay
-
+    const updateLangar = (events) =>{
+        console.log(events)
+        console.log(user.tokenId)
+        dispatch(updateLangarEventById(user.tokenId, events))
+        dispatch(updateEvent(events))
+        setModal(false)
+        sessionStorage.setItem("last", "langar")
+        navigate(`/create-event/event-confirmation/${events.eventid}`)
+      }
+      
+      const deleteLangar = (events) =>{
+        console.log("deletelangar")
+        console.log(events)
+        dispatch(deleteLangarEventById(user.tokenId, events))
+        dispatch(deleteEvent(events.eventid))
+        setModal(false)
+        
+        navigate(`/home`)
+       }
     return (
         <div className='bk-slot' style={{ backgroundColor: 'inherit' }}>
                 <label id="date-langar">
-                    <input
+                    {/* <input
                         name="endDate"
                         value={yy && mm && dd ? `${yy}-${mm}-${dd}` : ''}
                         type="date"
                         disabled
-                    />
+                    /> */}
                     <Calendar
                         name={"langarDate"}
                         value={calendar}
@@ -152,7 +214,7 @@ const LangarCalendar = (props) => {
                     />
                 </label>
 
-            {modal && <LangarModal event={modal} closeModal={setModal} />}
+            {modal && <LangarModal event={modal} closeModal={setModal} updateLangar= {updateLangar} deleteLangar= {deleteLangar}/>}
 
         </div>
     )
