@@ -1,5 +1,6 @@
 export const ADD_SLOT = 'ADD_SLOT'
 export const addSlot = (data) => ({
+    
     type: ADD_SLOT,
     payload: data
 })

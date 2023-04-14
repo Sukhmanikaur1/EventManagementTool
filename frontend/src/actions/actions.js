@@ -46,7 +46,7 @@ export const getDbEvents = () => async dispatch => {
 
 export const addDbEvent = ({ newEvent, navigate }) => async dispatch => {
     let event = await EventServices.createEvent(newEvent)
-    event = event.data.data.events
-    navigate(`/create-event/event-confirmation/${event.idEvent}`)
+    event = event?.data?.data?.events
     dispatch(addEvent(event))
+    navigate(`/create-event/event-confirmation/${event?.idEvent}`)
 }

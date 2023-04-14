@@ -94,6 +94,10 @@ const Langar = sequelize.define(
           primaryKey: true,
 
         },
+        eventname:{
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
         startDate: {
           type: DataTypes.DATE,
           allowNull: false,
@@ -125,7 +129,7 @@ const Langar = sequelize.define(
         tableName: "paath"
       }
     )
-  const BookSlotEvent = sequelize.define(
+  const BookSlotPaath = sequelize.define(
     "BookSlotPaath",
     {
       idBookSlot: {
@@ -148,9 +152,23 @@ const Langar = sequelize.define(
         allowNull: false,
       },
       time: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
       },
+      date: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      col: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      row: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      
+      
     },
     {
       tableName: "bookedslotspaath",
@@ -209,8 +227,7 @@ const Langar = sequelize.define(
     }
   )
 
-  User.hasMany(BookSlotEvent,{foreignKey: {name:"idBookSlot",allowNull: false},
-  as: "bookedSlot"})
+  
   User.hasMany(Langar)
     // ,{foreignKey: {name:"idUser",allowNull: false},as : "langar"})
   // BookSlotEvent.hasOne()
@@ -218,10 +235,10 @@ const Langar = sequelize.define(
   // as: "userid"})
   Langar.belongsTo(User)
   // ,{foreignKey: {name:"id",allowNull: false}})
-  Paath.hasMany(BookSlotEvent,{foreignKey: {name:"idBookSlot",allowNull: false}
-, as:"Paath"})
-  BookSlotEvent.belongsTo(Paath,{foreignKey:{name:"idPaath",allowNull: false}})
-  BookSlotEvent.belongsTo(User,{foreignKey: {name:"idUser",allowNull: false},
-  })
+  
+  BookSlotPaath.belongsTo(Paath)
+  BookSlotPaath.belongsTo(User)
+  User.hasMany(BookSlotPaath)
+  Paath.hasMany(BookSlotPaath)
   sequelize.sync();
-  module.exports = {User,BookSlotEvent,Langar,Paath,PersonalEvent}
+  module.exports = {User,BookSlotPaath,Langar,Paath,PersonalEvent}

@@ -22,6 +22,7 @@ export const updateLangarEventById = (tokenId, langarEventData) => async dispatc
     if (langarEvents?.data?.code ==="SUCCESS"){
         sessionStorage.setItem("langar",JSON.stringify(langarEvents?.data?.data?langarEvents?.data?.data:[]))
         dispatch(setLangarEvents(langarEvents?.data?.data?langarEvents?.data?.data:[]))
+        sessionStorage.setItem("last",JSON.stringify("langar"))
     }
     else { console.log("bad call")}
 }
@@ -30,6 +31,7 @@ export const createNewLangarEvent = (data, tokenId) => async dispatch => {
     console.log(newLangarEventList)
     if(newLangarEventList.data.code==="SUCCESS"){
         sessionStorage.setItem("langar",JSON.stringify(newLangarEventList.data.data))
+        sessionStorage.setItem("last",JSON.stringify("langar"))
         dispatch(setLangarEvents(newLangarEventList.data.data))
 
     }

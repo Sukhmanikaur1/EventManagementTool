@@ -100,7 +100,13 @@
 }
 
 
+.l-cal{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    width: 50%
 
+}
 
 .l-cal .bk-slot {
     height: fit-content;
@@ -114,11 +120,29 @@
 
 
 
-
-
-.mid-sec {
+.container-for-contents{
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+.containter-for-title{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    width: 50%
+}
+.services{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    width: 50%
+
+}
+.mid-sec {
+    display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
     background-color: var(--orange-shade);

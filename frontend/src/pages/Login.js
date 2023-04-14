@@ -22,7 +22,7 @@ const Login = () => {
         
         
         if(user.tokenId){
-            setModalMessage("Login Successful. You will be redirected to home page. ")
+            setModalMessage("Login Successful.")
             setTimeout(()=>{
 
                 navigate({pathname:`/`,search:`?tokenId=${user.tokenId}`,state:{user:user}})

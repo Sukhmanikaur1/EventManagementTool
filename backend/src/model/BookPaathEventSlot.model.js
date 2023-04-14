@@ -1,19 +1,22 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
-const {User,BookSlotEvent,Langar,Paath} = require("./DataTypes")
+const {User,BookSlotPaath,Langar,Paath} = require("./DataTypes")
 
 const bookSlot= async(bookedSlot) => {
   
-  const newBookSlot = await BookSlotEvent.build(
+  const newBookSlot = await BookSlotPaath.build(
     {
-      phonenumber:bookedSlot.phonenumber,
-      idUser: bookedSlot.idUser,
-      idEvent: bookedSlot.idEvent,
-      fname: bookedSlot.fname,
-      email: bookedSlot.email,
-      eventtype: bookedSlot.eventtype,
-      eventaddress: bookedSlot.eventaddress,
+          fullName: bookedSlot.fullName,
+          phonenumber:bookedSlot.phonenumber,
+          email:bookedSlot.email,
+          time:bookedSlot.time, 
+          date:bookedSlot.date,
+          col:bookedSlot.col, 
+          row:bookedSlot.row,
+          PaathIdPaath:bookedSlot.PaathIdPaath,
+          UserIdUser:bookedSlot.UserIdUser,
     })
     try{
+      console.log("newbookslot",newBookSlot,"   bookedSlot", bookedSlot)
       let bookedEvent={}
     await newBookSlot.save().then((res) => {
       bookedEvent= res.toJSON()
@@ -25,17 +28,18 @@ const bookSlot= async(bookedSlot) => {
 }
 const findBookedSlotById=async (idBookSlot)=>{
   try{
-    const bookedSlot = await BookSlotEvent.findOne({where: {idBookSlot: idBookSlot }})
+    const bookedSlot = await BookSlotPaath.findOne({where: {idBookSlot: idBookSlot }})
     return bookedSlot.toJSON()
   }
   catch (err){
     console.log(err)
   }
 }
-const findAllBookedSlot = async () =>{
+const findAllBookedSlot = async (paath) =>{
   try{
-    const allbookedSlot = await BookSlotEvent.findAll()
-    return allbookedSlot.toJSON()
+    const allbookedSlot = await BookSlotPaath.findAll({where:{PaathIdPaath:paath},include:["User","Paath"],raw: true,
+    nest: true,})
+    return JSON.parse(JSON.stringify(allbookedSlot))
   }
   catch (err){
     console.log(err)
@@ -44,7 +48,7 @@ const findAllBookedSlot = async () =>{
 const updatedBookedSlotbyId= async (bookedSlot)=>{
   try {
     const updatedbookedSlot = {}
-    await BookSlotEvent.update(bookedSlot  ,{where: {idbookedSlot:bookedSlot.idbookedSlot}}).then((res)=>{
+    await BookSlotPaath.update(bookedSlot  ,{where: {idbookedSlot:bookedSlot.idbookedSlot}}).then((res)=>{
       updatedbookedSlot = res.toJSON();
     })
     return updatedbookedSlot  
@@ -53,4 +57,4 @@ const updatedBookedSlotbyId= async (bookedSlot)=>{
     console.log(err)
   }
 }
-module.export= {BookSlotEvent,bookSlot,updatedBookedSlotbyId,findBookedSlotById,updatedBookedSlotbyId}
+module.exports= {BookSlotPaath,bookSlot,findAllBookedSlot}

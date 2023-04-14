@@ -180,7 +180,7 @@ console.log(event)
         dispatch(updateEvent(events))
         setModal(false)
         sessionStorage.setItem("last", "langar")
-        navigate(`/create-event/event-confirmation/${events.eventid}`)
+        navigate(`/create-event/event-confirmation/${events.eventid}`,{state:events})
       }
       
       const deleteLangar = (events) =>{

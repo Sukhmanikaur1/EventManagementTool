@@ -19,8 +19,10 @@ export const updatePersonalEvents=( data ,tokenId) => async dispatch => {
  
     console.log(personalEvents)
     
-    if (personalEvents?.data?.code ==="SUCCESS")
-    dispatch(setPersonalEvents(personalEvents?.data?.data))
+    if (personalEvents?.data?.code ==="SUCCESS"){
+        sessionStorage.setItem("last",JSON.stringify("personal"))
+        dispatch(setPersonalEvents(personalEvents?.data?.data))
+    }
     else { console.log("bad call")}
 }
 
@@ -29,8 +31,9 @@ export const deletePersonalEvents=( data ,tokenId) => async dispatch => {
  
     console.log(personalEvents)
     
-    if (personalEvents?.data?.code ==="SUCCESS")
-    dispatch(setPersonalEvents(personalEvents?.data?.data))
+    if (personalEvents?.data?.code ==="SUCCESS"){
+        dispatch(setPersonalEvents(personalEvents?.data?.data))
+    }
     else { console.log("bad call")}
 }
 export const getPersonalEvents=( ) => async dispatch => { 
@@ -48,7 +51,9 @@ export const createNewPersonalEvent = (tokenId,data) => async dispatch => {
     let newPersonalEventList= await addNewPersonalEventInBackend(tokenId, data)
     
     console.log(newPersonalEventList)
-    if (newPersonalEventList?.data?.code ==="SUCCESS")
-    dispatch(setPersonalEvents(newPersonalEventList?.data?.data))
+    if (newPersonalEventList?.data?.code ==="SUCCESS"){
+        sessionStorage.setItem("last",JSON.stringify("personal"))
+        dispatch(setPersonalEvents(newPersonalEventList?.data?.data))
+    }
     else { console.log("bad call")}
 }

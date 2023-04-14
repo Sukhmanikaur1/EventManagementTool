@@ -5,10 +5,10 @@ import { v4 as uuid } from 'uuid'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addSlot, deleteSlot, updateSlot } from '../actions/slotActions'
-
+import {addNewBookPaathSlot} from '../services/BookPaathSlotService'
 import '../styles/slotModal.css'
 
-const SlotModal = ({ setModalMessage,setShowModalMessage ,slot, closeModal }) => {
+const SlotModal = ({event, setModalMessage,setShowModalMessage ,slot, closeModal }) => {
 
     let user = useSelector(state => state.users.currentUser)
     if (!user.fname && JSON.parse(sessionStorage.getItem('user')).fname)
@@ -67,6 +67,32 @@ const SlotModal = ({ setModalMessage,setShowModalMessage ,slot, closeModal }) =>
         setShowModalMessage(true)
         closeModal(false)
     }
+    const handleCreateSlot = async(e) => {
+        e.preventDefault()
+        
+        let newSlot;
+        console.log("user",user,"event",event)
+            newSlot = {
+                fullName: nameRef.current.value,
+                email: emailRef.current.value,
+                phonenumber:phone,
+                eventId: event.idPaath,
+                place: event.orgname,
+                time: slot.time,
+                date: slot.date,
+                col:slot.col,
+                row:slot.row,
+                user:user.username,
+                paath:event.idPaath
+                
+            }
+            console.log('newSlot',newSlot)
+          const res =  await addNewBookPaathSlot(user.tokenid, newSlot)
+        console.log(res)
+        setModalMessage('Slot saved!')
+        setShowModalMessage(true)
+        closeModal(false)
+    }
 console.log('current slot')
 console.log(slot)
     const handleDelete = () => {
@@ -97,7 +123,7 @@ console.log(slot)
                 <div className='event-details'>
                     <p className='event-p'><span>{slot.event.eventplace}</span>{slot.viewOnly ? <span style={{ color: 'grey' }}>{slot.time} on {slot.date} was booked</span> : <><span>{slot.time}</span> <span>{slot.date}</span></>}</p>
 
-                    <form onSubmit={handleSubmit}>
+                    <form >
                         <div>
                             <label>
                                 Name:
@@ -141,7 +167,7 @@ console.log(slot)
                         </div>
 
                         <div>
-                            {!slot.viewOnly ? <button>{slot.currentSlot?.user?.username==user?.username ? 'Update' : 'Create'}</button> : null}
+                            {!slot.viewOnly &&(slot.currentSlot?.user?.username==user?.username ? <button>Update</button> :<button onClick={handleCreateSlot}> Create</button> )}
                             {slot.currentSlot && !slot.viewOnly ? <button type="button" onClick={handleDelete}>Delete</button> : null}
                             <button type="button" onClick={() => closeModal(false)}>Cancel</button>
                         </div>

@@ -33,22 +33,22 @@ const LangarModal = (props) => {
             <span>{`${date.split('-')[1]}/${date.split('-')[2].slice(0,2)}/${date.split('-')[0]}`}</span>
           </p>
           <p>
-          {User===user1?.username?"You have already booked":"has already been booked"}
+          {User.username===user1?.username?"You have already booked":"has already been booked"}
           
           </p>
         <div>
             <span>Booked by:</span> 
-            {User===user1?.username||user1.role==="admin"?<input type="text" className="" value={fullName}/>:<>{fullName}</>}
+            {User.username===user1?.username||user1.role==="admin"?<input type="text" className="" value={fullName}/>:<>{fullName}</>}
             
         </div>
         <div>
             <span>Phone number:</span> 
-            {User===user1?.username||user1.role==="admin"?<input type="text" className="" defaultValue={phonenumber} ref={eventPhoneRef}/>:<>{phonenumber}</>}
+            {User.username===user1?.username||user1.role==="admin"?<input type="text" className="" defaultValue={phonenumber} ref={eventPhoneRef}/>:<>{phonenumber}</>}
 
         </div>
                       
             <div id='em-buttons'>
-            {User===user1?.username||user1.role==="admin"?<>
+            {User.username===user1?.username||user1.role==="admin"?<>
             <button className='create-button' type="button" onClick={() => updateLangar(packageEvent(event))}>
                 Update
               </button>

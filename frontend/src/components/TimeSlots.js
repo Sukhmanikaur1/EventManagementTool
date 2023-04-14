@@ -2,16 +2,19 @@ import React, { useState, useEffect, useRef } from 'react'
 import SlotModal from './SlotModal'
 
 // import { v4 as uuid } from 'uuid'
-
+import {getAllPaathEvents} from '../services/BookPaathSlotService'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSlot } from '../actions/slotActions'
 
 import MessageModal from '../components/MessageModal'
 
 const TimeSlots = ({ event }) => {
+    
+    
+    console.log("event",event)
         const [showModalMessage, setShowModalMessage]= useState(false)
       const [modalMessage, setModalMessage] = useState('')
-    let { startdate, enddate } = event
+    let { startDate, enddate } = event
 
     let slotDateRef = useRef({})
     let slotTimeRef = useRef({})
@@ -19,9 +22,10 @@ const TimeSlots = ({ event }) => {
     let search = window.location.search;
     let params = new URLSearchParams(search);
     console.log(params)
-    const tokenId = params.get("id");
-    console.log(tokenId)
-    let rawDateRange = new Date(enddate) - new Date(startdate)
+    const id = params.get("id");
+    console.log(id)
+    let rawDateRange = new Date(enddate) - new Date(startDate)
+    console.log("rawDateRange",rawDateRange,"new Date(startdate)",new Date(startDate),"new Date(enddate)",new Date(enddate))
     let rawDaysRange = rawDateRange / 1000 / 60 / 60 / 24
     let daysInitialValue = Number(rawDaysRange.toFixed(0))
     let amountOfRows = 14 // to 6pm
@@ -37,17 +41,23 @@ const TimeSlots = ({ event }) => {
     let [gridCols] = useState([...Array(days + 1)])
 
     let slots = useSelector(state => state.slots.slots.filter(s => s.eventid === event.id))
+    // let slots = []
     let user = useSelector(state => state.users.currentUser)
     user= JSON.parse(sessionStorage.getItem('user'))
     let dispatch = useDispatch()
-
+    const getBookedSlots=async()=>{
+        console.log(await getAllPaathEvents(event.idPaath))
+    }
+    useEffect(()=>{
+        getBookedSlots()
+    },[])
     useEffect(() => {
 
         // won't be null with database... 
         // but if null parsed local storage would be the value
         dispatch(setSlot(null))
      
-        let currentDate = new Date(startdate);
+        let currentDate = new Date(startDate);
         currentDate.setDate(currentDate.getDate() + 1);
     
         let daysOfWeek = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -89,7 +99,7 @@ const TimeSlots = ({ event }) => {
         setSlotTime({...slotTimeRef.current})
         setSlotsDisabled({...slotDisableRef.current})
 
-    }, [days, dispatch, startdate, amountOfRows])
+    }, [days, dispatch, startDate, amountOfRows])
 
     const calculateTimeRow = (row, col) => {
         if (col !== 0 || row === 0) return
@@ -196,11 +206,13 @@ const TimeSlots = ({ event }) => {
                     </div>
                 )
             })}
-            {modal &&(modal.viewOnly?(modal.currentSlot?false:true):true)&& <SlotModal setModalMessage={setModalMessage} setShowModalMessage={setShowModalMessage} slot={modal} closeModal={setModal} />}
+            {modal &&(modal.viewOnly?(modal.currentSlot?false:true):true)&& <SlotModal event={event} setModalMessage={setModalMessage} setShowModalMessage={setShowModalMessage} slot={modal} closeModal={setModal} />}
             {showModalMessage&& <MessageModal message={modalMessage} closeModal={setShowModalMessage} show={showModalMessage}/>}
             
         </div>
     )
+        
+        
 }
 
 export default TimeSlots

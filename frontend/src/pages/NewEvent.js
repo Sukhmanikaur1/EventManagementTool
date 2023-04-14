@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {createNewLangarEvent} from '../actions/langarActions'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
+import {getAllPaathEvents, addNewpaatheventInBackend,updateOnePaathEvent, deleteOnePaathEvent} from '../services/PaathService'
 
 import { v4 as uuid } from 'uuid'
 import {createNewPersonalEvent} from '../actions/personalActions'
@@ -13,6 +14,8 @@ import '../styles/newEvent.css';
 import LangarModal from '../components/LangarModal';
 import LangarCalendar from '../components/LangarCalendar';
 import { getLangarEvents } from "../actions/langarActions";
+import { getPaathEvents, createNewPaathEvent } from '../actions/paathActions';
+
 import {getAllEvents} from "../services/LangarEventService";
 const NewEvent = () => {
     const [langarEventsData,setLangarEventsData]= useState()
@@ -50,7 +53,7 @@ const NewEvent = () => {
 
     let [event, setEvent] = useState({
     
-        user: user.fname+user.lname,
+        user: user.fname+" "+user.lname,
         type: eventtype ? eventtype : 'paath',
         startDate: '',
         endDate: '',
@@ -143,12 +146,13 @@ const NewEvent = () => {
         return newEvent
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
         
         let newEvent = packageEvent()
         if(event.type === "langar"&&user?.tokenId){
             dispatch(createNewLangarEvent({
+                
                   date:newEvent.startdate,
                   eventaddress: newEvent.eventaddress,
                   orgname: newEvent.eventplace,
@@ -158,8 +162,31 @@ const NewEvent = () => {
             dispatch(addEvent(newEvent))
         }
         else if( event.type === "paath"  && user?.tokenId){
-            dispatch(addEvent(newEvent))
+            // dispatch(addEvent(newEvent))
+            console.log(user.tokenId)
+            let newPaathEventList= await addNewpaatheventInBackend(tokenId, {
+                    eventname:newEvent.eventname,
+                    startdate:newEvent.startdate,
+                    enddate:newEvent.enddate,
+                    orgname:newEvent.eventplace,
+                    eventaddress: newEvent.eventaddress,
+                    phonenumber: newEvent.eventphone,
+                    status:newEvent.status,
+                })
+                 console.log(newPaathEventList)
+            if(newPaathEventList?.data?.code==="SUCCESS"){
+                sessionStorage.setItem("paath",JSON.stringify(newPaathEventList?.data?.data))
+                dispatch(addEvent(newEvent))
+            }
             // dispatch(createNewPaathEvent({
+            //     startdate:newEvent.startdate,
+            //     enddate:newEvent.enddate,
+            //     orgname:newEvent.eventplace,
+            //     eventaddress: newEvent.eventaddress,
+            //     phonenumber: newEvent.eventphone,
+            //     status:newEvent.status,
+            // },user.tokenId))
+            // // dispatch(createNewPaathEvent({
             // },user.tokenId))
         }
         else if( event.type === "personal" && user?.tokenId){
@@ -242,9 +269,9 @@ const NewEvent = () => {
         <h1 className='ne-h'>{!event.type ? 'Create an event' : event.type === 'langar' ? `Book a Langar: ` : `Create a Paath event`}</h1>
         <div className='containerdiv-bkslot'>
         <div className='langar-text'>
-            <span>In Sikhism, a langar (Punjabi: ਲੰਗਰ, 'kitchen') is the community kitchen of a gurdwara, which serves meals to all free of charge, regardless of religion, caste, gender, economic status, or ethnicity. People sit on the floor and eat together, and the kitchen is maintained and serviced by Sikh community volunteers.The meals served at a langar are always lacto-vegetarian.
+        {event.type === 'langar'?<span>In Sikhism, a langar (Punjabi: ਲੰਗਰ, 'kitchen') is the community kitchen of a gurdwara, which serves meals to all free of charge, regardless of religion, caste, gender, economic status, or ethnicity. People sit on the floor and eat together, and the kitchen is maintained and serviced by Sikh community volunteers.The meals served at a langar are always lacto-vegetarian.
 
-</span>
+</span>:<></>}
         </div>
         <form className="ne-form" onSubmit={handleSubmit}>
 
@@ -306,6 +333,7 @@ const NewEvent = () => {
                     <input
                         name="startTime"
                         type="time"
+                        step="3600"
                         value={event.startTime}
                         onChange={handleChange}
                         
@@ -319,6 +347,8 @@ const NewEvent = () => {
                     <input
                         name="endTime"
                         type="time"
+                        step="01"
+                        defaultValue={"00"}
                         value={event.endTime}
                         onChange={handleChange}
                         min={event.startTime}
@@ -402,9 +432,9 @@ const NewEvent = () => {
             <button style={buttInt} className='create-button'>Create</button>
         </form>
         <div className="langar-text">
-        <span>In Sikhism, a langar (Punjabi: ਲੰਗਰ, 'kitchen') is the community kitchen of a gurdwara, which serves meals to all free of charge, regardless of religion, caste, gender, economic status, or ethnicity. People sit on the floor and eat together, and the kitchen is maintained and serviced by Sikh community volunteers.The meals served at a langar are always lacto-vegetarian.
+        {event.type === 'langar'?<span>In Sikhism, a langar (Punjabi: ਲੰਗਰ, 'kitchen') is the community kitchen of a gurdwara, which serves meals to all free of charge, regardless of religion, caste, gender, economic status, or ethnicity. People sit on the floor and eat together, and the kitchen is maintained and serviced by Sikh community volunteers.The meals served at a langar are always lacto-vegetarian.
 
-</span>
+</span>:<></>}
         </div>
         </div>
         </div>

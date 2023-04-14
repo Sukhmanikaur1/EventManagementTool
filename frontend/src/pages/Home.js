@@ -113,11 +113,22 @@ let newdate = year + "/" + month + "/" + day;
         </div>
       </section>
       <article className="mid-sec">
-      <section className="services">
+        <div className="container-for-contents">
+      <div className="containter-for-title">
       <h2 className="table-title">Personal Events</h2>
+
+      </div>
+          <div className="containter-for-title">
+          <h2>Langar</h2>
+
+          </div>
+        </div>
+        <div className="container-for-contents">
+      <section className="services">
         <div className="personal-event-box">
         
-          <PersonalEvent setModals={setModals}columns={columns} data={personalEvents?.length>0?personalEvents:personalEventsData} />
+          {personalEvents?.length>0?<PersonalEvent setModals={setModals}columns={columns} data={personalEvents?.length>0?personalEvents:personalEventsData} />
+          :<span>No personal Events booked.</span>}
           {/* <h2>
             {guest ? 
               "Sign up or Log In to:" 
@@ -142,9 +153,9 @@ let newdate = year + "/" + month + "/" + day;
         </div>
       </section>
       <section className="l-cal">
-        <h2>Langar</h2>
         <LangarCalendar events={langarEventsData} />
       </section>
+      </div>
       </article>
       <Footer/>
       {/* {user?.fname?<section className="login-signup-banner-container">

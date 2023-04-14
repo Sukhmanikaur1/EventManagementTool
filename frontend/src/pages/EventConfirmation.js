@@ -1,11 +1,13 @@
 import React,{useState, useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams,useLocation } from 'react-router-dom'
 import {getLangarEvents} from '../actions/langarActions'
 import {getPersonalEvents} from '../actions/personalActions'
 import '../styles/eventConfirm.css'
 
 const EventConfirmation = () => {
+    const {state} = useLocation()
+    console.log(state)
     const dispatcher=useDispatch()
     let { id } = useParams()
     // for development... can remove later... basically checking if it's an auto-incremented number id 
@@ -23,6 +25,7 @@ const EventConfirmation = () => {
         setTimeout(() =>{temp1=JSON.parse(sessionStorage.getItem('personalEvents'))
         console.log('temp1')
         console.log(temp1)
+        if(state) temp1=[state]
         setEvent(temp1[temp1.length-1])
         setTimeout(()=>setEvent({...temp1[temp1.length-1],
             eventtype:"Personal",
@@ -41,11 +44,13 @@ const EventConfirmation = () => {
         setTimeout(() =>{temp2=JSON.parse(sessionStorage.getItem('langar'))
         console.log('temp2 langar')
         console.log(temp2)
+        if(state) temp2=[state]
+        console.log(temp2)
         setEvent(temp2[temp2.length-1])
         setTimeout(()=>setEvent({...temp2[temp2.length-1],
             eventtype:"langar",
             startdate:temp2[temp2.length-1].date,
-            eventphone:temp2[temp2.length-1].phonenumber,
+            eventphone:temp2[temp2.length-1].eventphone,
             eventplace:temp2[temp2.length-1].orgname
         }),300)},500
         )

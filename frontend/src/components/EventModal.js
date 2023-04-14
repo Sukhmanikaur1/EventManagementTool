@@ -5,8 +5,11 @@ import "../styles/slotModal.css";
 import "../styles/eventModal.css";
 import { useDispatch } from "react-redux";
 import { deleteEvent, updateEvent } from "../actions/actions";
+import {updatePaathEventById, deletePaathEventById,setPaathEvents} from "../actions/paathActions"
+import {getAllPaathEvents, addNewpaatheventInBackend,updateOnePaathEvent, deleteOnePaathEvent} from '../services/PaathService'
+
 import MessageModal from "../components/MessageModal"
-const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal }) => {
+const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal , tokenId, setPaathEvents}) => {
 
   let nameRef = useRef();
   let startRef = useRef();
@@ -19,28 +22,56 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal }) =
   
   const packageEvent = (event) => ({
     ...event,
-    startdate: startRef.current.value,
+    startDate: startRef.current.value,
     enddate: endRef.current.value,
     eventaddress: addressRef.current.value, 
     eventname: nameRef.current.value,
-    eventplace: placeRef.current.value, 
-    eventphone: phoneRef.current.value,
+    orgname: placeRef.current.value, 
+    phonenumber: phoneRef.current.value,
     status:statusRef.current.value
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
+    console.log(tokenId)
     e.preventDefault();
     setModalMessage('Updated event')
     setShowModalMessage(true)
     let payload = packageEvent(event)
     dispatch(updateEvent(payload))
+    // dispatch(updatePaathEventById(payload, tokenId))
+    let paathEvents = await updateOnePaathEvent(tokenId, payload)
+ 
+    console.log(paathEvents)
+    
+    if (paathEvents?.data?.code ==="SUCCESS"){
+      console.log(paathEvents)
+        sessionStorage.setItem("paath",JSON.stringify(paathEvents?.data?.data?paathEvents?.data?.data:[]))
+        // dispatch(setPaathEvents(paathEvents?.data?.data?paathEvents?.data?.data:[]))
+        setPaathEvents(paathEvents?.data?.data?paathEvents?.data?.data:[])
+        sessionStorage.setItem("last",JSON.stringify("paath"))
+    }
+    else { console.log("bad call")}
     closeModal(false)
   };
-
-  const handleDelete = () => {
+  
+  const handleDelete = async() => {
     setModalMessage('Event removed.')
     setShowModalMessage(true)
+    
+    let payload = packageEvent(event)
     dispatch(deleteEvent(event.eventid))
+    let paathEvents = await deleteOnePaathEvent(tokenId, payload)
+ 
+    console.log(paathEvents)
+    
+    if (paathEvents?.data?.code ==="SUCCESS"){
+      console.log(paathEvents)
+        sessionStorage.setItem("paath",JSON.stringify(paathEvents?.data?.data?paathEvents?.data?.data:[]))
+        // dispatch(setPaathEvents(paathEvents?.data?.data?paathEvents?.data?.data:[]))
+        setPaathEvents(paathEvents?.data?.data?paathEvents?.data?.data:[])
+        sessionStorage.setItem("last",JSON.stringify("paath"))
+    }
+    else { console.log("bad call")}
     closeModal(false)
   };
 
@@ -62,7 +93,7 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal }) =
             <span>{event.eventname}</span> Event Details
           </p>
 
-          <form onSubmit={handleSubmit} id="em-form">
+          <form  id="em-form">
             <div id='em-labels'>
               <label htmlFor="em-start">Start Date:</label>
               <label htmlFor="em-end">End Date:</label>
@@ -77,7 +108,7 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal }) =
               <input
                 id="em-start"
                 type="date"
-                defaultValue={formatDateForInput(event.startdate)}
+                defaultValue={formatDateForInput(event.startDate)}
                 ref={startRef}
                 required
                 
@@ -100,7 +131,7 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal }) =
 
               <input
                 id="em-place"
-                defaultValue={event.eventplace}
+                defaultValue={event.orgname}
                 ref={placeRef}
                 required
               />
@@ -115,7 +146,8 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal }) =
               <input
                 id="em-phone"
                 ref={phoneRef}
-                defaultValue={event.eventphone}
+                defaultValue={event.phonenumber
+                }
                 // value={phone}
                 // onChange={handlePhone}
                 type="tel"
@@ -130,8 +162,8 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal }) =
               </select>
             </div>
 
-            <div id='em-buttons'>
-              <button>Update</button>
+            <div id='em-buttons' >
+              <button type="button" onClick={handleSubmit}>Update</button>
               <button type="button" onClick={handleDelete}>
                 Delete
               </button>

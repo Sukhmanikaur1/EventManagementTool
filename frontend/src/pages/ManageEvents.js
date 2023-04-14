@@ -2,7 +2,7 @@ import React, { useState , useEffect} from 'react';
 import Event from '../components/Event';
 
 import { useSelector, useDispatch } from 'react-redux'
-
+import {getAllPaathEvents, addNewpaatheventInBackend,updateOnePaathEvent, deleteOnePaathEvent} from '../services/PaathService'
 import '../styles/manageEvents.css'
 import { Link } from 'react-router-dom';
 import EventModal from '../components/EventModal';
@@ -15,6 +15,7 @@ const Events = () => {
     let [modal, setModal] = useState(false)
     let [modalPersonalEvents,setModalPersonalEvents]= useState(false)
     const [personalEvents,setPersonalEvents]=useState([])
+    const [paathEvents, setPaathEvents ]=useState([])
     const [showModalMessage, setShowModalMessage]= useState(false)
   const [modalMessage, setModalMessage] = useState('')
     const dispatch = useDispatch()
@@ -23,9 +24,9 @@ const Events = () => {
     // let details = useSelector(state => state.events.details)
     const role = useSelector(state => state.users.role)
     user = JSON.parse(sessionStorage.getItem('user'))
-    
+    console.log(user)
     const renderEvents = (type) => {
-        return events
+        return paathEvents
                   .map(event => 
                     <Event setModalMessage={setModalMessage}
                         setShowModalMessage={setShowModalMessage}
@@ -35,6 +36,7 @@ const Events = () => {
                     />
                   )
     }
+    
     let personalEventData={}
     const renderPersonalEvents = () => {
     
@@ -47,10 +49,21 @@ const Events = () => {
                     />}
                   )
     }
+    const getAndSetAllPaathEvents=async ()=>{
+        await getAllPaathEvents(user.tokenId).then(res=>{
+            if (res?.data?.code ==="SUCCESS"){
+                setPaathEvents(res?.data?.data)
+
+            }
+        })
+    }
+    console.log(paathEvents)
     useEffect(() => {
         dispatch(getPersonalEvents())
         setPersonalEvents(JSON.parse(sessionStorage.getItem('personalEvents')))
+        getAndSetAllPaathEvents()
     },[])
+    
     const compareTime=(event)=>{
         let valid= true
         personalEvents.forEach(evnt=>{ 
@@ -152,7 +165,7 @@ const Events = () => {
                 </div>
              </div>
          
-            {modal && <EventModal setModalMessage={setModalMessage} setShowModalMessage={setShowModalMessage} event={modal} closeModal={setModal} />}
+            {modal && <EventModal setPaathEvents={setPaathEvents} setModalMessage={setModalMessage} setShowModalMessage={setShowModalMessage} event={modal} closeModal={setModal} tokenId= {user.tokenId}/>}
             {modalPersonalEvents && <PersonalEventEditModal handleDeletePerosnalEvents={handleDeletePerosnalEvents} handleUpdatePerosnalEvents={handleUpdatePerosnalEvents} personalEvent={modalPersonalEvents} closeModal={setModalPersonalEvents} show={modalPersonalEvents}/>}
             {showModalMessage&& <MessageModal message={modalMessage} closeModal={setShowModalMessage} show={showModalMessage}/>}
             {/* Temporary buttons for Local Storage management */}

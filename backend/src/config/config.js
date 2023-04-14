@@ -5,7 +5,7 @@ const config = {
       port: 3306,
       user: "root",
       password: "password",
-      database: "userdb",
+      database: "eventmanager",
     },
     listPerPage: 10,
   };

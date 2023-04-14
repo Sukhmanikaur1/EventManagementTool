@@ -20,12 +20,12 @@ const Event = ({ event, setModal }) => {
       return `${sd[1]}/${sd[2].slice(0, 2)}/${sd[0]}`;
     }
   };
-
+  console.log(event)
   return (
     <tr className="event" onClick={handleClick}>
       <td>{event.eventname}</td>
-      <td>{event.eventplace}</td>
-      <td>{displayDate(event.startdate)}</td>
+      <td>{event.orgname}</td>
+      <td>{displayDate(event.startDate)}</td>
       <td>{displayDate(event.enddate)}</td>
       <td>{event.status}</td>
     </tr>

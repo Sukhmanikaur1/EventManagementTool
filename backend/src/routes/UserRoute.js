@@ -91,6 +91,7 @@ UserRouter.post("/login", async (req, res) => {
 function userAuth(req, res, next){
   console.log(req.body)
     const authHeader = req.headers['authorization']
+    console.log(authHeader)
     const token= authHeader && authHeader.split(" ")[1]
     if(token == null ){
       return res.sendStatus(401)
@@ -101,6 +102,7 @@ function userAuth(req, res, next){
         console.log(err)
         res.sendStatus(403)
       }
+      console.log(user)
       req.user = user;
       next()
     })

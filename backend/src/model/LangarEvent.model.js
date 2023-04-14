@@ -36,6 +36,7 @@ const findAllLangar = async () =>{
   try{
     const Op = Sequelize.Op;
     let todayDate = new Date();
+    todayDate.setDate(todayDate.getDate()-1)
     const allLangar = await Langar.findAll({date:{[Op.gt]:todayDate},include:["User"],raw: true,
     nest: true,})
     console.log("allLangar")
