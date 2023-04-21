@@ -40,13 +40,19 @@ const TimeSlots = ({ event }) => {
     let [gridRows] = useState([...Array(amountOfRows)])
     let [gridCols] = useState([...Array(days + 1)])
 
-    let slots = useSelector(state => state.slots.slots.filter(s => s.eventid === event.id))
+    const [slots, setSlots] = useState([])//useSelector(state => state.slots.slots.filter(s => s.eventid === event.id))]
     // let slots = []
     let user = useSelector(state => state.users.currentUser)
     user= JSON.parse(sessionStorage.getItem('user'))
     let dispatch = useDispatch()
     const getBookedSlots=async()=>{
-        console.log(await getAllPaathEvents(event.idPaath))
+        await getAllPaathEvents(event.idPaath,user.tokenId).then(res=>{
+            console.log("res",res)
+            if(res?.data?.code==='SUCCESS'){
+                console.log("res.data.data",res?.data?.data)
+                setSlots(res?.data?.data)
+            }
+        })
     }
     useEffect(()=>{
         getBookedSlots()
@@ -99,8 +105,14 @@ const TimeSlots = ({ event }) => {
         setSlotTime({...slotTimeRef.current})
         setSlotsDisabled({...slotDisableRef.current})
 
-    }, [days, dispatch, startDate, amountOfRows])
+    }, [days, dispatch, startDate, amountOfRows, ])
+    useEffect(()=>{
+        console.log("slots",slots)
+        getBookedSlots()
+    },[modal]
+    )
 
+    // getBookedSlots()
     const calculateTimeRow = (row, col) => {
         if (col !== 0 || row === 0) return
         let baseTime = 5
@@ -127,13 +139,14 @@ const TimeSlots = ({ event }) => {
         // Ignore click if it was on a disabled or out of bounds slot
         // ...target is a span and the parent is a div with the class name
         if (!time || !date || e.target.parentElement.className.includes('d-slot')) return
-
+        console.log("slots",slots,time.trim(" "),date.trim(" "))
         // Otherwise, try to find the info associated with the slot clicked
-        let currentSlot = slots.filter(s => s.time === time && s.date === date)[0]
+        let currentSlot = slots.filter(s => s.time === time.trim(" ") && s.date === date.trim(" "))[0]
+        console.log("currentSlot",currentSlot)
         if (currentSlot) {
             // Grant access only to a logged in user who created it originally
             
-            if (currentSlot.user?.username === user?.username|| user?.role==="admin") {
+            if (currentSlot.User?.email === user?.username|| user?.role==="admin") {
                 console.log("here i am here")
                 modal ? setModal(!modal) : setModal({ row, col, time, date, event, currentSlot })
             }
@@ -160,9 +173,10 @@ const TimeSlots = ({ event }) => {
     const slotMiniDetails = (slot) => {
         return (
             <div className={`s-deet ${slot.user !== user ? 'cur-user-no' : ''}`}>
-                <p className='s-deets'>{slot.name}</p>
-                <p className='s-deets'>{slot.phone}</p>
-                <p className={`minus-symbol ${slot.user.username !== user.username ? 'not-cur-user' : 'cur-user-yes'}`}></p>
+                {slot?.email===user.username?<p className='plus-symbol'><span>-</span></p>:<></>}
+                <p className='s-deets'>{slot.fullName}</p>
+                <p className='s-deets'>{slot.phonenumber}</p>
+                {/* <p className={`minus-symbol ${slot.user.username !== user.username ? 'not-cur-user' : 'cur-user-yes'}`}></p> */}
             </div>
         )
     }

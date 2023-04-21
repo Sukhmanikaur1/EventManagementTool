@@ -28,8 +28,8 @@ const bookSlot= async(bookedSlot) => {
 }
 const findBookedSlotById=async (idBookSlot)=>{
   try{
-    const bookedSlot = await BookSlotPaath.findOne({where: {idBookSlot: idBookSlot }})
-    return bookedSlot.toJSON()
+    let bookedSlot = await BookSlotPaath.findOne({where: {idBookSlot: idBookSlot }})
+    return bookedSlot
   }
   catch (err){
     console.log(err)
@@ -37,7 +37,7 @@ const findBookedSlotById=async (idBookSlot)=>{
 }
 const findAllBookedSlot = async (paath) =>{
   try{
-    const allbookedSlot = await BookSlotPaath.findAll({where:{PaathIdPaath:paath},include:["User","Paath"],raw: true,
+    let allbookedSlot = await BookSlotPaath.findAll({where:{PaathIdPaath:paath},include:["User","Paath"],raw: true,
     nest: true,})
     return JSON.parse(JSON.stringify(allbookedSlot))
   }
@@ -47,9 +47,9 @@ const findAllBookedSlot = async (paath) =>{
 }
 const updatedBookedSlotbyId= async (bookedSlot)=>{
   try {
-    const updatedbookedSlot = {}
-    await BookSlotPaath.update(bookedSlot  ,{where: {idbookedSlot:bookedSlot.idbookedSlot}}).then((res)=>{
-      updatedbookedSlot = res.toJSON();
+    let updatedbookedSlot = {}
+    await BookSlotPaath.update(bookedSlot  ,{where: {idbookSlot:bookedSlot.idbookSlot}}).then((res)=>{
+      updatedbookedSlot = res
     })
     return updatedbookedSlot  
   }
@@ -57,4 +57,18 @@ const updatedBookedSlotbyId= async (bookedSlot)=>{
     console.log(err)
   }
 }
-module.exports= {BookSlotPaath,bookSlot,findAllBookedSlot}
+const deleteBookedSlotById= async (idBookSlot)=>{
+  try{
+    let deletedBookedSlot = {}
+    await BookSlotPaath.destroy({where: {idBookSlot: idBookSlot}}).then((res)=>{
+      deletedBookedSlot = res.toJSON()
+    })
+    return deletedBookedSlot
+  }
+  catch (err){
+    console.log(err)
+  }
+}
+
+
+module.exports= {BookSlotPaath,bookSlot,findAllBookedSlot,findBookedSlotById,updatedBookedSlotbyId,deleteBookedSlotById}

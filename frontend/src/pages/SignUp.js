@@ -4,7 +4,11 @@ import { Link, useNavigate} from 'react-router-dom'
 import '../styles/loginSignup.css'
 
 import {registerUser} from '../services/UserService'
+
+import MessageModal from '../components/MessageModal'
 const SignUp = () => {
+    const [showModalMessage, setShowModalMessage]= useState(false)
+  const [modalMessage, setModalMessage] = useState('')
     const fname = useRef('')
     const lname = useRef('')
     const username= useRef("")
@@ -13,15 +17,19 @@ const SignUp = () => {
     const navigate = useNavigate()
     const handleRegister = async (event)=>{
         event.preventDefault()
+        setShowModalMessage(true)
+        
         const res = await registerUser({username:username.current.value,fname:fname.current.value,password:password.current.value,lname:lname.current.value,email:username.current.value})
         if(res){
-            
-            navigate(`/`)
-        }
-        else{
-            
-           
-        }
+        setModalMessage("Registration Successful.")
+    }
+    else{
+        setModalMessage("Registration Failed.")
+    }
+        setTimeout(()=>{
+            navigate(`/`)           
+            // setShowModalMessage(false)
+    },1000)
     }
     return (
         <main className="login-pg register-pgs">
@@ -38,6 +46,8 @@ const SignUp = () => {
                 </form>
                 <span>Already have an account? <Link to="/login">Log In</Link></span>
             </div>
+            {showModalMessage&& <MessageModal message={modalMessage} closeModal={setShowModalMessage} show={showModalMessage}/>}
+
         </main>
     )
 }

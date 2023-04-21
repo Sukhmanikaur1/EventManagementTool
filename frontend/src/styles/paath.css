@@ -82,7 +82,7 @@
 
   .plus-symbol span {
     position: absolute;
-    top: 10px;
+    top: 0px;
     right: 10px;
     font-size: 10pt;
     color: grey;
@@ -90,7 +90,7 @@
 
   .plus-symbol {
     position: relative;
-    height: 100%;
+    height: 30%;
     width: 100%;
   }
 

@@ -20,6 +20,7 @@ export const getAllPaathEvents= async (paath,tokenId) =>{
         return null
     }
 }
+
 export const addNewBookPaathSlot = async (tokenId, bookslotpaath) =>{
     console.log(tokenId)
     axios.interceptors.request.use(
@@ -57,9 +58,6 @@ export const updateOneBookedPaathSlot = async (tokenId,  bookedslot) =>{
           }
       );
       try{
-        console.log(tokenId)
-        const bookedslotObj= {bookedslot:bookedslot}
-        console.log(bookedslotObj)
         const allbookedslot = await axios.patch(baseUrl + '/updateonepaathslotevent/', {bookedslot:bookedslot})
           console.log(allbookedslot)
         return allbookedslot
@@ -80,10 +78,8 @@ export const deleteOneBookedSlot = async (tokenId,  bookedslot) =>{
           }
       );
       try{
-        console.log(tokenId)
-        const bookedslotObj= {bookedslot:bookedslot}
-        console.log(bookedslotObj)
-        const allbookedslot = await axios.patch(baseUrl + '/deletebookedslot/'+tokenId, {bookedslot:bookedslot})
+        console.log(bookedslot)
+        const allbookedslot = await axios.patch(baseUrl + '/deletebookedslot/'+bookedslot,{})
           console.log(allbookedslot)
         return allbookedslot
     }

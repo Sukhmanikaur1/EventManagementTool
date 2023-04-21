@@ -25,7 +25,7 @@ const addPaath = async (paath) =>{
 const findPaathById = async (idPaath)=>{
   try{
     const paath = await Paath.findOne({where: {idPaath: idPaath }})
-    return paath.toJSON()
+    return paath
   }
   catch (err){
     console.log(err)

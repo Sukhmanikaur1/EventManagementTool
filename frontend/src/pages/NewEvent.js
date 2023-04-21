@@ -277,10 +277,10 @@ const NewEvent = () => {
 
              <label > {/* style={eventtype ? greyedOutStyle : null} */}
                 Event Type
-                <select value={event.type ? event.type : eventtype ? eventtype : 'paath'} onChange={handleChange} name="type" autoFocus>
-                    <option value="choose" disabled />
-                    <option value="paath">Paath (Prayer)</option>
-                    <option value="personal">Personal</option>
+                <select disabled={user.role!=="admin"} value={event.type ? event.type : eventtype ? eventtype : 'paath'} onChange={handleChange} name="type" autoFocus>
+                    
+                    {user.role==="admin"&&<option value="paath">Paath (Prayer)</option>}
+                    {user.role==="admin"&&<option value="personal">Personal</option>}
                     <option value="langar">Langar (Kitchen)</option>
                 </select>
             </label>
@@ -344,17 +344,35 @@ const NewEvent = () => {
                 <label >
                     {/* style={interactMore}> */}
                     End Time
+                   
                     <input
                         name="endTime"
                         type="time"
-                        step="01"
-                        defaultValue={"00"}
+                        step="3600"
                         value={event.endTime}
                         onChange={handleChange}
                         min={event.startTime}
                     />
                     
                 </label>}
+                {personal==='personal'&&<label style={interact}>
+                Host Name
+                <input
+                    name="hostname"
+                    value={event.hostname}
+                    onChange={handleChange}
+                    required
+                />
+            </label>}
+            {personal==='personal'&&<label style={interact}>
+                Host Phone Number
+                <input
+                    name="hostphone"
+                    value={event.hostphone}
+                    onChange={handleChange}
+                    required
+                />
+            </label>}
 
             {paath==="paath" &&
             <label style={interact}> {/* style={interactMore} */}
@@ -386,15 +404,7 @@ const NewEvent = () => {
                     required
                 />
             </label>
-            {personal==='personal'&&<label style={interact}>
-                Host Name
-                <input
-                    name="hostname"
-                    value={event.hostname}
-                    onChange={handleChange}
-                    required
-                />
-            </label>}
+            
             {personal==='personal'&&<label style={interact}>
                 Event Description
                 <input
@@ -416,7 +426,7 @@ const NewEvent = () => {
             </label>
 
             <label style={interact}>
-                Phone Number
+                Event Phone Number
                 <input
                     type= "tel"
                     id="number"
@@ -428,8 +438,12 @@ const NewEvent = () => {
                     required
                 />
             </label>
-
+            <div style={{display: 'flex', flexDirection: 'row', alignItems:'center',width:"100%",justifyContent:"space-around"}}>
             <button style={buttInt} className='create-button'>Create</button>
+            <button style={buttInt} onClick={()=>navigate('/')} className='create-button'>Cancel</button>
+
+            </div>
+            
         </form>
         <div className="langar-text">
         {event.type === 'langar'?<span>In Sikhism, a langar (Punjabi: ਲੰਗਰ, 'kitchen') is the community kitchen of a gurdwara, which serves meals to all free of charge, regardless of religion, caste, gender, economic status, or ethnicity. People sit on the floor and eat together, and the kitchen is maintained and serviced by Sikh community volunteers.The meals served at a langar are always lacto-vegetarian.

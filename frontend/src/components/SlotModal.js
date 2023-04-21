@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addSlot, deleteSlot, updateSlot } from '../actions/slotActions'
-import {addNewBookPaathSlot} from '../services/BookPaathSlotService'
+import {addNewBookPaathSlot,updateOneBookedPaathSlot,deleteOneBookedSlot} from '../services/BookPaathSlotService'
 import '../styles/slotModal.css'
 
 const SlotModal = ({event, setModalMessage,setShowModalMessage ,slot, closeModal }) => {
@@ -13,16 +13,17 @@ const SlotModal = ({event, setModalMessage,setShowModalMessage ,slot, closeModal
     let user = useSelector(state => state.users.currentUser)
     if (!user.fname && JSON.parse(sessionStorage.getItem('user')).fname)
     user= JSON.parse(sessionStorage.getItem('user'))
-    let [phone, setPhone] = useState(slot.currentSlot?.phone ? slot.currentSlot.phone : '')
+    
+    let [phone, setPhone] = useState(slot.currentSlot?.phonenumber ? slot.currentSlot.phonenumber : '')
     console.log(user)
     console.log(slot)
     let nameRef = useRef()
     let emailRef = useRef()
     // let phoneRef = useRef()
     useEffect(() => {
-        if(slot.currentSlot?.user){
+        if(slot.currentSlot?.User){
             console.log("here")
-        nameRef.current.value=`${slot.currentSlot?.name}`
+        nameRef.current.value=`${slot.currentSlot?.fullName}`
         emailRef.current.value=slot.currentSlot?.email
         }
         else { 
@@ -59,14 +60,50 @@ const SlotModal = ({event, setModalMessage,setShowModalMessage ,slot, closeModal
         }
 
         if (slot.currentSlot)
-            dispatch(updateSlot(newSlot))
-        else 
-            dispatch(addSlot(newSlot))
-        
+            updateOneBookedPaathSlot(user.tokenid,slot.currentSlot.id,newSlot)
+        else{
+            addNewBookPaathSlot(user.tokenid,newSlot)
+        }
         setModalMessage('Slot saved!')
         setShowModalMessage(true)
         closeModal(false)
     }
+    const handleUpdateSlot = async(e) => {
+        e.preventDefault()
+
+        let newSlot;
+        console.log("user",user,"event",event)
+            newSlot = {
+                idbookSlot: slot.currentSlot.idBookSlot,
+                fullName: nameRef.current.value,
+                email: emailRef.current.value,
+                phonenumber:phone,
+                eventId: event.idPaath,
+                place: event.orgname,
+                time: slot.time,
+                date: slot.date,
+                col:slot.col,
+                row:slot.row,
+                user:user.username,
+                paath:event.idPaath
+            }
+            console.log('newSlot',newSlot)
+            const res =  await updateOneBookedPaathSlot(user.tokenid,newSlot)
+        console.log(res)
+        if(res?.data?.code==="SUCCESS")
+        {
+            setModalMessage('Slot saved!')
+            setShowModalMessage(true)
+            closeModal(false)
+
+        }
+        else{
+            setModalMessage('Slot not saved! error!')
+            setShowModalMessage(true)
+            // closeModal(false)
+        }
+    }
+
     const handleCreateSlot = async(e) => {
         e.preventDefault()
         
@@ -95,10 +132,28 @@ const SlotModal = ({event, setModalMessage,setShowModalMessage ,slot, closeModal
     }
 console.log('current slot')
 console.log(slot)
-    const handleDelete = () => {
+    const handleDelete = async() => {
+        let res ={}
+        if (slot.currentSlot) {
+          res = await deleteOneBookedSlot(user.tokenid,slot.currentSlot.idBookSlot)
+            
+        }
+        console.log(res)
+        if(res?.data?.code==="SUCCESS")
+        {
+            setModalMessage('Slot deleted!')
+            setShowModalMessage(true)
+            closeModal(false)
+
+        }
+        else{
+            setModalMessage('error!')
+            setShowModalMessage(true)
+            // closeModal(false)
+        }
         setModalMessage('Slot deleted.')
         setShowModalMessage(true)
-        dispatch(deleteSlot(slot.currentSlot.id))
+        
         closeModal(false)
     }
 
@@ -128,7 +183,7 @@ console.log(slot)
                             <label>
                                 Name:
                                 <input 
-                                    defaultValue={slot.currentSlot?.name}
+                                    defaultValue={slot.currentSlot?.fullName}
                                     readOnly={slot.viewOnly ? true : false}
                                     style={slot.viewOnly ? { backgroundColor: 'rgb(224, 236, 255)' } : null}
                                     ref={nameRef} 
@@ -167,7 +222,8 @@ console.log(slot)
                         </div>
 
                         <div>
-                            {!slot.viewOnly &&(slot.currentSlot?.user?.username==user?.username ? <button>Update</button> :<button onClick={handleCreateSlot}> Create</button> )}
+                            {console.log(user)}
+                            {!slot.viewOnly && slot.currentSlot?.User?.email===user?.username ? <button onClick={handleUpdateSlot}>Update</button> :<button onClick={handleCreateSlot}> Create</button> }
                             {slot.currentSlot && !slot.viewOnly ? <button type="button" onClick={handleDelete}>Delete</button> : null}
                             <button type="button" onClick={() => closeModal(false)}>Cancel</button>
                         </div>
