@@ -197,7 +197,11 @@ const Langar = sequelize.define(
         type: DataTypes.STRING,
         allowNull: true,
       },
-      phonenumber:{
+      hostphonenumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      eventphonenumber:{
         type: DataTypes.STRING,
         allowNull: false,
       },

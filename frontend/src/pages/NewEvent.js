@@ -208,7 +208,9 @@ const NewEvent = () => {
                 }
                 else{ console.log("different start datte")}})
                 console.log(valid)
-            const currentEvent ={phonenumber:phone,
+            const currentEvent ={
+                hostphonenumber: event.hostphonenumber,
+                eventphonenumber:phone,
                 hostname: event.hostname,
                 eventdate: event.startDate,
                 eventdescription: event.eventdescription,
@@ -368,7 +370,7 @@ const NewEvent = () => {
                 Host Phone Number
                 <input
                     name="hostphone"
-                    value={event.hostphone}
+                    value={event.hostphonenumber}
                     onChange={handleChange}
                     required
                 />

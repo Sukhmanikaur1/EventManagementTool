@@ -19,7 +19,7 @@ PersonalEventRouter.post('/addpersonalevent/:tokenId', userAuth,async (req, res)
         console.log(user)
         console.log(addpersonalEvent)
         const personalEvent = {
-        phonenumber:req.body.personalEventData.phonenumber,
+        eventphonenumber:req.body.personalEventData.eventphonenumber,
       hostname: req.body.personalEventData.hostname,
       eventdate: req.body.personalEventData.eventdate,
       eventdescription: req.body.personalEventData.eventdescription,

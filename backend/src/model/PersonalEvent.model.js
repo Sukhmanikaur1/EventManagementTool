@@ -6,7 +6,8 @@ const addpersonalEvent= async(personalEventData) => {
   
   const newPersonalEvent = await PersonalEvent.build(
     {
-      phonenumber:personalEventData.phonenumber,
+      hostphonenumber: personalEventData.hostphonenumber,
+      eventphonenumber:personalEventData.eventphonenumber,
       hostname: personalEventData.hostname,
       eventdate: personalEventData.eventdate,
       eventdescription: personalEventData.eventdescription,
