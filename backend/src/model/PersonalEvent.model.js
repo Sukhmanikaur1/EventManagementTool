@@ -6,12 +6,12 @@ const addpersonalEvent= async(personalEventData) => {
   console.log("personalEventData",personalEventData)
   const newPersonalEvent = await PersonalEvent.build(
     {
-      hostphonenumber: personalEventData.hostphonenumber,
       eventphonenumber:personalEventData.eventphonenumber,
       hostname: personalEventData.hostname,
       eventdate: personalEventData.eventdate,
       eventdescription: personalEventData.eventdescription,
       eventaddress: personalEventData.eventaddress,
+      hostphonenumber: personalEventData.hostphonenumber,
       eventplace: personalEventData.eventplace,
       eventname: personalEventData.eventname,
       starttime: personalEventData.eventtimestart,
