@@ -9,7 +9,7 @@ import PersonalEventModal from '../components/PersonalEventModal'
 import {getPersonalEvents} from '../actions/personalActions'
 import '../styles/home.css'
 import { setLangarEvents } from "../actions/langarActions";
-
+import {getAllEvents} from '../services/LangarEventService'
 import Footer from '../components/Footer'
 const Home = () => {
 
@@ -65,10 +65,17 @@ let newdate = year + "/" + month + "/" + day;
   }
   const [langarEventsData,setLangarEventsData] =useState([])
   const assignLangarEvents = async() => {
-    setTimeout(()=> setLangarEvents(JSON.parse(sessionStorage.getItem('langar'))),1400)
-    setLangarEventsData(JSON.parse(sessionStorage.getItem('langar')))
-    console.log("langarEventsData")
-    console.log(langarEventsData)
+    const res = await getAllEvents()
+    if (res?.data?.code === "SUCCESS"){
+      setLangarEventsData(res?.data?.data)
+    }
+    else{
+      setLangarEventsData([])
+    }
+    // setTimeout(()=> setLangarEvents(JSON.parse(sessionStorage.getItem('langar'))),1400)
+    // setLangarEventsData(JSON.parse(sessionStorage.getItem('langar')))
+    // console.log("langarEventsData")
+    // console.log(langarEventsData)
   }
   useEffect(() => {
     dispatch(updateEventOutdated())

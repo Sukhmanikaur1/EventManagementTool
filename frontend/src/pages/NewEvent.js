@@ -71,9 +71,14 @@ const NewEvent = () => {
         startTime:new Date(),
         endTime: new Date(),
         phone:"",
+        hostphonenumber:"",
     })
 
     let [phone, setPhone] = useState('')
+    const [hostphonenumber, setHostphonenumber] = useState('')
+    const onChangeHostphonenumber = (e) => {
+        setHostphonenumber(e.target.value)
+    }
     useEffect(()=>{
         assignLangarEvents()
     },[])
@@ -163,7 +168,7 @@ const NewEvent = () => {
         }
         else if( event.type === "paath"  && user?.tokenId){
             // dispatch(addEvent(newEvent))
-            console.log(user.tokenId)
+            // console.log(user.tokenId)
             let newPaathEventList= await addNewpaatheventInBackend(tokenId, {
                     eventname:newEvent.eventname,
                     startdate:newEvent.startdate,
@@ -198,18 +203,18 @@ const NewEvent = () => {
                         setEvent({...event, startTime:(Number(event.startTime.substr(0,2))-12)+event.startTime.substr(2)+"PM"})
                     }
                     if(evnt.starttime.substr(0,5)>= event.startTime.substr(0,5)&&event.startTime.substr(0,5)<=evnt.endtime.substr(0,5)){
-                        console.log(evnt.starttime+"here")
+                        // console.log(evnt.starttime+"here")
                         valid= false
                     }
                     else if(evnt.endtime.substr(0,5)== event.endTime)
                     valid= false
-                    console.log(true+" same startdate start time")
+                    // console.log(true+" same startdate start time")
                 
                 }
                 else{ console.log("different start datte")}})
-                console.log(valid)
+                // console.log(valid)
             const currentEvent ={
-                hostphonenumber: event.hostphonenumber,
+                hostphonenumber: hostphonenumber,
                 eventphonenumber:phone,
                 hostname: event.hostname,
                 eventdate: event.startDate,
@@ -220,7 +225,7 @@ const NewEvent = () => {
                 eventtimestart: event.startTime,
                 eventtimeend: event.endTime,
             }
-            
+            console.log("currentEvent",currentEvent)
             dispatch(createNewPersonalEvent(user?.tokenId,currentEvent))
             
         }
@@ -370,8 +375,8 @@ const NewEvent = () => {
                 Host Phone Number
                 <input
                     name="hostphone"
-                    value={event.hostphonenumber}
-                    onChange={handleChange}
+                    value={hostphonenumber}
+                    onChange={onChangeHostphonenumber}
                     required
                 />
             </label>}

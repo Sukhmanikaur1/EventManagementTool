@@ -3,7 +3,7 @@ const {PersonalEvent} = require("./DataTypes");
 const e = require("express");
 
 const addpersonalEvent= async(personalEventData) => {
-  
+  console.log("personalEventData",personalEventData)
   const newPersonalEvent = await PersonalEvent.build(
     {
       hostphonenumber: personalEventData.hostphonenumber,
@@ -18,6 +18,7 @@ const addpersonalEvent= async(personalEventData) => {
       endtime: personalEventData.eventtimeend
     })
     try{
+      console.log("newPersonalEvent",newPersonalEvent)
       let personalEvent={}
       await newPersonalEvent.save().then((res) => {
       personalEvent= res.toJSON()

@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 let baseUrl = 'http://localhost:4000/bookpaathslot'
 
 export const getAllPaathEvents= async (paath,tokenId) =>{

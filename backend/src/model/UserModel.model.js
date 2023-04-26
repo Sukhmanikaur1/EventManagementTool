@@ -8,7 +8,7 @@ const addUser = async (user) => {
     password: user.password,
     fname: user.fname,
     lname:user.lname,
-    email: user.email,
+    email: user.email.toLowerCase(),
     role:"member",
     tokenId:null
   });
@@ -32,7 +32,7 @@ const findUserByUserId = async (id)=>{
 }
 const findByEmail = async (email)=>{
     try{
-  const user = await User.findOne({where: {email: email}})
+  const user = await User.findOne({where: {email: email.toLowerCase()}})
   
   return user;
     }

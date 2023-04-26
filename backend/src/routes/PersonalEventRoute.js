@@ -16,8 +16,8 @@ PersonalEventRouter.post('/addpersonalevent/:tokenId', userAuth,async (req, res)
     try{
         console.log(req.body.personalEventData)
         const user = await findByEmail(req.user)
-        console.log(user)
-        console.log(addpersonalEvent)
+        // console.log(user)
+        // console.log(addpersonalEvent)
         const personalEvent = {
         eventphonenumber:req.body.personalEventData.eventphonenumber,
       hostname: req.body.personalEventData.hostname,
@@ -27,7 +27,8 @@ PersonalEventRouter.post('/addpersonalevent/:tokenId', userAuth,async (req, res)
       eventplace: req.body.personalEventData.eventplace,
       eventname: req.body.personalEventData.eventname,
       eventtimestart: req.body.personalEventData.eventtimestart,
-      eventtimeend: req.body.personalEventData.eventtimeend
+      eventtimeend: req.body.personalEventData.eventtimeend,
+      hostphonenumber: req.body.personalEventData.hostphonenumber
 }
         console.log(personalEvent)
         let allPersonalEvents=[]

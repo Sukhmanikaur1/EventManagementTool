@@ -40,11 +40,13 @@ BookedSlotRouter.get('/allbookslotsevents/:paathid', async(req, res, next)=>{
 })
 BookedSlotRouter.post('/addbookpaathslot/', async(req, res, next)=>{
   try{
-     console.log("req.body.bookedslot",req.body.bookslotpaath)
+    //  console.log("req.body.bookedslot",req.body.bookslotpaath)
      const user = await findByEmail(req.body.bookslotpaath.user)
+     const userFromEmail = await findByEmail(req.body.bookslotpaath.email);
+    console.log("userFromEmail",userFromEmail)
+    
       const paath = await findPaathById(req.body.bookslotpaath.paath)
       let bookedSlots =[]
-
       await bookSlot({
         
         fullName: req.body.bookslotpaath.fullName,
@@ -54,7 +56,7 @@ BookedSlotRouter.post('/addbookpaathslot/', async(req, res, next)=>{
           date:req.body.bookslotpaath.date,
           col:req.body.bookslotpaath.col, 
           row:req.body.bookslotpaath.row,
-          UserIdUser:user.idUser,
+          UserIdUser:user?.role === "admin"?userFromEmail?userFromEmail.idUser:user.idUser:user.idUser,
           PaathIdPaath:paath.idPaath,
 
       }).then(async (response)=>{
@@ -101,9 +103,9 @@ BookedSlotRouter.patch('/updateonepaathslotevent/',userAuth, async(req, res, nex
 BookedSlotRouter.patch('/deletebookedslot/:id',userAuth, async(req, res, next)=>{
   try{
     const user = await findByEmail(req.user)
-    console.log("req.params.id",req.params.id)
+    // console.log("req.params.id",req.params.id)
     let bookedSlot = await findBookedSlotById(req.params.id)
-    console.log("bookedSlot",bookedSlot)
+    // console.log("bookedSlot",bookedSlot)
     let bookedSlots =[]
     await BookSlotPaath.destroy({
       where: {
