@@ -223,7 +223,7 @@ console.log(slot)
 
                         <div>
                             {console.log(user)}
-                            {!slot.viewOnly && slot.currentSlot?.User?.email===user?.username ? <button onClick={handleUpdateSlot}>Update</button> :<button onClick={handleCreateSlot}> Create</button> }
+                            {!slot.viewOnly && (slot.currentSlot?.User?.email===user?.username || slot?.currentSlot?.User&&user.role ==="admin")? <button onClick={handleUpdateSlot}>Update</button> :<button onClick={handleCreateSlot}> Create</button> }
                             {slot.currentSlot && !slot.viewOnly ? <button type="button" onClick={handleDelete}>Delete</button> : null}
                             <button type="button" onClick={() => closeModal(false)}>Cancel</button>
                         </div>

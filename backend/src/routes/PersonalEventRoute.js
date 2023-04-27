@@ -77,7 +77,9 @@ PersonalEventRouter.patch('/updatepersonalevents/:tokenId', userAuth,async (req,
         
         const personalEvent = {
             personaleventid:req.body.personalEventData.personaleventid,
-        phonenumber:req.body.personalEventData.phonenumber,
+        eventphonenumber:req.body.personalEventData.eventphonenumber,
+        
+        hostphonenumber:req.body.personalEventData.hostphonenumber,
       hostname: req.body.personalEventData.hostname,
       eventdate: req.body.personalEventData.eventdate,
       eventdescription: req.body.personalEventData.eventdescription,

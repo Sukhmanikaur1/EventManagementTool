@@ -87,7 +87,7 @@ BookedSlotRouter.patch('/updateonepaathslotevent/',userAuth, async(req, res, nex
          date:req.body.bookedslot.date,
          col:req.body.bookedslot.col, 
          row:req.body.bookedslot.row,
-         UserIdUser:user.idUser,
+         UserIdUser:req.body.User.idUser,
          PaathIdPaath:req.body.bookedslot.paath,
 
      }).then(async (response)=>{

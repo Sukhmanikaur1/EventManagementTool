@@ -31,11 +31,12 @@ const PersonalEventModal = ({ personalEvent, closeModal , show}) => {
         <Modal.Body>
           <span>Event Name: {data.eventname}</span><br/>
           <span>Host Name: {data.hostname}</span><br/>
-          <span>Host Phone Number:{data.phonenumber}</span><br/>
+          <span>Host Phone Number:{data.hostphonenumber}</span><br/>
           <span>Event Date: {date2}</span><br/>
           <span>Event Place: {data.eventplace}</span><br/>
           <span>Event Address: {data.eventaddress}</span><br/>
           <span>Event Description: {data.eventdescription}</span><br/>
+          <span>Event Phone Number:{data.eventphonenumber}</span><br/>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={()=>closeModal(false)}>
