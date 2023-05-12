@@ -77,7 +77,18 @@ const NewEvent = () => {
     let [phone, setPhone] = useState('')
     const [hostphonenumber, setHostphonenumber] = useState('')
     const onChangeHostphonenumber = (e) => {
-        setHostphonenumber(e.target.value)
+        let { value } = e.target
+        let lstChTypd = value.slice(-1)
+        
+        if (!/[0-9]/.test(Number(lstChTypd)) && lstChTypd !== '-' && lstChTypd) return
+        if (value.length === 13) return
+
+        if (value.length === 4 && !value.includes('-')) {
+            value = value.slice(0, 3) + '-' + value.slice(3)
+        } else if (value.length === 8 && value[7] !== '-') {
+            value = value.slice(0, 7) + '-' + value.slice(7)
+        }
+        setHostphonenumber(value)
     }
     useEffect(()=>{
         assignLangarEvents()
@@ -229,7 +240,7 @@ const NewEvent = () => {
             dispatch(createNewPersonalEvent(user?.tokenId,currentEvent))
             
         }
-        setTimeout(() =>navigate(`/create-event/event-confirmation/${newEvent.eventid}`),500)
+        setTimeout(() =>navigate(`/create-event/event-confirmation/${newEvent.eventid}`,{type:"personal"}),500)
         
     }
 
@@ -374,9 +385,13 @@ const NewEvent = () => {
             {personal==='personal'&&<label style={interact}>
                 Host Phone Number
                 <input
+                type="tel"
+                
                     name="hostphone"
                     value={hostphonenumber}
                     onChange={onChangeHostphonenumber}
+                    placeholder="ex: 555-555-5555"
+                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                     required
                 />
             </label>}
@@ -447,7 +462,7 @@ const NewEvent = () => {
             </label>
             <div style={{display: 'flex', flexDirection: 'row', alignItems:'center',width:"100%",justifyContent:"space-around"}}>
             <button style={buttInt} className='create-button'>Create</button>
-            <button style={buttInt} onClick={()=>navigate('/')} className='create-button'>Cancel</button>
+            <button onClick={()=>navigate('/')} className='create-button'>Cancel</button>
 
             </div>
             

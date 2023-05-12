@@ -73,11 +73,12 @@ BookedSlotRouter.patch('/updateonepaathslotevent/',userAuth, async(req, res, nex
   try{
     console.log("req.body.bookslotpaath",req.body.bookedslot)
     const user = await findByEmail(req.user)
-    
+    const emailUser = await findByEmail(req.body.bookedslot.email)
+    console.log("emailUser",emailUser)
      const paath = await findPaathById(req.body.bookedslot.paath)
      console.log(paath)
      let bookedSlots =[]
-
+    console.log("req.body.bookedslot",req.body.bookedslot)
      await updatedBookedSlotbyId({
       idbookSlot:req.body.bookedslot.idbookSlot,
        fullName: req.body.bookedslot.fullName,
@@ -87,7 +88,7 @@ BookedSlotRouter.patch('/updateonepaathslotevent/',userAuth, async(req, res, nex
          date:req.body.bookedslot.date,
          col:req.body.bookedslot.col, 
          row:req.body.bookedslot.row,
-         UserIdUser:req.body.User.idUser,
+         UserIdUser:user?.role === "admin"?emailUser?emailUser.idUser:emailUser.idUser:user.idUser,
          PaathIdPaath:req.body.bookedslot.paath,
 
      }).then(async (response)=>{

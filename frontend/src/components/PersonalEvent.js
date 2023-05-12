@@ -16,8 +16,9 @@ const PersonalEvent = ({ event, setModal }) => {
   console.log(date)
   return (
     <tr className="event" onClick={handleClick}>
-      <td>{event.eventname}</td>
       <td>{event.hostname}</td>
+      <td>{event.eventplace}</td>
+      
       <td>{date}</td>
       <td>{event.starttime}</td>
       <td>{event.endtime}</td>

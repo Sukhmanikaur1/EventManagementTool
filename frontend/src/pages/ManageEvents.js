@@ -20,7 +20,6 @@ const Events = () => {
   const [modalMessage, setModalMessage] = useState('')
     const dispatch = useDispatch()
     let user = useSelector(state => state.users.currentUser)
-    let events = useSelector(state => state.events.events.filter((e) => e.eventtype === 'paath'))
     // let details = useSelector(state => state.events.details)
     const role = useSelector(state => state.users.role)
     user = JSON.parse(sessionStorage.getItem('user'))
@@ -50,10 +49,10 @@ const Events = () => {
                   )
     }
     const getAndSetAllPaathEvents=async ()=>{
-        await getAllPaathEvents(user.tokenId).then(res=>{
+        await getAllPaathEvents(user?.tokenId).then(res=>{
+            console.log(res?.data?.data)
             if (res?.data?.code ==="SUCCESS"){
                 setPaathEvents(res?.data?.data)
-
             }
         })
     }
@@ -107,7 +106,7 @@ const Events = () => {
             </div>
 
             <div id='me-contain'>
-                {events.length ? 
+                {paathEvents.length ? 
                 <>
                     <h2 id="h-p">Paath Events</h2>
                 

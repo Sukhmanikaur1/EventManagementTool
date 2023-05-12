@@ -21,10 +21,10 @@ const SlotModal = ({event, setModalMessage,setShowModalMessage ,slot, closeModal
     let emailRef = useRef()
     // let phoneRef = useRef()
     useEffect(() => {
-        if(slot.currentSlot?.User){
+        if(slot?.currentSlot?.User){
             console.log("here")
-        nameRef.current.value=`${slot.currentSlot?.fullName}`
-        emailRef.current.value=slot.currentSlot?.email
+        nameRef.current.value=`${slot?.currentSlot?.fullName}`
+        emailRef.current.value=slot?.currentSlot?.email
         }
         else { 
             
@@ -196,6 +196,7 @@ console.log(slot)
                                 Email:
                                 <input 
                                     type="email"
+                                    disabled={user.role!=='admin'?true:false}
                                     defaultValue={slot.currentSlot?.email}
                                     ref={emailRef} 
                                     readOnly={slot.viewOnly ? true : false}
@@ -223,7 +224,7 @@ console.log(slot)
 
                         <div>
                             {console.log(user)}
-                            {!slot.viewOnly && (slot.currentSlot?.User?.email===user?.username || slot?.currentSlot?.User&&user.role ==="admin")? <button onClick={handleUpdateSlot}>Update</button> :<button onClick={handleCreateSlot}> Create</button> }
+                            {!slot.viewOnly && (slot.currentSlot?.User?.email===user?.username || slot?.currentSlot?.User&&user.role ==="admin")? <button onClick={handleUpdateSlot}>Update a slot</button> :<button onClick={handleCreateSlot}> Save a Slot</button> }
                             {slot.currentSlot && !slot.viewOnly ? <button type="button" onClick={handleDelete}>Delete</button> : null}
                             <button type="button" onClick={() => closeModal(false)}>Cancel</button>
                         </div>

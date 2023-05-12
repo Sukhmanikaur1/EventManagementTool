@@ -11,6 +11,7 @@ const LangarModal = (props) => {
   console.log(props)
   
   const eventPhoneRef = useRef()
+  const eventFullName = useRef()
 
   let user1 = useSelector(state => state.users.currentUser)
   if (!user1?.fname && JSON.parse(sessionStorage.getItem('user'))?.fname)
@@ -22,9 +23,11 @@ const LangarModal = (props) => {
   
       ...event.ev, 
       eventphone: eventPhoneRef.current.value,
+      fullName: eventFullName.current.value,
       
     })
-    
+    console.log("user1",user1)
+    console.log("User",User)
   return (
     <Modal>
       <div className="event-modal">
@@ -33,22 +36,22 @@ const LangarModal = (props) => {
             <span>{`${date.split('-')[1]}/${date.split('-')[2].slice(0,2)}/${date.split('-')[0]}`}</span>
           </p>
           <p>
-          {User.username===user1?.username?"You have already booked":"has already been booked"}
+          {User?.email===user1?.username?"You have already booked":"has already been booked"}
           
           </p>
         <div>
             <span>Booked by:</span> 
-            {User.username===user1?.username||user1.role==="admin"?<input type="text" className="" value={fullName}/>:<>{fullName}</>}
+            {User?.email===user1?.username||user1.role==="admin"?<input type="text" className="" defaultValue={fullName} ref={eventFullName}/>:<>{fullName}</>}
             
         </div>
         <div>
             <span>Phone number:</span> 
-            {User.username===user1?.username||user1.role==="admin"?<input type="text" className="" defaultValue={phonenumber} ref={eventPhoneRef}/>:<>{phonenumber}</>}
+            {User?.email===user1?.username||user1.role==="admin"?<input type="text" className="" defaultValue={phonenumber} ref={eventPhoneRef}/>:<>{phonenumber}</>}
 
         </div>
                       
             <div id='em-buttons'>
-            {User.username===user1?.username||user1.role==="admin"?<>
+            {User.email===user1?.username||user1.role==="admin"?<>
             <button className='create-button' type="button" onClick={() => updateLangar(packageEvent(event))}>
                 Update
               </button>

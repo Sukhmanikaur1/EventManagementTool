@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Modal from "./Modal";
-
+import ClipLoader from "react-spinners/ClipLoader";
 import "../styles/slotModal.css";
 import "../styles/eventModal.css";
 import { useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ import {getAllPaathEvents, addNewpaatheventInBackend,updateOnePaathEvent, delete
 
 import MessageModal from "../components/MessageModal"
 const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal , tokenId, setPaathEvents}) => {
-
+  const [loading, setLoading] = useState(false);
   let nameRef = useRef();
   let startRef = useRef();
   let endRef = useRef();
@@ -32,6 +32,7 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal , to
   })
 
   const handleSubmit = async(e) => {
+    setLoading(true);
     console.log(tokenId)
     e.preventDefault();
     setModalMessage('Updated event')
@@ -51,10 +52,12 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal , to
         sessionStorage.setItem("last",JSON.stringify("paath"))
     }
     else { console.log("bad call")}
+    setLoading(false);
     closeModal(false)
   };
   
   const handleDelete = async() => {
+    setLoading(true);
     setModalMessage('Event removed.')
     setShowModalMessage(true)
     
@@ -72,6 +75,7 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal , to
         sessionStorage.setItem("last",JSON.stringify("paath"))
     }
     else { console.log("bad call")}
+    setLoading(false);
     closeModal(false)
   };
 
@@ -87,6 +91,8 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal , to
   return (
       <>
     <Modal>
+      {loading ? <p>loading</p>:<>  </>
+        }
       <div className="event-modal">
         <div className="event-details" id="em-details">
           <p className="event-p">
