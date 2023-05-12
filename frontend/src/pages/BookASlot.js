@@ -11,17 +11,19 @@ const BookASlot = () => {
     let navigate = useNavigate()
     let location = useLocation()
     let path = location.pathname
-
+    const [loading,setLoading] = useState(false)
     const handlePaathClick = (e) => {
         navigate(`/events/${e.target.id}`)
     }
     const getAllPaaths=async ()=>{
+        setLoading(true)
         const res = await getAllPaathEvents()
         console.log(res)
         if(res?.data?.code==='SUCCESS'){
             console.log(res?.data?.data)
             setPaaths(res?.data?.data)
         }
+        setLoading(false)
 
     }
     useEffect(()=>{
@@ -30,7 +32,7 @@ const BookASlot = () => {
     return (
         <section className='book-a-slot'>
             {path.includes('paath') ?
-                <>
+                loading?<>
                     {paaths.length ? 
                         <>
                             <h1>Paath events to choose from:</h1> 
@@ -41,7 +43,7 @@ const BookASlot = () => {
                         : 
                         <h1>No paath events to choose from</h1>
                     }
-                </>
+                </>:<>Loading...</>
             :
                 <>
                     <h1>Choose the event type:</h1>
