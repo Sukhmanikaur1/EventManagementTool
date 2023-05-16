@@ -192,6 +192,12 @@ console.log(event)
         
         navigate(`/home`)
        }
+       //event on load ... //
+       //when ever an application is loaded it will interact with calendar
+
+       
+
+
     return (
         <div className='bk-slot' style={{ backgroundColor: 'inherit' }}>
                 <label id="date-langar">

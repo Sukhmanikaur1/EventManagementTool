@@ -32,7 +32,7 @@ const BookASlot = () => {
     return (
         <section className='book-a-slot'>
             {path.includes('paath') ?
-                loading?<>
+                loading?<>Loading...</>:<>
                     {paaths.length ? 
                         <>
                             <h1>Paath events to choose from:</h1> 
@@ -43,7 +43,7 @@ const BookASlot = () => {
                         : 
                         <h1>No paath events to choose from</h1>
                     }
-                </>:<>Loading...</>
+                </>
             :
                 <>
                     <h1>Choose the event type:</h1>
