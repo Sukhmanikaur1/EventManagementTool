@@ -63,7 +63,11 @@ const PersonalEventEditModal = ({ handleDeletePerosnalEvents,handleUpdatePerosna
     }
     }
     const handleDelete = ()=>{
+      if(window.confirm('Are you sure you want to proceed?'))
+      {
+
         handleDeletePerosnalEvents(event)
+      }
     }
     const handleUpdate = ()=>{
         handleUpdatePerosnalEvents(event)

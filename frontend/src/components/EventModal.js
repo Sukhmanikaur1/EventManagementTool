@@ -58,9 +58,9 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal , to
   
   const handleDelete = async() => {
     setLoading(true);
-    setModalMessage('Event removed.')
     setShowModalMessage(true)
-    
+    if (window.confirm('Are you sure you want to proceed?')){
+      setModalMessage('Event removed.')
     let payload = packageEvent(event)
     dispatch(deleteEvent(event.eventid))
     let paathEvents = await deleteOnePaathEvent(tokenId, payload)
@@ -75,7 +75,7 @@ const EventModal = ({ setModalMessage,setShowModalMessage,event, closeModal , to
         sessionStorage.setItem("last",JSON.stringify("paath"))
     }
     else { console.log("bad call")}
-    setLoading(false);
+  }  setLoading(false);
     closeModal(false)
   };
 

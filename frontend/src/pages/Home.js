@@ -67,6 +67,7 @@ let newdate = year + "/" + month + "/" + day;
   const assignLangarEvents = async() => {
     const res = await getAllEvents()
     if (res?.data?.code === "SUCCESS"){
+      console.log("Success data.data langar ", res.data.data)
       setLangarEventsData(res?.data?.data)
     }
     else{

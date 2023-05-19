@@ -36,7 +36,7 @@ const Login = () => {
         <main className="login-pg register-pgs">
             <h1><i className="fas fa-calendar-check"></i>Event Management Tool</h1>
             <div className="login-container">
-                <h2 >Log in to Company Name</h2>
+                <h2 >Log in </h2>
                 <form onSubmit={handleSubmit}>
                     <input ref={email} type="email" placeholder="Enter email address" required />
                     <input ref = {password} type="password" placeholder="Enter Password" required />

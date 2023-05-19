@@ -11,7 +11,7 @@ require('dotenv').config()
 const {userAuth} = require('./UserRoute')
 const cors = require('cors')
 const {findByEmail} =require('../model/UserModel.model')
-const {addLangar,findLangarById,findAllLangar,updateLangarbyId} = require('../model/LangarEvent.model');
+const {addLangar,findLangarById,findAllLangar,updateLangarbyId,deleteLangarEventbyId} = require('../model/LangarEvent.model');
 LangarEventRouter.post('/addLangarEvent/:tokenId', userAuth,async (req, res) =>{
     try{
         console.log(req.body)
@@ -78,7 +78,6 @@ LangarEventRouter.patch('/deletelangarevent/:tokenId', userAuth,async (req, res)
         console.log(req.body)
         const user = await findByEmail(req.user)
         console.log(user)
-        console.log(deletePersonalEventbyId)
         const langarEvent = {
             idLangar:req.body.langar.idLangar,
             date: req.body.langar.date,

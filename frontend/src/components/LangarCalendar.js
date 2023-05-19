@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
 import { useDispatch,useSelector } from "react-redux";
-
+// import ConfirmationModal from './ConfirmationModal';
 import { deleteEvent, updateEvent } from "../actions/actions";
-import { updateLangarEventById,deleteLangarEventById } from "../actions/langarActions"
+import { updateLangarEventById,deleteLangarEventById, setLangarEvents } from "../actions/langarActions"
 import Calendar from 'react-calendar';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/calendar.css'
 import '../styles/newEvent.css';
 import LangarModal from '../components/LangarModal';
-
+import {deleteOneLangarEvent} from '../services/LangarEventService'
 const LangarCalendar = (props) => {
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+    const [messageConfirmationModal, setMessageConfirmationModal] = useState("are you sure you want to delete langar event?")
+    const [resultConfirmationModal, setResultConfirmationModal] = useState(false)
     let user = useSelector(state => state.users.currentUser)
     if(!user?.fname && JSON.parse(sessionStorage.getItem('user'))?.fname)
     user = JSON.parse(sessionStorage.getItem('user'))
@@ -18,7 +21,7 @@ const LangarCalendar = (props) => {
     const dispatch=useDispatch();
     let [calendar, setCalendar] = useState(new Date())
     let [modal, setModal] = useState(false)
-    console.log(props)
+    console.log("props",props)
     let [event, setEvent] = useState({
         langarDate: { dd: '', mm: '', yy: '' },
         bookedDetails: {},
@@ -29,7 +32,7 @@ const LangarCalendar = (props) => {
         
 
             let bookedDays = {}
-            
+            console.log("props.events LangarCalendar",props?.events)
             // Find days that have aleady been taken. 
             for (let i = 0; i < props?.events?.length; i++) {
                 
@@ -69,13 +72,20 @@ const LangarCalendar = (props) => {
            
 
     }, [])
+    useEffect(() => {
 
+        setEvent(prevEvent => ({
+            ...prevEvent,
+            langarDate: formatLangarDate(new Date()),
+        }))
+        callondate()
+    }, [props.events])
 
     useEffect(() => {
         // Handles filtering of available days and months for langar events when necessary 
     
             let bookedDays = {}
-
+            
             // Find days that have aleady been taken. 
             for (let i = 0; i < props?.events?.length; i++) {
 
@@ -183,15 +193,31 @@ console.log(event)
         navigate(`/create-event/event-confirmation/${events.eventid}`,{state:events})
       }
       
-      const deleteLangar = (events) =>{
-        console.log("deletelangar")
-        console.log(events)
-        dispatch(deleteLangarEventById(user.tokenId, events))
-        dispatch(deleteEvent(events.eventid))
-        setModal(false)
-        
-        navigate(`/home`)
-       }
+      const deleteLangar = async (events) => {
+        console.log("events delete",events)
+
+        // setShowConfirmationModal(true)
+        // showConfirmationModal && setTimeout(() =>{
+        // if (resultConfirmationModal){   
+            if(window.confirm("Are you sure you want to delete this event?") === true){
+           const res = await deleteOneLangarEvent(user.tokenId, events)
+           console.log("res delete",res)
+           if (res.status === 200) {
+            if (res.data.code ==="SUCCESS"){
+                setLangarEvents(res.data.data)
+                // setEvent(res.data.data)
+                navigate(`/home`)
+            }
+        }
+    }
+            setModal(false)
+            
+            
+            
+        }
+
+        // })
+    //    }
        //event on load ... //
        //when ever an application is loaded it will interact with calendar
 
@@ -219,10 +245,9 @@ console.log(event)
                         onActiveStartDateChange={handlePreviousOrNext}
                     />
                 </label>
-
-            {modal && <LangarModal event={modal} closeModal={setModal} updateLangar= {updateLangar} deleteLangar= {deleteLangar}/>}
-
-        </div>
+''
+            {modal && <LangarModal event={modal} closeModal={setModal} updateLangar= {updateLangar} deleteLangar= {deleteLangar} showConfirmationModal = {showConfirmationModal} setShowConfirmationModal={setShowConfirmationModal} messageConfirmationModal={messageConfirmationModal} setResultConfirmationModal={setResultConfirmationModal}/>}
+            </div>
     )
 }
 

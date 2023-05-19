@@ -77,9 +77,9 @@ const updateLangarbyId= async (langar)=>{
 const deleteLangarEventbyId= async (langarEvent)=>{
   try {
     let deletedLangarEvent = {}
-    console.log(langarEvent)
+    console.log("langarEvent in deleteLangarbyId",langarEvent)
     
-    await PersonalEvent.destroy({where: {idLangar:langarEvent.idLangar}}).then((res)=>{
+    await Langar.destroy({where: {idLangar:langarEvent.idLangar}}).then((res)=>{
         deletedLangarEvent = JSON.parse(res);
     })
     deletedLangarEvent= await findAllLangar()
@@ -90,4 +90,4 @@ const deleteLangarEventbyId= async (langarEvent)=>{
     console.log(err)
   }
 }
-module.exports = {addLangar,findLangarById,findAllLangar,updateLangarbyId}
+module.exports = {addLangar,findLangarById,findAllLangar,updateLangarbyId,deleteLangarEventbyId}

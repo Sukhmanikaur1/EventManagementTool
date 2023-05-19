@@ -36,7 +36,7 @@ const SignUp = () => {
             
             <h1><i className="fas fa-calendar-check"></i>Event Management Tool</h1>
             <div className="login-signup-container">
-                <h2 >Sign Up for Company Name</h2>
+                <h2 >Sign Up </h2>
                 <form>
                     <input ref={fname}  type="text" placeholder="Enter First Name" required />
                     <input ref={lname}  type="text" placeholder="Enter Last Name" required />

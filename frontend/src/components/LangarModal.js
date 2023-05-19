@@ -1,18 +1,19 @@
-import React ,{useRef, useEffect}from "react";
+import React ,{useRef, useEffect, useState}from "react";
 import Modal from "./Modal";
 import { useDispatch,useSelector } from "react-redux";
-
+import ConfirmationModal from './ConfirmationModal';
 import { deleteEvent, updateEvent } from "../actions/actions";
 import "../styles/langarModal.css"
-
 const LangarModal = (props) => {
-  const { event, closeModal,updateLangar,deleteLangar } = props;
+  const { event, closeModal,updateLangar,deleteLangar,showConfirmationModal,setShowConfirmationModal,messageConfirmationModal,setResultConfirmationModal } = props;
   const { date, User, phonenumber, fullName } = event.ev
   console.log(props)
   
   const eventPhoneRef = useRef()
   const eventFullName = useRef()
 
+  
+  
   let user1 = useSelector(state => state.users.currentUser)
   if (!user1?.fname && JSON.parse(sessionStorage.getItem('user'))?.fname)
   user1= JSON.parse(sessionStorage.getItem('user'))
@@ -30,6 +31,8 @@ const LangarModal = (props) => {
     console.log("User",User)
   return (
     <Modal>
+      {/* <ConfirmationModal show={showConfirmationModal} closeModal={setShowConfirmationModal} message={messageConfirmationModal} setResult={setResultConfirmationModal} /> */}
+        
       <div className="event-modal">
         <div className="event-details booked-details" id="la-details">
           <p className="event-p">
