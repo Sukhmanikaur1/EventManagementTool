@@ -32,7 +32,7 @@ EventRouter.post("/addevent/:tokenId", userAuth ,cors(),async (req, res) => {
         eventtype:req.body.event.eventtype,
     };
      const events = await addEvent(event);
-     console.log(events)
+    //  console.log(events)
     res.status(201).send({data:{code: 'success',events}});
   } catch (err){
     console.log(err)

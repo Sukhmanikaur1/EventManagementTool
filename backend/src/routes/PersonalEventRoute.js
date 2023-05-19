@@ -30,10 +30,10 @@ PersonalEventRouter.post('/addpersonalevent/:tokenId', userAuth,async (req, res)
       eventtimeend: req.body.personalEventData.eventtimeend,
       hostphonenumber: req.body.personalEventData.hostphonenumber
 }
-        console.log(personalEvent)
+        // console.log(personalEvent)
         let allPersonalEvents=[]
         await addpersonalEvent(personalEvent).then(async (res) => {await findAllPersonalEvent().then((res)=>{allPersonalEvents=JSON.parse(res)})})
-        console.log(allPersonalEvents)
+        // console.log(allPersonalEvents)
         return res.status(200).json({
             code:"SUCCESS",
             data: allPersonalEvents,
@@ -49,7 +49,7 @@ PersonalEventRouter.post('/addpersonalevent/:tokenId', userAuth,async (req, res)
 PersonalEventRouter.get('/allPersonalEvents/',async (req, res)=>{
     try{
        const personalEvents = await findAllPersonalEvent()
-       console.log(JSON.parse(personalEvents))
+    //    console.log(JSON.parse(personalEvents))
        appendDatePersonalEvents=[]
        JSON.parse(personalEvents).forEach(event=>{
         let date = new Date(event.eventdate)
@@ -66,10 +66,10 @@ PersonalEventRouter.get('/allPersonalEvents/',async (req, res)=>{
 })
 PersonalEventRouter.patch('/updatepersonalevents/:tokenId', userAuth,async (req, res) =>{
     try{
-        console.log(req.body.personalEventData)
+        // console.log(req.body.personalEventData)
         const user = await findByEmail(req.user)
-        console.log(user)
-        console.log(updatedPersonalEventbyId)
+        // console.log(user)
+        // console.log(updatedPersonalEventbyId)
         let starttime = req.body.personalEventData.starttime.split(":")
         let starttime2= starttime[2]?.includes("PM")?(Number(starttime[0])+12):starttime[0]+":"+starttime[1]
         let endtime = req.body.personalEventData.endtime.split(":")
@@ -106,10 +106,10 @@ PersonalEventRouter.patch('/updatepersonalevents/:tokenId', userAuth,async (req,
 })
 PersonalEventRouter.patch('/deletepersonalevents/:tokenId', userAuth,async (req, res) =>{
     try{
-        console.log(req.body.personalEventData)
+        // console.log(req.body.personalEventData)
         const user = await findByEmail(req.user)
-        console.log(user)
-        console.log(deletePersonalEventbyId)
+        // console.log(user)
+        // console.log(deletePersonalEventbyId)
         const personalEvent = {
             personaleventid:req.body.personalEventData.personaleventid,
         phonenumber:req.body.personalEventData.phonenumber,

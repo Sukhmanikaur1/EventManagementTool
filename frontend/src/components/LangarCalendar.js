@@ -245,7 +245,7 @@ console.log(event)
                         onActiveStartDateChange={handlePreviousOrNext}
                     />
                 </label>
-''
+
             {modal && <LangarModal event={modal} closeModal={setModal} updateLangar= {updateLangar} deleteLangar= {deleteLangar} showConfirmationModal = {showConfirmationModal} setShowConfirmationModal={setShowConfirmationModal} messageConfirmationModal={messageConfirmationModal} setResultConfirmationModal={setResultConfirmationModal}/>}
             </div>
     )

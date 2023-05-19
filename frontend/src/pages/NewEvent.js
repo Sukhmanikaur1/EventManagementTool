@@ -72,6 +72,7 @@ const NewEvent = () => {
         endTime: new Date(),
         phone:"",
         hostphonenumber:"",
+        email:user.role==="admin"?"":user.email,
     })
 
     let [phone, setPhone] = useState('')
@@ -143,6 +144,7 @@ const NewEvent = () => {
   console.log(event)
     const packageEvent = () => {
         let newEvent = { 
+                email: event.email,
                 startdate: event.startDate,
                 enddate: event.endDate,
                 eventaddress: event.address, 
@@ -168,7 +170,7 @@ const NewEvent = () => {
         let newEvent = packageEvent()
         if(event.type === "langar"&&user?.tokenId){
             dispatch(createNewLangarEvent({
-                
+                  email: event.email,
                   date:newEvent.startdate,
                   eventaddress: newEvent.eventaddress,
                   orgname: newEvent.eventplace,
@@ -306,6 +308,17 @@ const NewEvent = () => {
             {!(paath==="paath" ||personal==="personal") && <LangarCalendar events={langarEventsData} liftSelectedDate={liftSelectedDate} />}
             
             {modal && <LangarModal event={modal} closeModal={setModal} />}
+            {event.type === 'langar' && user.role=== 'admin'&& event.selectedDay && 
+                <div>
+                    <label style={interact}>User Email
+                        <input
+                            name="email"
+                            type="email"
+                            value={event.email}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>}
 
             {paath ==="paath" &&
                 <label style={interact}>

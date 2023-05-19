@@ -26,7 +26,7 @@ const sequelize = new Sequelize(userdb, username, password, {
 BookedSlotRouter.use(express.json());
 BookedSlotRouter.get('/allbookslotsevents/:paathid', async(req, res, next)=>{
   try{
-     console.log(req.params.paathid)
+    //  console.log(req.params.paathid)
       let allBookedSlots=[]
       await findAllBookedSlot(req.params.paathid).then((response)=>{
         allBookedSlots= response
@@ -43,7 +43,7 @@ BookedSlotRouter.post('/addbookpaathslot/', async(req, res, next)=>{
     //  console.log("req.body.bookedslot",req.body.bookslotpaath)
      const user = await findByEmail(req.body.bookslotpaath.user)
      const userFromEmail = await findByEmail(req.body.bookslotpaath.email);
-    console.log("userFromEmail",userFromEmail)
+    // console.log("userFromEmail",userFromEmail)
     
       const paath = await findPaathById(req.body.bookslotpaath.paath)
       let bookedSlots =[]
@@ -71,14 +71,14 @@ BookedSlotRouter.post('/addbookpaathslot/', async(req, res, next)=>{
 })
 BookedSlotRouter.patch('/updateonepaathslotevent/',userAuth, async(req, res, next)=>{
   try{
-    console.log("req.body.bookslotpaath",req.body.bookedslot)
+    // console.log("req.body.bookslotpaath",req.body.bookedslot)
     const user = await findByEmail(req.user)
     const emailUser = await findByEmail(req.body.bookedslot.email)
-    console.log("emailUser",emailUser)
+    // console.log("emailUser",emailUser)
      const paath = await findPaathById(req.body.bookedslot.paath)
      console.log(paath)
      let bookedSlots =[]
-    console.log("req.body.bookedslot",req.body.bookedslot)
+    // console.log("req.body.bookedslot",req.body.bookedslot)
      await updatedBookedSlotbyId({
       idbookSlot:req.body.bookedslot.idbookSlot,
        fullName: req.body.bookedslot.fullName,

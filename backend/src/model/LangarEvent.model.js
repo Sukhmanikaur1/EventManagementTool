@@ -39,8 +39,8 @@ const findAllLangar = async () =>{
     todayDate.setDate(todayDate.getDate()-1)
     const allLangar = await Langar.findAll({date:{[Op.gt]:todayDate},include:["User"],raw: true,
     nest: true,})
-    console.log("allLangar")
-    console.log(allLangar)
+    // console.log("allLangar")
+    // console.log(allLangar)
     return allLangar
   }
   catch (err){

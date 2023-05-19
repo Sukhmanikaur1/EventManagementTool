@@ -7,11 +7,11 @@ const {findByEmail} =require('../model/UserModel.model')
 const {addPaath,findPaathById,findAllPaath,updatePaathbyId,deletePaathbyId} = require('../model/Paath.model');
 PaathRouter.post('/addpaathevent/:tokenId', userAuth,async (req, res) =>{
     try{
-        console.log(req.body)
+        // console.log(req.body)
         const user = await findByEmail(req.user)
         let allpaath=[]
         await findAllPaath().then((res)=>res?allpaath=res:allpaath=[])
-    console.log(allpaath)
+    // console.log(allpaath)
         allpaath.forEach(paath=>{if(paath.enddate===req.body.paath.enddate) return res.status(200).json({code:"error",msg:"paath at the date already exists"})})
         const paath = {
             eventname:req.body.paath.eventname,
@@ -25,7 +25,7 @@ PaathRouter.post('/addpaathevent/:tokenId', userAuth,async (req, res) =>{
         
         let allAndAddedPaath = []
         await addPaath(paath).then((res) => {
-            console.log(res)
+            // console.log(res)
             allAndAddedPaath=res})
         
        
@@ -51,10 +51,10 @@ PaathRouter.get('/allpaathevents/', async(req, res, next)=>{
 })
 PaathRouter.patch('/updatepaathevent/:tokenId', userAuth,async (req, res) =>{
     try{
-        console.log("paath update body")
-        console.log(req.body.paath)
+        // console.log("paath update body")
+        // console.log(req.body.paath)
         let user=JSON.parse(JSON.stringify(await findByEmail(req.user))) 
-        console.log(user)
+        // console.log(user)
         if ( user.role !=="admin"){
             res.status(200).json({code:"FAIL", msg:"unauthorized user"})
         }
@@ -88,11 +88,11 @@ PaathRouter.patch('/deletepaathevent/:tokenId', userAuth,async (req, res) =>{
         await deletePaathbyId(paathEvent).then(async (res) => {
 
             await findAllPaath().then((response)=> {
-                console.log(response)
+                // console.log(response)
                 allPaathEvents=response
             })
         })
-        console.log(allPaathEvents)
+        // console.log(allPaathEvents)
         return res.status(200).send({
             code:"SUCCESS",
             data: allPaathEvents,
