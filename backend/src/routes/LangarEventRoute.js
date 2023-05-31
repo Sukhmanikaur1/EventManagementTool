@@ -18,12 +18,14 @@ LangarEventRouter.post('/addLangarEvent/:tokenId', userAuth,async (req, res) =>{
         const user = await findByEmail(req.user)
         if(!user) return res.status(200).json({code:"error",msg:"User not found"})
         let userId = user.idUser
+        let userName = user.fname+" "+user.lname
         if (user.role === 'admin'){
             if(user.email!==req.body.langar.email){
                 const userFromEmail = await findByEmail(req.body.langar.email)
                 if(userFromEmail) 
                 {
                     userId = userFromEmail.idUser
+                    userName = userFromEmail.fname+" "+userFromEmail.lname
                 }
             }
         }
@@ -37,7 +39,7 @@ LangarEventRouter.post('/addLangarEvent/:tokenId', userAuth,async (req, res) =>{
             orgname: req.body.langar.orgname,
             phonenumber: req.body.langar.phonenumber,
             UserIdUser: userId,
-            fullname:user.fname+" "+ user.lname
+            fullname: userName
         }
         
         let allAndAddedlangar = []
